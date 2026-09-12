@@ -1,0 +1,231 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-09-12T08:25:00Z",
+  "project": "DeepNorthTesting :: Valheim 1.0 Autonomous Verification",
+  "environment": {
+    "host_machine": "OMEN Sovereign Workstation",
+    "operating_system": "Microsoft Windows 11 Enterprise (64-bit)",
+    "gpus": [
+      {
+        "device_id": 0,
+        "name": "Intel Arc Pro B70",
+        "architecture": "Battlemage (Xe2-HPG)",
+        "role": "Primary Compute & Game Engine Rendering"
+      },
+      {
+        "device_id": 1,
+        "name": "Intel Arc Pro B70",
+        "architecture": "Battlemage (Xe2-HPG)",
+        "role": "Sovereign Local Inference & Agentic Acceleration"
+      }
+    ],
+    "cloud_tokens_spent": 0,
+    "cloud_dependencies": 0,
+    "target_platform": "Valheim 1.0 (Ashlands / Deep North 1.0.12)",
+    "target_runtime": "Unity 2022.3 LTS (Mono / IL2CPP Hybrid)",
+    "mod_loader": "BepInEx 5.4.2202",
+    "patching_framework": "HarmonyX (0Harmony 2.9.0.0)",
+    "static_analysis_framework": "Mono.Cecil 0.11.5"
+  },
+  "repositories": {
+    "test_harness": {
+      "repo_url": "https://github.com/djcdevelopment/deepnorthtesting",
+      "branch": "main",
+      "head_commit": "e70d3eb0de96fcc403233a0682aef26e6bd8c7bd"
+    },
+    "remediated_mods_fork": {
+      "repo_url": "https://github.com/djcdevelopment/ComfyMods",
+      "branch": "feature/valheim-1.0-deep-north",
+      "head_commit": "d201f95476879a63d1d02d552f3733e7fe5ecf01"
+    },
+    "upstream_canonical": {
+      "repo_url": "https://github.com/redseiko/ComfyMods",
+      "audit_issue": "https://github.com/redseiko/ComfyMods/issues/163"
+    }
+  },
+  "benchmarks": {
+    "boot_latency": {
+      "unpatched_baseline_seconds": 240.0,
+      "unpatched_baseline_note": "4-minute unskippable intro cinematic & intro world flyover",
+      "harness_bypassed_seconds": 7.82,
+      "harness_bypassed_note": "Direct to main menu via LetMePlay CinematicsPatch + IPC launch flags",
+      "speedup_factor": 30.69,
+      "feedback_loop_reduction_pct": 96.74
+    },
+    "static_analysis": {
+      "engine": "Mono.Cecil 0.11.5 + C# Inspector CLI",
+      "assemblies_scanned": 59,
+      "methods_decompiled_and_audited": 214,
+      "scan_duration_seconds": 1.24,
+      "assemblies_per_second": 47.58
+    },
+    "live_engine_telemetry": {
+      "telemetry_source": "ComfyNetworkSense (Internal UDP/IPC Bridge)",
+      "game_pid": 38760,
+      "process_memory_mb": 2485.15,
+      "avg_fps": 57.52,
+      "instant_fps": 130.56,
+      "frame_time_ms": 7.66,
+      "frame_time_p95_ms": 31.93,
+      "cpu_bound_pct": 17.5,
+      "network_rtt_ms": 0.0,
+      "render_resolution": "2560x1440 Borderless",
+      "target_refresh_hz": 60
+    },
+    "reliability_and_health": {
+      "log_source": "BepInEx/LogOutput.log",
+      "total_log_lines": 295,
+      "logged_errors": 0,
+      "logged_exceptions": 0,
+      "harmony_patch_failures": 0,
+      "clean_boot_assertion_status": "PASS"
+    }
+  },
+  "mod_audit_summary": {
+    "total_mods_surveyed": 51,
+    "passing_unmodified": 41,
+    "remediated_and_verified": 10,
+    "pending_upstream_dependency": 1,
+    "remediated_mods_list": [
+      "PartyRock",
+      "LicenseToSkill",
+      "SearsCatalog",
+      "Silence",
+      "Shortcuts",
+      "ContentsWithin",
+      "Recipedia",
+      "BetterZeeRouter",
+      "PaperTrail",
+      "LetMePlay"
+    ],
+    "pending_dependency_list": [
+      {
+        "mod": "DraftingTable",
+        "missing_dependency": "com.jotunn.jotunn",
+        "status": "Awaiting Jotunn 1.0 release"
+      }
+    ]
+  },
+  "remediated_mods_breakdown": [
+    {
+      "mod": "PartyRock",
+      "version": "1.7.0",
+      "failure_mode": "MissingFieldException & AmbiguousMatchException",
+      "root_cause": "ZDO sector partitioning refactored from Vector2i to Vector2s in ZDOMan.FindSectorObjects. RPC_ZDOData IL local variable shifted: V_12 is ZDO, V_13 is Boolean.",
+      "remediation": "Updated sector type to Vector2s; rewritten transpiler index targeting V_12."
+    },
+    {
+      "mod": "LicenseToSkill",
+      "version": "1.8.0",
+      "failure_mode": "PatchMethodNotFoundException",
+      "root_cause": "SEMan.AddStatusEffect signature added 5th parameter: Int16 variant = 0.",
+      "remediation": "Updated prefix/postfix Harmony patch signatures to include Int16 variant."
+    },
+    {
+      "mod": "SearsCatalog",
+      "version": "1.6.0",
+      "failure_mode": "AmbiguousMatchException",
+      "root_cause": "PieceTable.SetCategory added overload accepting PieceCategory enum alongside int.",
+      "remediation": "Specified exact argument types in AccessTools.Method reflection calls."
+    },
+    {
+      "mod": "Silence",
+      "version": "1.3.0",
+      "failure_mode": "MissingMethodException on Transpiler",
+      "root_cause": "Roslyn lowered compiler-generated closure lambda <Method>b__0 to local function <Method>g__...|0.",
+      "remediation": "Re-routed Cecil/Harmony method target to the lowered local function token."
+    },
+    {
+      "mod": "Shortcuts",
+      "version": "1.4.0",
+      "failure_mode": "Transpiler Pattern Match Failure",
+      "root_cause": "GameCamera.UpdateMouseCapture keycode evaluation order reversed (F1 before LeftControl).",
+      "remediation": "Updated IL pattern matcher sequence to reflect new evaluation order."
+    },
+    {
+      "mod": "ContentsWithin",
+      "version": "1.4.0",
+      "failure_mode": "InvalidProgramException / Signature Mismatch",
+      "root_cause": "InventoryGui.Show added 2nd parameter: int activeGroup = 1. Character.TakeInput changed stack layout.",
+      "remediation": "Patched InventoryGui.Show overload and aligned IL evaluation stack."
+    },
+    {
+      "mod": "Recipedia",
+      "version": "1.5.0",
+      "failure_mode": "Transpiler Failure in UpdateContainer",
+      "root_cause": "InventoryGui.UpdateContainer refactored inline button checks into separate UseButtonHeld() method.",
+      "remediation": "Changed patch target from inline loop to Postfix on UseButtonHeld()."
+    },
+    {
+      "mod": "BetterZeeRouter",
+      "version": "1.2.0",
+      "failure_mode": "NullReferenceException in Awake()",
+      "root_cause": "PlatformManager.DistributionPlatform is uninitialized during early plugin Awake().",
+      "remediation": "Added null check and safe fallback to Utils.persistantDataPath."
+    },
+    {
+      "mod": "PaperTrail",
+      "version": "1.3.0",
+      "failure_mode": "NullReferenceException in Awake()",
+      "root_cause": "Accessing FileHelpers.CloudStorageSupported before Steam subsystem initialization.",
+      "remediation": "Guarded cloud storage calls behind initialization check."
+    },
+    {
+      "mod": "LetMePlay",
+      "version": "1.2.0",
+      "failure_mode": "Feature Addition / Cold Start Blocker",
+      "root_cause": "Valheim 1.0 added mandatory 4-minute intro cinematic and flyover.",
+      "remediation": "Implemented CinematicsPatch to immediately short-circuit FejdStartup into the main menu."
+    }
+  ],
+  "architectural_shifts": [
+    {
+      "id": "ARCH-01",
+      "name": "Sector Partitioning Modernization",
+      "subsystem": "ZDOMan / World Streaming",
+      "old_signature": "Vector2i FindSectorObjects(Vector2i sector, int distance)",
+      "new_signature": "Vector2s FindSectorObjects(Vector2s sector, int distance, SimulationDistance simDist)",
+      "impact": "Breaks all spatial coordinate mods, map tracking, and network entity synchronization."
+    },
+    {
+      "id": "ARCH-02",
+      "name": "Status Effect Variant Parameter Expansion",
+      "subsystem": "SEMan / Character Status System",
+      "old_signature": "StatusEffect AddStatusEffect(int nameHash, bool resetTime, int itemLevel, float skillLevel)",
+      "new_signature": "StatusEffect AddStatusEffect(int nameHash, bool resetTime, int itemLevel, float skillLevel, Int16 variant)",
+      "impact": "Breaks all skill, buff, debuff, and equipment effect patches via MissingMethodException."
+    },
+    {
+      "id": "ARCH-03",
+      "name": "Build Table Strong Typing & Overloading",
+      "subsystem": "PieceTable / Construction System",
+      "old_signature": "void SetCategory(int index)",
+      "new_signature": "void SetCategory(int index) AND void SetCategory(PieceCategory category)",
+      "impact": "Reflection calls using AccessTools.Method(typeof(PieceTable), \"SetCategory\") crash with AmbiguousMatchException."
+    },
+    {
+      "id": "ARCH-04",
+      "name": "Roslyn 4.x Compiler Closure Lowering",
+      "subsystem": "Mono/C# Compiler Toolchain",
+      "old_pattern": "Compiler generates nested class `<>c__DisplayClass` with lambda `<MethodName>b__0`",
+      "new_pattern": "Compiler generates struct/local function `<MethodName>g__LocalFunction|0`",
+      "impact": "Direct IL/Harmony hooks targeting compiler-generated delegate methods fail silently or crash on assembly load."
+    },
+    {
+      "id": "ARCH-05",
+      "name": "GUI Container Interaction Refactor",
+      "subsystem": "InventoryGui / UI Runtime",
+      "old_pattern": "Inline keycode/axis polling inside UpdateContainer() loop",
+      "new_pattern": "Encapsulated into UseButtonHeld() helper method; Show() takes int activeGroup",
+      "impact": "Transpilers scanning for inline Input.GetKey opcodes fail to locate insertion anchors."
+    },
+    {
+      "id": "ARCH-06",
+      "name": "Platform Distribution Subsystem Deferral",
+      "subsystem": "PlatformManager / FileHelpers",
+      "old_behavior": "PlatformManager.DistributionPlatform initialized before first BepInEx Awake() cycle",
+      "new_behavior": "DistributionPlatform initialized during FejdStartup.Awake()",
+      "impact": "Plugins calling FileHelpers.CloudStorageSupported or Steam APIs in early Awake() throw NullReferenceException."
+    }
+  ]
+}
