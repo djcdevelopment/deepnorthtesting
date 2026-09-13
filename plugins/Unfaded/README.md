@@ -1,6 +1,6 @@
 # Unfaded
 
-> **Eliminate the tedious 9.5-second death blackout in Valheim, unlock 360° ragdoll spectator physics, and take control of your respawn.**
+> **Eliminate the tedious 9.5-second death blackout in Valheim, unlock 360° ragdoll spectator physics, killer tracking, tactical drone scouting, and instant respawn.**
 
 [![Valheim 1.0](https://img.shields.io/badge/Valheim-1.0-blue.svg)](#)
 [![BepInEx 5](https://img.shields.io/badge/BepInEx-5.4.2202-green.svg)](#)
@@ -20,19 +20,36 @@ In vanilla Valheim, Iron Gate actually wrote code for the camera to follow your 
 
 Instead of watching your Viking ragdoll launch over a mountain, slide into the ocean, or see the troll that crushed you, you are forced to stare into a pitch-black void.
 
-**Unfaded** fixes this completely.
+**Unfaded** transforms the death experience from a punitive blackout into an informative, cinematic spectator tool.
 
 ---
 
-## ⚡ Features
+## ⚡ Core Features & "Beyond the Fade"
 
-- 👁️ **Zero Death Blackout**: Keeps the viewport 100% clear when you die. No black screen, no dimming, no forced blindness.
-- 🔄 **360° Orbital Corpse Camera**: Smooth mouse orbit and scroll wheel distance zoom around your ragdoll body. Look in any direction to inspect the battlefield or watch your fellow Vikings avenge you.
-- 🛡️ **Terrain Collision Protection**: Built-in sphere-cast collision detection prevents the death camera from clipping through rocks, dungeons, or ground geometry.
-- ⌨️ **Instant Manual Respawn (`[Space]`)**: Done watching the aftermath? Tap `[Space]` (or your configured hotkey) to respawn at your bed or spawnpoint immediately.
-- ⏱️ **Configurable Auto-Respawn Timer**: Change the default 10-second timer to anything from 0 seconds (instant) to 120 seconds (long spectator mode).
-- 🌐 **100% Client-Side Safe**: Runs entirely in client UI and local camera routines. Zero server-side installation required; completely safe on vanilla or modded dedicated multiplayer servers.
-- 🧼 **Clean Transition**: Preserves genuine loading screens when you actually arrive at your spawnpoint, teleport, or sleep.
+### 1. 👁️ Zero Death Blackout
+Keeps the viewport 100% clear when you die. No black screen, no artificial dimming, no forced blindness.
+
+### 2. 🔄 Triple Spectator Camera Modes
+- **Corpse Orbit (Default)**: Smooth 360° mouse look and scroll wheel distance zoom around your ragdoll body with obstacle raycast protection.
+- **Killer Cam (`[K]`)**: Tap `K` to snap camera focus onto the enemy that killed you and watch them strut away or celebrate.
+- **Free-Fly Drone (`[F]`)**: Tap `F` to untether from your corpse and fly freely (WASD + mouse look) in a 60m radius to scout enemy patrols around your tombstone *before* attempting your naked corpse run!
+
+### 3. 🎬 Cinematic Bullet-Time Slow-Mo
+Upon receiving the fatal blow, game time briefly slows to 0.35x for 1.5 seconds. Watch your Viking get launched by a troll club or boulder in glorious slow-motion ragdoll physics before smoothly transitioning into spectator mode.
+
+### 4. 💀 Death Cause & Attacker Recap Banner
+Displays a clean on-screen summary of exactly what dealt the killing blow:
+> `💀 Slain by: 2★ Fuling Berserker [164 Blunt]` or `💀 Slain by: Gravity / Fall Damage [-95 Physical]`
+
+### 5. ⌨️ Instant Manual Respawn (`[Space]`)
+Done watching the aftermath or scouted your tombstone? Tap `[Space]` (or your configured hotkey) to respawn at your bed or spawnpoint immediately.
+
+### 6. 🧪 In-Game Console & Safe Testing (`unfaded test`)
+Never sacrifice a survival character just to test mod settings. Press `F5` and type:
+- `unfaded test` — Simulates 6 seconds of spectator mode right where you stand (test orbit, `[K]`, and `[F]` safely)!
+- `unfaded delay <seconds>` — Adjusts respawn delay on the fly.
+- `unfaded slowmo` — Toggles cinematic slow-mo.
+- `unfaded status` — Prints full live configuration.
 
 ---
 
@@ -43,41 +60,43 @@ Open the standalone interactive Archify map in your browser:
 
 ```mermaid
 flowchart LR
-    subgraph Input ["Player Controls"]
-        PInput["Mouse Look & Zoom<br/>[Space] Respawn Key"]
+    subgraph Input ["Player Controls & CLI"]
+        PInput["Mouse Look & Zoom<br/>[Space] Respawn • [K] Killer • [F] Drone"]
+        Console["F5 Console Command<br/>'unfaded test' | 'unfaded delay'"]
     end
 
     subgraph Valheim ["Valheim Game Engine"]
-        PDeath["Player.OnDeath()<br/>Spawns Ragdoll Body"]
+        PDeath["Player.OnDeath()<br/>Lethal Hit & Ragdoll Spasm"]
         Ragdoll["Ragdoll Physics<br/>Corpse Rigidbody"]
-        VHUD["Valheim HUD<br/>m_loadingScreen"]
+        VHUD["Valheim HUD<br/>Death Cause Banner"]
         VGame["Game Instance<br/>RequestRespawn & Bed Spawn"]
         Cam["GameCamera<br/>Active Viewport"]
     end
 
     subgraph Unfaded ["Unfaded Mod (BepInEx)"]
         HGuard["HudBlackScreenPatch<br/>Forces Alpha = 0f (No Blackout)"]
-        COrbit["GameCameraDeathPatch<br/>360° Orbital Ragdoll Tracking"]
-        RController["GameRespawnPatch<br/>Instant Space Trigger & Delay Override"]
+        COrbit["GameCameraDeathPatch<br/>Orbit • Killer Focus • Drone Spectator"]
+        RController["GameRespawnPatch<br/>Space Trigger • Delay Override • Slow-Mo"]
     end
 
     PDeath -->|Death Event| HGuard
-    PDeath -->|Spawns| Ragdoll
     HGuard -->|Bypass Blackout| VHUD
+    PDeath -->|Spawns| Ragdoll
     
-    PInput -->|Mouse Delta| COrbit
+    PInput -->|Controls| Cam
+    Cam -->|Active Viewport| COrbit
     COrbit -->|Tracks Center| Ragdoll
-    COrbit -->|Positions| Cam
 
+    Console -->|Live Tuning & Test Sim| RController
     PInput -->|Press Space| RController
     RController -->|Triggers _RequestRespawn| VGame
 ```
 
 ---
 
-## ⚙️ Configuration
+## ⚙️ Configuration Reference
 
-Configuration is automatically generated at `BepInEx/config/djc.valheim.unfaded.cfg` on first launch. All options can be modified live or via configuration managers.
+Configuration is generated at `BepInEx/config/djc.valheim.unfaded.cfg` on first launch.
 
 | Section | Setting | Default | Description |
 | :--- | :--- | :--- | :--- |
@@ -87,10 +106,15 @@ Configuration is automatically generated at `BepInEx/config/djc.valheim.unfaded.
 | `3 - Respawn` | `RespawnDelay` | `10.0` | Auto-respawn delay in seconds (range: `0.0` to `120.0`). |
 | `3 - Respawn` | `EnableManualRespawn` | `true` | Enables pressing a hotkey to respawn immediately without waiting. |
 | `3 - Respawn` | `ManualRespawnKey` | `Space` | Hotkey that triggers immediate respawn. |
-| `3 - Respawn` | `ShowRespawnPrompt` | `true` | Displays on-screen HUD reminder showing the manual respawn hotkey. |
-| `3 - Respawn` | `RespawnPromptText` | `Press [{0}] to Respawn` | Message format string displayed on death. |
 | `4 - Spectator Camera` | `EnableCameraOrbit` | `true` | Allows free 360° mouse look and orbit around your ragdoll body. |
-| `4 - Spectator Camera` | `CameraOrbitSensitivity` | `2.0` | Mouse look sensitivity multiplier while spectating your corpse. |
+| `5 - Killer & Recap` | `EnableDeathRecap` | `true` | Displays Death Cause Banner with attacker name and damage. |
+| `5 - Killer & Recap` | `EnableKillerCam` | `true` | Enables Killer Focus mode. |
+| `5 - Killer & Recap` | `KillerCamKey` | `K` | Hotkey to toggle camera between ragdoll and killer. |
+| `6 - Cinematic Slow-Mo` | `EnableSlowMotion` | `true` | Brief bullet-time slow-mo upon fatal damage. |
+| `6 - Cinematic Slow-Mo` | `SlowMotionScale` | `0.35` | Time scale during fatal blow (0.1 = super slow, 1.0 = normal). |
+| `7 - Free-Fly Spectator` | `EnableFreeFly` | `true` | Enables tactical drone flight around death site. |
+| `7 - Free-Fly Spectator` | `FreeFlyKey` | `F` | Hotkey to toggle free-fly mode. |
+| `7 - Free-Fly Spectator` | `FreeFlyRadius` | `60.0` | Maximum flight distance in meters from death position. |
 
 ---
 
@@ -105,23 +129,6 @@ Configuration is automatically generated at `BepInEx/config/djc.valheim.unfaded.
 2. Download `Unfaded.dll` from the latest [GitHub Releases](https://github.com/djcdevelopment/Unfaded/releases).
 3. Place `Unfaded.dll` into your `Valheim/BepInEx/plugins/` directory.
 4. Launch Valheim!
-
----
-
-## 🛠️ Building from Source
-
-Requirements:
-- .NET SDK (8.0 or newer)
-- Valheim installation
-
-```powershell
-# Clone the repository
-git clone https://github.com/djcdevelopment/Unfaded.git
-cd Unfaded
-
-# Build the project (automatically copies to your local Valheim plugins folder)
-dotnet build -c Release
-```
 
 ---
 

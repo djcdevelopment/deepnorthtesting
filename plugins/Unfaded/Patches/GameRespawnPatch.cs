@@ -2,6 +2,7 @@ namespace Unfaded.Patches;
 
 using HarmonyLib;
 using Unfaded.Configuration;
+using Unfaded.Core;
 using UnityEngine;
 
 public static class GameRespawnPatch
@@ -49,10 +50,10 @@ public static class GameRespawnPatch
                 return;
             }
 
-            // Periodic gentle reminder if enabled and time has passed
-            if (PluginConfig.ShowRespawnPrompt.Value && PluginConfig.EnableManualRespawn.Value)
+            // Periodic status and control reminder
+            if (PluginConfig.ShowRespawnPrompt.Value)
             {
-                if (Time.time - s_lastPromptTime > 5f)
+                if (Time.time - s_lastPromptTime > 4.5f)
                 {
                     s_lastPromptTime = Time.time;
                     string keyName = PluginConfig.ManualRespawnKey.Value.ToString();
@@ -66,7 +67,8 @@ public static class GameRespawnPatch
             {
                 if (Input.GetKeyDown(PluginConfig.ManualRespawnKey.Value))
                 {
-                    // Trigger immediate respawn
+                    // Clean up spectator state and immediately request respawn
+                    DeathStateManager.ResetOnRespawn();
                     Game.instance.RequestRespawn(0f, afterDeath: true);
                 }
             }
@@ -84,7 +86,24 @@ public static class GameRespawnPatch
                 return;
             }
 
-            if (PluginConfig.ShowRespawnPrompt.Value && PluginConfig.EnableManualRespawn.Value)
+            // 1. Record lethal hit details for Killer Cam and Death Recap
+            DeathStateManager.RecordLethalHit(__instance, __instance.m_lastHit);
+
+            // 2. Trigger cinematic slow-motion bullet-time if enabled
+            if (PluginConfig.EnableSlowMotion.Value && UnfadedPlugin.Instance != null)
+            {
+                UnfadedPlugin.Instance.StartCoroutine(DeathStateManager.SlowMotionRoutine(UnfadedPlugin.Instance));
+            }
+
+            // 3. Display Death Cause Recap
+            if (PluginConfig.EnableDeathRecap.Value)
+            {
+                string recap = DeathStateManager.FormatDeathRecap();
+                __instance.Message(MessageHud.MessageType.Center, recap);
+            }
+
+            // 4. Display spectator controls
+            if (PluginConfig.ShowRespawnPrompt.Value)
             {
                 string keyName = PluginConfig.ManualRespawnKey.Value.ToString();
                 string prompt = string.Format(PluginConfig.RespawnPromptText.Value, keyName);
