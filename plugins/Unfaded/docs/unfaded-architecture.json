@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Unfaded System Architecture",
+    "output": "docs/unfaded-architecture.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "death-flow",
+        "label": "Death and blackout suppression",
+        "focus": ["valheim_player", "unfaded_hud", "valheim_hud", "ragdoll_body"],
+        "note": "Follow player death through the blackout guard keeping the viewport clear."
+      },
+      {
+        "id": "spectator-view",
+        "label": "Orbital ragdoll spectator",
+        "focus": ["player_input", "unfaded_camera", "ragdoll_body", "game_camera"],
+        "note": "Inspect how mouse input drives 360-degree orbital corpse observation."
+      },
+      {
+        "id": "respawn-path",
+        "label": "Manual and timer respawn",
+        "focus": ["player_input", "unfaded_respawn", "valheim_game"],
+        "note": "See how Spacebar keypresses or configurable timeouts trigger bed respawn."
+      }
+    ]
+  },
+  "components": [
+    { "id": "player_input", "type": "external", "label": "Player Input", "sublabel": "Spacebar / Mouse", "pos": [50, 310], "size": [130, 60] },
+    { "id": "valheim_player", "type": "backend", "label": "Player Entity", "sublabel": "OnDeath & ZDO", "pos": [260, 160], "size": [140, 60] },
+    { "id": "game_camera", "type": "frontend", "label": "GameCamera", "sublabel": "Active Viewport", "pos": [260, 390], "size": [140, 60] },
+    { "id": "unfaded_hud", "type": "security", "label": "Blackout Guard", "sublabel": "HudBlackScreenPatch", "pos": [490, 160], "size": [160, 60], "tag": "Alpha = 0f" },
+    { "id": "unfaded_camera", "type": "frontend", "label": "Orbital Spectator", "sublabel": "GameCameraDeathPatch", "pos": [490, 310], "size": [160, 60], "tag": "360° Orbit" },
+    { "id": "unfaded_respawn", "type": "backend", "label": "Respawn Controller", "sublabel": "GameRespawnPatch", "pos": [490, 470], "size": [160, 60], "tag": "Space Trigger" },
+    { "id": "valheim_hud", "type": "frontend", "label": "Valheim HUD", "sublabel": "m_loadingScreen", "pos": [740, 160], "size": [150, 60] },
+    { "id": "ragdoll_body", "type": "database", "label": "Ragdoll Physics", "sublabel": "Corpse Rigidbody", "pos": [740, 310], "size": [150, 60] },
+    { "id": "valheim_game", "type": "backend", "label": "Game Instance", "sublabel": "Bed & World Spawn", "pos": [740, 470], "size": [150, 60] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Unfaded Harmony Interceptors", "wraps": ["unfaded_hud", "unfaded_camera", "unfaded_respawn"] },
+    { "kind": "region", "label": "Valheim Engine Runtime", "wraps": ["valheim_player", "game_camera", "valheim_hud", "ragdoll_body", "valheim_game"] }
+  ],
+  "connections": [
+    { "id": "input_to_camera", "from": "player_input", "to": "unfaded_camera", "label": "mouse orbit", "variant": "emphasis" },
+    { "id": "input_to_respawn", "from": "player_input", "to": "unfaded_respawn", "label": "spacebar", "variant": "default", "fromSide": "bottom", "toSide": "left" },
+    { "id": "player_to_hud_guard", "from": "valheim_player", "to": "unfaded_hud", "label": "death event", "variant": "emphasis" },
+    { "id": "hud_guard_to_hud", "from": "unfaded_hud", "to": "valheim_hud", "label": "bypass fade", "variant": "security" },
+    { "id": "player_to_ragdoll", "from": "valheim_player", "to": "ragdoll_body", "label": "spawns ragdoll", "fromSide": "right", "toSide": "top" },
+    { "id": "camera_tracks_ragdoll", "from": "unfaded_camera", "to": "ragdoll_body", "label": "track center", "variant": "emphasis" },
+    { "id": "camera_to_viewport", "from": "unfaded_camera", "to": "game_camera", "label": "apply orbit", "fromSide": "left", "toSide": "right" },
+    { "id": "respawn_to_game", "from": "unfaded_respawn", "to": "valheim_game", "label": "request respawn", "variant": "emphasis" }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Zero Blackout Spectator",
+      "items": [
+        "Eliminates Valheim's 9.5-second black screen canvas fadeout",
+        "Screen remains 100% visible while spectating your corpse",
+        "Preserves legitimate world-load and teleport loading screens"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Orbital Corpse Camera",
+      "items": [
+        "Tracks the 3D physics center of your falling or rolling ragdoll",
+        "Full 360-degree mouse look and scroll wheel distance zoom",
+        "Built-in sphere raycasting prevents clipping through terrain"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Manual & Timer Respawn",
+      "items": [
+        "Press [Space] to respawn immediately without waiting",
+        "Configurable auto-respawn timer (0 to 120 seconds)",
+        "100% client-side: safe on dedicated multiplayer servers"
+      ]
+    }
+  ]
+}
