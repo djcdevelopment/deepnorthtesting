@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Valheim 1.0 Backpack Status Effect Architecture",
+    "output": "docs/backpack-effects.architecture.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "native-flow",
+        "label": "Native single-effect pipeline",
+        "focus": ["yaml_cfg", "config_loader", "hash_resolver", "object_db", "single_slot", "se_man"],
+        "note": "Follow the native YAML string parsing and ObjectDB lookup for equipment status effects."
+      },
+      {
+        "id": "delimiter-failure",
+        "label": "Delimiter hash mismatch",
+        "focus": ["yaml_cfg", "config_loader", "hash_resolver", "object_db"],
+        "note": "Inspect why comma or semicolon delimited strings fail to match any ObjectDB prefab hash."
+      },
+      {
+        "id": "patch-solution",
+        "label": "Harmony companion interceptor",
+        "focus": ["config_loader", "harmony_interceptor", "multi_effects", "se_man"],
+        "note": "See how a lightweight Harmony postfix tokenizes delimiters and applies all effects."
+      }
+    ]
+  },
+  "components": [
+    { "id": "yaml_cfg", "type": "external", "label": "Backpack Config", "sublabel": "Backpacks.yml / .cfg", "pos": [40, 240], "size": [130, 60], "tag": "User Input" },
+    { "id": "config_loader", "type": "backend", "label": "CustomBackpackConfig", "sublabel": "YAML Deserializer", "pos": [260, 240], "size": [140, 60] },
+    { "id": "hash_resolver", "type": "backend", "label": "Hash Resolver", "sublabel": "GetStableHashCode()", "pos": [500, 240], "size": [150, 60] },
+    { "id": "object_db", "type": "database", "label": "ObjectDB Catalog", "sublabel": "m_StatusEffects", "pos": [760, 240], "size": [150, 60] },
+    { "id": "single_slot", "type": "database", "label": "SharedData Item", "sublabel": "m_equipStatusEffect", "pos": [500, 100], "size": [150, 60], "tag": "Single Slot" },
+    { "id": "se_man", "type": "backend", "label": "Player SEMan", "sublabel": "AddStatusEffect()", "pos": [760, 100], "size": [150, 60] },
+    { "id": "harmony_interceptor", "type": "security", "label": "Companion Patch", "sublabel": "Tokenize ',' and ';'", "pos": [500, 380], "size": [150, 60], "tag": "Harmony Postfix" },
+    { "id": "multi_effects", "type": "frontend", "label": "Active Status Effects", "sublabel": "Warm + Megingjord", "pos": [760, 380], "size": [150, 60], "tag": "Multi Stack" }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Smoothbrain Backpacks Mod", "wraps": ["config_loader", "hash_resolver"] },
+    { "kind": "region", "label": "Valheim Engine Runtime", "wraps": ["object_db", "single_slot", "se_man"] },
+    { "kind": "region", "label": "Multi-Effect Companion Extension", "wraps": ["harmony_interceptor", "multi_effects"] }
+  ],
+  "connections": [
+    { "id": "yaml_to_loader", "from": "yaml_cfg", "to": "config_loader", "label": "effect string", "variant": "emphasis" },
+    { "id": "loader_to_hasher", "from": "config_loader", "to": "hash_resolver", "label": "literal hash", "variant": "emphasis" },
+    { "id": "hasher_to_db", "from": "hash_resolver", "to": "object_db", "label": "lookup", "variant": "default" },
+    { "id": "hasher_to_slot", "from": "hash_resolver", "to": "single_slot", "label": "binds scalar", "variant": "default", "fromSide": "top", "toSide": "bottom" },
+    { "id": "slot_to_seman", "from": "single_slot", "to": "se_man", "label": "equip", "variant": "emphasis" },
+    { "id": "loader_to_interceptor", "from": "config_loader", "to": "harmony_interceptor", "label": "token stream", "variant": "dashed", "fromSide": "bottom", "toSide": "top" },
+    { "id": "interceptor_to_multi", "from": "harmony_interceptor", "to": "multi_effects", "label": "registers", "variant": "security" },
+    { "id": "multi_to_seman", "from": "multi_effects", "to": "se_man", "label": "applies buffs", "variant": "emphasis", "fromSide": "right", "toSide": "right", "via": [[980, 410], [980, 130]] }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Native Delimiter Limitation",
+      "items": [
+        "Backpacks.yml treats delimited strings as a single literal identifier",
+        "ObjectDB hash query fails on compound names ('SE_Warm, SE_Megingjord')",
+        "ItemDrop.ItemData.SharedData only holds one StatusEffect reference"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Composite StatusEffect Pattern",
+      "items": [
+        "Valheim StatusEffect (SE_Stats) is an aggregate modifier container",
+        "A single custom effect can combine carry weight, warmth, and speed",
+        "Zero C# code required: pure YAML configuration & prefab referencing"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Harmony Companion Patch",
+      "items": [
+        "Lightweight postfix on Humanoid.UpdateEquipmentStatusEffects",
+        "Tokenizes comma and semicolon delimited effect strings at runtime",
+        "Dynamically updates player SEMan without modifying mod assemblies"
+      ]
+    }
+  ]
+}

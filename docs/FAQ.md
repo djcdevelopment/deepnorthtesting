@@ -207,6 +207,10 @@ flowchart TD
     style Solution2 fill:#eef3ff,stroke:#0066cc,stroke-width:1px
 ```
 
+> 🗺️ **Interactive Archify System Map**: Open the [**Fully Rendered Archify Architecture Map (HTML)**](./backpack-effects.architecture.html) ([JSON Source](./backpack-effects.architecture.json)) for an explorable, standalone system map featuring preset views, dark/light themes, and route tracing.
+>
+> ![Backpack Effects Architecture System Map](./backpack-effects.architecture.visual-check.1440x900.dark.png)
+
 ---
 
 #### 🛠️ Workable Solutions
