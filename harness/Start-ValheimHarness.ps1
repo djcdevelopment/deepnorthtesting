@@ -43,13 +43,13 @@ do {
 } until ($valheimProcess -or (Get-Date) -ge $deadline)
 
 if ($valheimProcess) {
-    Write-Host "[✓] Valheim running with PID: $($valheimProcess.Id)" -ForegroundColor Green
+    Write-Host "[OK] Valheim running with PID: $($valheimProcess.Id)" -ForegroundColor Green
     Write-Host "[+] Awaiting initialization and BepInEx chainloader..." -ForegroundColor Gray
     Start-Sleep -Seconds 8
     
     $valheimProcess.Refresh()
     Write-Host "[+] Process Status: Responding=$($valheimProcess.Responding), WorkingSet=$([math]::Round($valheimProcess.WorkingSet64 / 1MB, 1)) MB" -ForegroundColor Cyan
 } else {
-    Write-Error "[✗] Valheim did not launch within $TimeoutSeconds seconds."
+    Write-Error "[FAIL] Valheim did not launch within $TimeoutSeconds seconds."
     exit 1
 }
