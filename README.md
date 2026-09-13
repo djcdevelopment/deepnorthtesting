@@ -116,6 +116,7 @@ We pointed this harness at the complete 51-mod suite from [Redseiko's ComfyMods]
 See our complete documentation:
 - 📖 [**Valheim 1.0 Mod Migration Guide**](./docs/VALHEIM_1.0_MIGRATION_GUIDE.md) — Comprehensive guide to the 6 core architectural shifts, before/after code snippets, and transpiler rules.
 - 📊 [**ComfyMods Full Audit Matrix**](./docs/COMFYMODS_AUDIT_MATRIX.md) — Complete 51-mod status table and verification logs.
+- ❓ [**Technical FAQ & Knowledgebase**](./docs/FAQ.md) — Authoritative engineering answers, IL breakdowns, and operational runbooks (e.g., FAQ-001 on Smoothbrain Backpacks status effects).
 - 📈 [**Final Verification Stats & Telemetry**](./stats/final_stats.md) ([JSON](./stats/final_stats.json)) — Quantitative benchmarks, latency reductions, and telemetry data.
 - 🎙️ [**2-Hour Podcast Companion Series**](./podcast/README.md) — Exhaustive 6-chapter audio script covering the voyage from silicon to bytecode.
 
