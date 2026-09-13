@@ -414,4 +414,4 @@ Launch the autonomous harness and assert zero error states:
 
 ---
 
-*End of FAQ-001. For contributions and additions, copy the template in [FAQ Contribution Standard](#-faq-contribution-standard--entry-template).*
+*End of FAQ-001. For hands-on testing labs, sample configs, and observable checkpoints, see the [**Operational Testing Workbook**](./WORKBOOK.md). For contributions and additions, copy the template in [FAQ Contribution Standard](#-faq-contribution-standard--entry-template).*
