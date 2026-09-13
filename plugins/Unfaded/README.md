@@ -5,9 +5,10 @@
 [![Valheim 1.0](https://img.shields.io/badge/Valheim-1.0-blue.svg)](#)
 [![BepInEx 5](https://img.shields.io/badge/BepInEx-5.4.2202-green.svg)](#)
 [![Hardware Verified](https://img.shields.io/badge/OMEN%20Verified-0%20Errors-purple.svg)](#)
-[![Archify Diagram](https://img.shields.io/badge/Archify-Showcase%209%2F9-0891b2.svg)](docs/unfaded-architecture.html)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Archify Diagram](https://img.shields.io/badge/Archify-Showcase%209%2F9-0891b2.svg)](https://github.com/djcdevelopment/Unfaded/blob/main/docs/unfaded-architecture.html)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/djcdevelopment/Unfaded/blob/main/LICENSE)
 [![Client-Side Safe](https://img.shields.io/badge/Multiplayer-100%25%20Client--Side-success.svg)](#)
+[![AI Assisted](https://img.shields.io/badge/Development-AI--Assisted-blueviolet.svg)](#)
 
 ---
 
@@ -35,7 +36,7 @@
 
 ## 🎯 The Request & Origin
 
-![Draugor Discord Request](docs/draugor-request.png)
+![Draugor Discord Request](https://raw.githubusercontent.com/djcdevelopment/Unfaded/main/docs/draugor-request.png)
 
 > *"Any mods out there to get rid of the annoying fadeout on death? It's the most uninspiring and boring thing ever to watch"*  
 > — **Draugor**
@@ -52,9 +53,9 @@ Instead of watching your Viking ragdoll launch over a mountain, slide into the o
 
 Archify verified showcase map illustrating the engine hooks, spectator modes, and respawn pipeline:
 
-[![Unfaded Architecture Preview](docs/unfaded-architecture.visual-check.1440x900.dark.png)](docs/unfaded-architecture.html)
+[![Unfaded Architecture Preview](https://raw.githubusercontent.com/djcdevelopment/Unfaded/main/docs/unfaded-architecture.visual-check.1440x900.dark.png)](https://github.com/djcdevelopment/Unfaded/blob/main/docs/unfaded-architecture.html)
 
-👉 **[Open Live Interactive Archify Diagram (docs/unfaded-architecture.html)](docs/unfaded-architecture.html)** *(Dark/Light themes, guided view inspection, and node reachability)*
+👉 **[Open Live Interactive Archify Diagram](https://github.com/djcdevelopment/Unfaded/blob/main/docs/unfaded-architecture.html)** ([Live Web Preview](https://htmlpreview.github.io/?https://github.com/djcdevelopment/Unfaded/blob/main/docs/unfaded-architecture.html)) *(Dark/Light themes, guided view inspection, and node reachability)*
 
 ```mermaid
 flowchart LR
@@ -186,17 +187,17 @@ unfaded status       # Prints complete live configuration and active hotkeys
 
 Verified BepInEx Chainloader Log:
 ```text
-[Info   :   BepInEx] Loading [Unfaded 1.0.0]
-[Info   :   Unfaded] Unfaded v1.0.0 loaded successfully. Blackout: Disabled, Respawn: 10s ([Space]), KillerCam: True, FreeFly: True, SlowMo: True.
+[Info   :   BepInEx] Loading [Unfaded 1.0.1]
+[Info   :   Unfaded] Unfaded v1.0.1 loaded successfully. Blackout: Disabled, Respawn: 10s ([Space]), KillerCam: True, FreeFly: True, SlowMo: True.
 ```
 
 ---
 
 ## 📚 Documentation & Guides
 
-- 🔍 [**Technical Explanation & Engine Decompilation**](docs/EXPLANATION.md) — Deep dive into `Hud.UpdateBlackScreen`, `GameCamera.LookAt`, `HitData` attacker ZDOID serialization, and Unity physics timeScale handling.
-- 📖 [**Field Workbook & Scenario Playbook**](docs/WORKBOOK.md) — Step-by-step walkthrough of the Request-Snipe methodology, gameplay scenarios (Tree Fails, Fuling Raids, Crypt Recon), and configuration presets.
-- 🗺️ [**Interactive Archify Diagram**](docs/unfaded-architecture.html) — Standalone responsive HTML architecture map with theme toggling and guided story perspectives.
+- 🔍 [**Technical Explanation & Engine Decompilation**](https://github.com/djcdevelopment/Unfaded/blob/main/docs/EXPLANATION.md) — Deep dive into `Hud.UpdateBlackScreen`, `GameCamera.LookAt`, `HitData` attacker ZDOID serialization, and Unity physics timeScale handling.
+- 📖 [**Field Workbook & Scenario Playbook**](https://github.com/djcdevelopment/Unfaded/blob/main/docs/WORKBOOK.md) — Step-by-step walkthrough of the Request-Snipe methodology, gameplay scenarios (Tree Fails, Fuling Raids, Crypt Recon), and configuration presets.
+- 🗺️ [**Interactive Archify Diagram**](https://github.com/djcdevelopment/Unfaded/blob/main/docs/unfaded-architecture.html) ([Live Web Preview](https://htmlpreview.github.io/?https://github.com/djcdevelopment/Unfaded/blob/main/docs/unfaded-architecture.html)) — Standalone responsive HTML architecture map with theme toggling and guided story perspectives.
 
 ---
 
@@ -231,6 +232,14 @@ dotnet build -c Release
 
 ---
 
+## 🤖 AI Disclosure & Provenance
+
+In accordance with open source transparency and community guidelines:
+- **AI-Assisted Engineering:** Engineered through collaborative human-AI pair programming (Google DeepMind Antigravity / Gemini) under human architectural direction.
+- **Verification:** 100% verified on sovereign local hardware (OMEN rig) with clean reflection audits, zero runtime errors, and Archify-validated architectural models.
+
+---
+
 ## 📄 License
 
-Distributed under the [MIT License](LICENSE). Copyright (c) 2026 djcdevelopment.
+Distributed under the [MIT License](https://github.com/djcdevelopment/Unfaded/blob/main/LICENSE). Copyright (c) 2026 djcdevelopment.
