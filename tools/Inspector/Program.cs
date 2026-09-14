@@ -65,6 +65,18 @@ class Program {
             if (mShow != null) {
                 Console.WriteLine($"[Game Signature] InventoryGui.Show => ({string.Join(", ", mShow.Parameters.Select(p => p.ParameterType.Name + " " + p.Name))})");
             }
+
+            // Audit Character.Message (5 parameters in Valheim 1.0)
+            var tChar = valheimModule.GetType("Character");
+            var mMsg = tChar?.Methods.FirstOrDefault(m => m.Name == "Message");
+            if (mMsg != null) {
+                Console.WriteLine($"[Game Signature] Character.Message => {mMsg.Parameters.Count} parameters ({string.Join(", ", mMsg.Parameters.Select(p => p.ParameterType.Name + " " + p.Name))})");
+                if (mMsg.Parameters.Count == 5) {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("  -> Confirmed Valheim 1.0 Character.Message signature (added Boolean log)");
+                    Console.ResetColor();
+                }
+            }
         }
 
         // 2. Audit Installed BepInEx Plugins
@@ -81,6 +93,17 @@ class Program {
                 try {
                     var module = ModuleDefinition.ReadModule(pluginFile);
                     bool hasIssue = false;
+
+                    // Check member references for obsolete Character.Message (4 params)
+                    foreach (var mr in module.GetMemberReferences()) {
+                        if (mr.Name == "Message" && mr.DeclaringType.Name == "Character" && mr is MethodReference mref && mref.Parameters.Count == 4) {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine($"  [FAIL] {fileName}: references obsolete 4-parameter Character.Message signature (causes MissingMethodException in Valheim 1.0)");
+                            Console.ResetColor();
+                            hasIssue = true;
+                            warnings++;
+                        }
+                    }
 
                     foreach (var type in module.Types) {
                         // Check for obsolete Vector2i FindSectorObjects patches

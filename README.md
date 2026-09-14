@@ -177,7 +177,7 @@ Our repository hosts a rigorous technical library documenting Valheim 1.0 intern
 | :--- | :--- | :--- |
 | 📖 [**Valheim 1.0 Mod Migration Guide**](./docs/VALHEIM_1.0_MIGRATION_GUIDE.md) | Authoritative guide to the 6 core architectural shifts, before/after code snippets, and transpiler rules. | Markdown |
 | 📊 [**ComfyMods Full Audit Matrix**](./docs/COMFYMODS_AUDIT_MATRIX.md) | Complete 51-mod status matrix and automated reflection verification logs. | Markdown Table |
-| ❓ [**Technical FAQ & Knowledgebase**](./docs/FAQ.md) | Engineering answers, IL breakdowns, and operational solutions (e.g. FAQ-001 on Smoothbrain Backpacks). | Markdown + ToC |
+| ❓ [**Technical FAQ & Knowledgebase**](./docs/FAQ.md) | Engineering answers, IL breakdowns, and operational runbooks (FAQ-001 Backpacks, FAQ-002 Tombstone Timers, FAQ-003 Black Screen on Connect, FAQ-004 Missing Auto-Pickup Notifications). | Markdown + ToC |
 | 📓 [**Harness Testing Workbook**](./docs/WORKBOOK.md) | Hands-on labs, sample configs (`Backpacks.yml`, `Unfaded.cfg`), and observable checkpoints. | Markdown Lab Guide |
 | 🔭 [**Unfaded Technical Deep Dive**](./plugins/Unfaded/docs/EXPLANATION.md) | In-depth engineering breakdown of blackout suppression, camera transforms, and bullet-time. | Markdown |
 | 🛠️ [**Unfaded Hands-On Workbook**](./plugins/Unfaded/docs/WORKBOOK.md) | Interactive lab guide for spectator testing, console tuning, and keybindings. | Markdown |
