@@ -1261,8 +1261,8 @@ This inquiry reflects a widespread reaction on `r/valheim`, where players noted 
 
 #### ⚡ TL;DR Verdict
 
-1. **Has anyone released a mod to restore the pre-1.0 run animation yet?**  
-   **Not yet as an off-the-shelf package.** Because Valheim 1.0 is newly released, an `AnimatorOverrideController` mod that extracts the legacy 0.218 `.anim` clips from pre-1.0 asset bundles and injects them back into the player's run state machine has not yet been published to Thunderstore or Nexus.
+1. **Has anyone released a mod to restore the pre-1.0 run animation or fix the camera bobbing?**  
+   **Yes — we engineered and published [Unswayed](../plugins/Unswayed) in this repository!** While an asset-swapping `AnimatorOverrideController` mod that restores legacy 0.218 `.anim` clips is fragile across game updates, **Unswayed** solves the problem at the root camera level: it decouples the third-person viewport from the animated head bone, enforces a minimum camera distance floor in burial crypts, softly lifts the camera over shoulders in narrow hallways, dynamically boosts FOV in tight corridors, and scales or disables camera shake. For players wanting an immediate fix without mod bloat, Unswayed is zero-dependency and fully configurable.
 2. **Why does it cause vertigo, and why specifically in Burial Crypts?**  
    The new 1.0 run animation features increased vertical amplitude along the Viking's spine and cervical (head) bones. Valheim's `GameCamera` anchors its view target directly to `Character.m_eye`, which is a child transform of this animated head bone.  
    In the open world (at a 4.0m–6.0m camera distance), `GameCamera.UpdateBaseOffset()` dampens this bounce with `Vector3.SmoothDamp`. However, inside **Burial Crypts** (and Sunken Crypts or Frost Caves), narrow corridors and low stone ceilings trigger `GameCamera.CollideRay2()`, which forcibly clamps camera distance down to **less than 1 meter** right behind the Viking's neck. At point-blank range, 100% of the vertical bone bobbing is translated directly into viewport oscillation under flickering torchlight, creating an immediate visual-vestibular mismatch that triggers nausea and vertigo.
@@ -1395,8 +1395,17 @@ Narrow FOV dramatically increases the perception of motion sickness. Using a ver
 2. Adjust your camera FOV from the default `65°` up to **`85° – 90°`**.
 3. A wider focal cone creates a larger peripheral anchor, which significantly stabilizes the horizon in tight crypts and suppresses vertigo.
 
-##### Solution D: Technical Developer Blueprint (Decoupling Camera from Head Bone)
-For mod developers seeking to eliminate the vertigo without needing asset bundle extraction, a lightweight Harmony patch can decouple `GameCamera` from the oscillating head bone by anchoring to root player height:
+##### Solution D: Install `Unswayed` — Sovereign Valheim 1.0 Camera Stabilizer
+For players and server hosts seeking an immediate, clean fix without bulky dependencies, this repository provides **[`Unswayed`](../plugins/Unswayed)**. It directly resolves the 1.0 motion sickness bug at the camera anchor level:
+
+1. **Zero-Dependency Plugin**: Drop `Unswayed.dll` into `Valheim/BepInEx/plugins/`.
+2. **Instant Head-Bob Decoupling**: Decouples `GameCamera` from the animated head bone and stabilizes camera pivot height at `1.65m`, completely eliminating the 1.0 vertical running bounce while preserving natural mouse look.
+3. **Dungeon Anti-Crush Clamp**: Enforces a `1.35m` minimum distance floor in Burial Crypts, preventing `CollideRay2()` from crushing the camera point-blank against the player's skull.
+4. **Adaptive Shoulder Lift & Dynamic FOV**: Gently elevates camera height by `+0.35m` and widens dungeon FOV by `+10°` in cramped corridors for clear sightlines down hallways.
+5. **Live Hotkey & In-Game CLI**: Press **`F7`** to toggle stabilization on/off on the fly, or use `unswayed [status|toggle|height|damping|shake]` in the Valheim developer console (`F5`).
+
+##### Solution E: Technical Developer Blueprint (Decoupling Camera from Head Bone)
+For mod developers seeking to implement custom camera decoupling in their own plugins, here is the verified Harmony patch blueprint used in `Unswayed`:
 
 ```csharp
 using HarmonyLib;

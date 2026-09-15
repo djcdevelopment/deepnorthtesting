@@ -18,6 +18,7 @@
   - [2. Unfaded Death Spectator & Blackout Removal](#2-unfaded-death-spectator--blackout-removal)
 - [🧩 Sovereign Mod Plugins](#-sovereign-mod-plugins)
   - [Unfaded (Death Spectator & Blackout Suppression)](#unfaded-death-spectator--blackout-suppression)
+  - [Unswayed (Ergonomic Camera & Locomotion Bobbing Stabilizer)](#unswayed-ergonomic-camera--locomotion-bobbing-stabilizer)
   - [EarnYourKeep (Modded Achievement Enabler)](#earnyourkeep-modded-achievement-enabler)
 - [🚀 Quickstart & Autonomous Harness](#-quickstart--autonomous-harness)
   - [1. Preflight Reflection Audit](#1-run-the-preflight-reflection-audit)
@@ -117,6 +118,15 @@ This repository develops and tests sovereign Valheim 1.0 plugins built for perfo
   - **Free-Fly Drone**: Press **[F]** to disconnect camera anchors and fly freely across the battlefield.
 - **Cinematic Bullet-Time**: Configurable slow-motion timescale (`0.35x` default) upon lethal hit.
 - **In-Game CLI**: Type `unfaded test` in the console (`F5`) to test spectator features without dying.
+
+### [Unswayed](./plugins/Unswayed) (Ergonomic Camera & Locomotion Bobbing Stabilizer)
+- **Decouples Camera Stride Bounce**: Anchors base camera height to a stabilized ground offset, decoupling it from the 1.0 animated head bone to completely eliminate running vertical bounce.
+- **Dungeon Ergonomics & Anti-Crush**:
+  - **Min Distance Clamp**: Prevents camera collision raycasts from crushing point-blank against the player's skull in narrow burial crypt corridors.
+  - **Adaptive Shoulder Lift**: Gently raises the camera over the Viking's shoulders in low-clearance crypts for clear sightlines.
+  - **Dynamic Dungeon FOV**: Automatically widens FOV in cramped dungeons (e.g. +10°–15°) to stabilize peripheral vision and suppress vertigo.
+- **Motion Sickness Toolkit**: Configurable camera shake multiplier (`0.0` to `1.0`), sailing ship tilt suppression, continuous vertical damping slider (`0.0` to `1.0`), and live hotkey toggling (`F7`).
+- **In-Game CLI**: Type `unswayed status`, `unswayed toggle`, or tune live parameters directly in console.
 
 ### [EarnYourKeep](./plugins/EarnYourKeep) (Modded Achievement Enabler)
 - **Decoupled Cheat Detection**: Permits earning Steam achievements while playing with BepInEx and mods.
