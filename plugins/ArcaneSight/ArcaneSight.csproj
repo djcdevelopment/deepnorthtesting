@@ -7,9 +7,6 @@
     <Deterministic>true</Deterministic>
     <Optimize>true</Optimize>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <RootNamespace>Unfaded</RootNamespace>
-    <AssemblyName>Unfaded</AssemblyName>
-    <Version>1.0.6</Version>
     <GamePath Condition="'$(GamePath)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Valheim</GamePath>
   </PropertyGroup>
 
@@ -30,26 +27,26 @@
     <Reference Include="assembly_utils" Private="false">
       <HintPath>$(GamePath)\valheim_Data\Managed\publicized_assemblies\assembly_utils_publicized.dll</HintPath>
     </Reference>
+    <Reference Include="assembly_guiutils" Private="false">
+      <HintPath>$(GamePath)\valheim_Data\Managed\assembly_guiutils.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine" Private="false">
       <HintPath>$(GamePath)\valheim_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule" Private="false">
       <HintPath>$(GamePath)\valheim_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UI" Private="false">
-      <HintPath>$(GamePath)\valheim_Data\Managed\UnityEngine.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UIModule" Private="false">
-      <HintPath>$(GamePath)\valheim_Data\Managed\UnityEngine.UIModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.PhysicsModule" Private="false">
-      <HintPath>$(GamePath)\valheim_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+    <Reference Include="UnityEngine.IMGUIModule" Private="false">
+      <HintPath>$(GamePath)\valheim_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule" Private="false">
       <HintPath>$(GamePath)\valheim_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.TextMeshPro" Private="false">
-      <HintPath>$(GamePath)\valheim_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+    <Reference Include="UnityEngine.TextRenderingModule" Private="false">
+      <HintPath>$(GamePath)\valheim_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI" Private="false">
+      <HintPath>$(GamePath)\valheim_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
 
