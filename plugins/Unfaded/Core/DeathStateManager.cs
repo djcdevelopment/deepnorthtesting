@@ -63,6 +63,9 @@ public static class DeathStateManager
                 case HitData.HitType.Fall:
                     LastKillerName = "Gravity / Fall Damage";
                     break;
+                case HitData.HitType.Tree:
+                    LastKillerName = "Falling Tree / Timber";
+                    break;
                 case HitData.HitType.Smoke:
                     LastKillerName = "Smoke Inhalation";
                     break;

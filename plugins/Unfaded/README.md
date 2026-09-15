@@ -23,10 +23,14 @@
   - [4. Death Cause & Attacker Recap Banner](#4-death-cause--attacker-recap-banner)
   - [5. Instant Manual Respawn (`[Space]`)](#5-instant-manual-respawn-space)
   - [6. In-Game CLI & Safe Testing (`unfaded test`)](#6-in-game-cli--safe-testing-unfaded-test)
+  - [7. Video Recording Suite (`[F9]` / `record`)](#7-video-recording-suite-f9--record)
+  - [8. Instant Death & Timber Simulation (`unfaded tree`)](#8-instant-death--timber-simulation-unfaded-tree)
+- [🎬 Official Showcase Video](#-official-showcase-video)
 - [🎮 Hotkey Quick Reference](#-hotkey-quick-reference)
 - [⚙️ Configuration Reference](#️-configuration-reference)
 - [💻 In-Game Console Commands (`F5`)](#-in-game-console-commands-f5)
 - [🔬 Hardware Verification (OMEN Rig)](#-hardware-verification-omen-rig)
+- [📋 Changelog](#-changelog)
 - [📚 Documentation & Guides](#-documentation--guides)
 - [📦 Installation Guide](#-installation-guide)
 - [🛠️ Building from Source](#️-building-from-source)
@@ -108,13 +112,31 @@ Upon receiving the fatal blow, game time briefly slows to 0.35x for 1.5 seconds.
 
 ### 4. Death Cause & Attacker Recap Banner
 Displays a clean on-screen summary of exactly what dealt the killing blow:
-> `💀 Slain by: 2★ Fuling Berserker [164 Blunt]` or `💀 Slain by: Gravity / Fall Damage [-95 Physical]`
+> `💀 Slain by: 2★ Fuling Berserker [164 Blunt]`, `💀 Slain by: Falling Tree / Timber [120 Physical]`, or `💀 Slain by: Gravity / Fall Damage [-95 Physical]`
 
 ### 5. Instant Manual Respawn (`[Space]`)
 Done watching the aftermath or scouted your tombstone? Tap `[Space]` (or your configured hotkey) to respawn at your bed or spawnpoint immediately.
 
 ### 6. In-Game CLI & Safe Testing (`unfaded test`)
 Never sacrifice a survival character just to test mod settings. Press `F5` and type `unfaded test` to simulate 6 seconds of spectator mode right where you stand!
+
+### 7. Video Recording Suite (`[F9]` / `record`)
+One-touch capture workflow for clip creators and bug reporters. Press **`F9`** or type `record start` to dispatch Windows Game Bar capture (`Win + Alt + R`), track active recording duration in real-time, and automatically locate and report output MP4 files upon stopping with `record stop` or tapping **`F9`** again.
+
+### 8. Instant Death & Timber Simulation (`unfaded tree` / `smite`)
+Testing ragdoll physics, killer cameras, or recording clips without risking survival characters is effortless:
+- `unfaded tree` — Deals simulated lethal timber damage (`HitType.Tree`), launching your Viking ragdoll forward in 0.35x bullet-time with full combat recap banner.
+- `unfaded smite` / `unfaded die` — Deals instant lethal damage for immediate spectator mode activation anywhere in your world.
+
+---
+
+## 🎬 Official Showcase Video
+
+Check out the full in-game showcase demonstrating Unfaded's zero-blackout death experience, 0.35x bullet-time physics, killer tracking, free-fly drone scouting, and instant spacebar respawn:
+
+[![Unfaded In-Game Showcase Video Preview](https://raw.githubusercontent.com/djcdevelopment/Unfaded/main/docs/preview_titlecard.jpg)](https://github.com/djcdevelopment/Unfaded/blob/main/docs/SHOWCASE_VIDEO_SCRIPT.md)
+
+- 🎥 **[Showcase Production Guide & Storyboard](https://github.com/djcdevelopment/Unfaded/blob/main/docs/SHOWCASE_VIDEO_SCRIPT.md)** — Shot-by-shot breakdown and community post templates.
 
 ---
 
@@ -127,7 +149,8 @@ Never sacrifice a survival character just to test mod settings. Press `F5` and t
 | **`Mouse Wheel`** | **Distance Zoom** | Zooms camera in and out smoothly from your body. |
 | **`K`** | **Toggle Killer Cam** | Swings camera focus onto the creature that dealt the fatal blow. |
 | **`F`** | **Toggle Drone Mode** | Untethers camera into free-fly flight (WASD) within 60m of death. |
-| **`F5`** | **Console CLI** | Opens in-game console for `unfaded test` and live tuning. |
+| **`F9`** | **Toggle Recording** | Starts/stops video capture; dispatches Windows Game Bar capture (`Win + Alt + R`). |
+| **`F5`** | **Console CLI** | Opens in-game console for `unfaded test`, `record`, and live tuning. |
 
 ---
 
@@ -153,14 +176,25 @@ Configuration file: `BepInEx/config/djc.valheim.unfaded.cfg`
 | `7 - Free-Fly Spectator` | `EnableFreeFly` | `true` | Enables tactical drone flight around death site. |
 | `7 - Free-Fly Spectator` | `FreeFlyKey` | `F` | Hotkey to toggle free-fly mode. |
 | `7 - Free-Fly Spectator` | `FreeFlyRadius` | `60.0` | Maximum flight distance in meters from death position. |
+| `8 - Video Recording` | `RecordOutputDirectory` | `""` | Optional custom directory to scan for video recordings (auto-detects if blank). |
+| `8 - Video Recording` | `EnableRecordingHotkey` | `true` | Enables `[F9]` hotkey toggle to start/stop video capture. |
+| `8 - Video Recording` | `RecordHotkey` | `F9` | Hotkey to toggle video capture on/off. |
+| `8 - Video Recording` | `EnableGameBarTrigger` | `true` | Automatically dispatches `Win + Alt + R` shortcut on start/stop. |
 
 ---
 
 ## 💻 In-Game Console Commands (`F5`)
 
-Press `F5` in-game and use the `unfaded` command suite:
+Press `F5` in-game and use the `unfaded` and `record` command suite:
 
 ```text
+record start         # Starts recording, dispatches Win+Alt+R, begins session timer
+record stop          # Stops recording, scans output folders, logs filename & size
+record status        # Shows current recording state and elapsed recording time
+record dir [path]    # Displays or sets active video capture output directory
+rec <start|stop>     # Shorthand alias for record command
+unfaded tree         # Simulates fatal tree fall damage (HitType.Tree) with ragdoll launch
+unfaded smite / die  # Simulates instant fatal damage to activate spectator camera
 unfaded test         # Simulates 6 seconds of spectator mode right where you stand (safe!)
 unfaded delay <sec>  # Adjusts auto-respawn timer dynamically (e.g. unfaded delay 5)
 unfaded slowmo       # Toggles cinematic bullet-time slow motion on/off
@@ -187,9 +221,28 @@ unfaded status       # Prints complete live configuration and active hotkeys
 
 Verified BepInEx Chainloader Log:
 ```text
-[Info   :   BepInEx] Loading [Unfaded 1.0.1]
-[Info   :   Unfaded] Unfaded v1.0.1 loaded successfully. Blackout: Disabled, Respawn: 10s ([Space]), KillerCam: True, FreeFly: True, SlowMo: True.
+[Info   :   BepInEx] Loading [Unfaded 1.0.2]
+[Info   :   Unfaded] Unfaded v1.0.2 loaded successfully. Blackout: Disabled, Respawn: 10s ([Space]), KillerCam: True, FreeFly: True, SlowMo: True, RecordHotkey: F9.
 ```
+
+---
+
+## 📋 Changelog
+
+### v1.0.2 (2026-09-14)
+- **Video Recording Devcommands**: Added `record start`, `record stop`, `record status`, `record dir`, and shorthand `rec` alias with automated output directory scanning and file reporting.
+- **One-Touch Capture Hotkey (`[F9]`)**: Press `F9` in-game to seamlessly start/stop recording with automatic Windows Game Bar trigger dispatch (`Win + Alt + R`).
+- **Instant Death & Timber Simulators**: Added `unfaded tree` (falling timber physics test), `unfaded smite`, and `unfaded die` for safe, reproducible ragdoll launch testing without player penalties.
+- **Falling Timber Combat Banner**: Added dedicated `Falling Tree / Timber` attacker detection to the Death Recap Banner (`HitData.HitType.Tree`).
+- **Official Showcase Edits**: Storyboarded, captured in 4K, and produced official 39-second showcase videos (Discord/Web, 1080p, and 4K masters).
+- **Architecture & Storyboard Docs**: Added `SHOWCASE_VIDEO_SCRIPT.md` and screenshot previews.
+
+### v1.0.1 (2026-09-13)
+- Fixed Thunderstore documentation relative link 404s with absolute repository URLs.
+- Initial Thunderstore release packaging.
+
+### v1.0.0 (2026-09-13)
+- Initial release: Complete death blackout elimination (`HudBlackScreenPatch`), 360° corpse orbit camera, killer focus cam (`[K]`), free-fly drone recon (`[F]`), 0.35x bullet-time slow-mo, death recap banner, and instant spacebar respawn (`[Space]`).
 
 ---
 

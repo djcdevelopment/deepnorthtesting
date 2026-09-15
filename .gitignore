@@ -9,5 +9,8 @@ obj/
 # Logs & temp
 *.log
 *.tmp
+*.mp4
+*.zip
+tools/video_preview/
 .vs/
 .vscode/

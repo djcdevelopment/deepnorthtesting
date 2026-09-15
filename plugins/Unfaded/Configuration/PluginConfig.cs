@@ -39,6 +39,12 @@ public static class PluginConfig
     public static ConfigEntry<float> FreeFlyRadius = null!;
     public static ConfigEntry<float> FreeFlySpeed = null!;
 
+    // 8 - Video Recording Devcommands
+    public static ConfigEntry<string> RecordOutputDirectory = null!;
+    public static ConfigEntry<bool> EnableRecordingHotkey = null!;
+    public static ConfigEntry<KeyCode> RecordHotkey = null!;
+    public static ConfigEntry<bool> EnableGameBarTrigger = null!;
+
     public static void BindConfig(ConfigFile config)
     {
         // 1 - General
@@ -205,5 +211,35 @@ public static class PluginConfig
                 new AcceptableValueRange<float>(5.0f, 50.0f)
             )
         );
+
+        // 8 - Video Recording Devcommands
+        RecordOutputDirectory = config.Bind(
+            "8 - Video Recording",
+            "RecordOutputDirectory",
+            "",
+            "Optional custom directory to scan for recorded video files. If blank, auto-detects Captures and OBS directories."
+        );
+
+        EnableRecordingHotkey = config.Bind(
+            "8 - Video Recording",
+            "EnableRecordingHotkey",
+            true,
+            "Enable hotkey toggle to start and stop video recording without opening console."
+        );
+
+        RecordHotkey = config.Bind(
+            "8 - Video Recording",
+            "RecordHotkey",
+            KeyCode.F9,
+            "Hotkey to toggle video recording on/off (starts recording on first press, stops and logs summary on second press)."
+        );
+
+        EnableGameBarTrigger = config.Bind(
+            "8 - Video Recording",
+            "EnableGameBarTrigger",
+            true,
+            "Automatically dispatch Windows Game Bar capture shortcut (Win + Alt + R) on record start/stop."
+        );
     }
 }
+
