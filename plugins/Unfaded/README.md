@@ -15,6 +15,7 @@
 ## 📑 Table of Contents
 
 - [🎯 The Request & Origin](#-the-request--origin)
+- [🎬 In-Game Showcase Video](#-in-game-showcase-video)
 - [🏗️ Visual System Architecture (Archify)](#️-visual-system-architecture-archify)
 - [⚡ Core Features](#-core-features)
   - [1. Zero Death Blackout](#1-zero-death-blackout)
@@ -25,7 +26,6 @@
   - [6. In-Game CLI & Safe Testing (`unfaded test`)](#6-in-game-cli--safe-testing-unfaded-test)
   - [7. Video Recording Suite (`[F9]` / `record`)](#7-video-recording-suite-f9--record)
   - [8. Instant Death & Timber Simulation (`unfaded tree`)](#8-instant-death--timber-simulation-unfaded-tree)
-- [🎬 Official Showcase Video](#-official-showcase-video)
 - [🎮 Hotkey Quick Reference](#-hotkey-quick-reference)
 - [⚙️ Configuration Reference](#️-configuration-reference)
 - [💻 In-Game Console Commands (`F5`)](#-in-game-console-commands-f5)
@@ -50,6 +50,18 @@ In vanilla Valheim, Iron Gate actually wrote code for the camera to follow your 
 Instead of watching your Viking ragdoll launch over a mountain, slide into the ocean, or see the troll that crushed you, you are forced to stare into a pitch-black void.
 
 **Unfaded** transforms the death experience from a punitive blackout into an informative, cinematic spectator tool.
+
+---
+
+## 🎬 In-Game Showcase Video
+
+Watch Unfaded in action — zero death blackout, 0.35x bullet-time slow-mo, combat recap banner, killer focus cam (`[K]`), free-fly drone scouting (`[F]`), and instant manual respawn (`[Space]`):
+
+[![Unfaded In-Game Action Preview](https://raw.githubusercontent.com/djcdevelopment/Unfaded/main/docs/unfaded-showcase.gif)](https://github.com/djcdevelopment/Unfaded/raw/main/docs/Unfaded_Showcase_Discord_Web.mp4)
+
+https://github.com/djcdevelopment/Unfaded/raw/main/docs/Unfaded_Showcase_Discord_Web.mp4
+
+▶️ **[Click to Watch / Download Full 1080p Showcase Video (MP4)](https://github.com/djcdevelopment/Unfaded/raw/main/docs/Unfaded_Showcase_Discord_Web.mp4)** • 🎥 **[Showcase Production Guide & Storyboard](https://github.com/djcdevelopment/Unfaded/blob/main/docs/SHOWCASE_VIDEO_SCRIPT.md)**
 
 ---
 
@@ -127,19 +139,6 @@ One-touch capture workflow for clip creators and bug reporters. Press **`F9`** o
 Testing ragdoll physics, killer cameras, or recording clips without risking survival characters is effortless:
 - `unfaded tree` — Deals simulated lethal timber damage (`HitType.Tree`), launching your Viking ragdoll forward in 0.35x bullet-time with full combat recap banner.
 - `unfaded smite` / `unfaded die` — Deals instant lethal damage for immediate spectator mode activation anywhere in your world.
-
----
-
-## 🎬 Official In-Game Showcase Video
-
-Watch the in-game showcase demonstrating Unfaded's zero-blackout death experience, 0.35x bullet-time physics, combat recap banner, killer tracking, free-fly drone scouting, and instant spacebar respawn:
-
-[![Unfaded In-Game Action Preview](https://raw.githubusercontent.com/djcdevelopment/Unfaded/main/docs/unfaded-showcase.gif)](https://github.com/djcdevelopment/Unfaded/raw/main/docs/Unfaded_Showcase_Discord_Web.mp4)
-
-https://github.com/djcdevelopment/Unfaded/raw/main/docs/Unfaded_Showcase_Discord_Web.mp4
-
-▶️ **[Click to Watch Full 1080p In-Game Showcase Video (MP4)](https://github.com/djcdevelopment/Unfaded/raw/main/docs/Unfaded_Showcase_Discord_Web.mp4)**  
-🎥 **[Showcase Production Guide & Storyboard](https://github.com/djcdevelopment/Unfaded/blob/main/docs/SHOWCASE_VIDEO_SCRIPT.md)** — Shot-by-shot breakdown and community post templates.
 
 ---
 
