@@ -5,8 +5,8 @@
 [![Valheim 1.0](https://img.shields.io/badge/Valheim-1.0%20(Deep%20North)-blue.svg)](#)
 [![BepInEx 5](https://img.shields.io/badge/BepInEx-5.4.2350-green.svg)](#)
 [![Hardware Verified](https://img.shields.io/badge/OMEN%20Verified-0%20Errors-purple.svg)](#)
-[![Archify Diagram](https://img.shields.io/badge/Archify-Showcase%209%2F9-0891b2.svg)](./docs/unswayed-architecture.html)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
+[![Archify Diagram](https://img.shields.io/badge/Archify-Showcase%209%2F9-0891b2.svg)](https://github.com/djcdevelopment/deepnorthtesting/blob/main/plugins/Unswayed/docs/unswayed-architecture.html)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/djcdevelopment/deepnorthtesting/blob/main/plugins/Unswayed/LICENSE)
 [![Client-Side Safe](https://img.shields.io/badge/Multiplayer-100%25%20Client--Side-success.svg)](#)
 [![AI Assisted](https://img.shields.io/badge/Development-AI--Assisted-blueviolet.svg)](#)
 
@@ -39,7 +39,7 @@
 
 ## 🎯 The Request & Origin
 
-![Crusnik Discord Inquiry](./docs/crusnik-request.png)
+![Crusnik Discord Inquiry](https://raw.githubusercontent.com/djcdevelopment/deepnorthtesting/main/plugins/Unswayed/docs/crusnik-request.png)
 
 > *"Anyone make a mod to restore the pre 1.0 run animations yet? All that rigid bobbing is giving me vertigo. Especially in the burial crypts."*  
 > — **Crusnik**, Valheim Modding Community
@@ -61,9 +61,9 @@ Instead of waiting for an asset-swapping `AnimatorOverrideController` that break
 
 Archify verified showcase map illustrating the locomotion decoupling hooks, dungeon collision clamps, and live tuning pipeline:
 
-[![Unswayed Architecture Preview](./docs/unswayed-architecture.visual-check.1440x900.dark.png)](./docs/unswayed-architecture.html)
+[![Unswayed Architecture Preview](https://raw.githubusercontent.com/djcdevelopment/deepnorthtesting/main/plugins/Unswayed/docs/unswayed-architecture.visual-check.1440x900.dark.png)](https://github.com/djcdevelopment/deepnorthtesting/blob/main/plugins/Unswayed/docs/unswayed-architecture.html)
 
-👉 **[Open Live Interactive Archify Diagram](./docs/unswayed-architecture.html)** *(Dark/Light themes, guided view inspection, and node reachability)*
+👉 **[Open Live Interactive Archify Diagram](https://github.com/djcdevelopment/deepnorthtesting/blob/main/plugins/Unswayed/docs/unswayed-architecture.html)** ([Live Web Preview](https://htmlpreview.github.io/?https://github.com/djcdevelopment/deepnorthtesting/blob/main/plugins/Unswayed/docs/unswayed-architecture.html)) *(Dark/Light themes, guided view inspection, and node reachability)*
 
 ```mermaid
 flowchart LR
@@ -205,10 +205,10 @@ Preflight Cecil Reflection Audit:
 
 ## 📚 Documentation & Guides
 
-- 🔍 [**Technical Explanation & Engine Decompilation**](./docs/EXPLANATION.md) — Deep dive into `GameCamera.GetCameraBaseOffset`, `CollideRay2`, `Character.m_eye` bone parenting, and smooth damp math.
-- 📖 [**Field Workbook & Scenario Playbook**](./docs/WORKBOOK.md) — Step-by-step walkthrough of the Request-Snipe methodology, dungeon test scenarios (Burial Crypts, Sunken Crypts, Plains Sprinting), and live observability commands.
-- 🗺️ [**Interactive Archify Diagram**](./docs/unswayed-architecture.html) — Standalone responsive HTML architecture map with theme toggling, component isolation, and guided story perspectives.
-- 💡 [**Knowledgebase FAQ-005**](../../docs/FAQ.md#faq-005-why-does-the-valheim-10-run-animation-cause-rigid-bobbing-and-vertigo-in-burial-crypts-and-can-it-be-reverted) — Comprehensive root-cause investigation into the 1.0 run animation bounce.
+- 🔍 [**Technical Explanation & Engine Decompilation**](https://github.com/djcdevelopment/deepnorthtesting/blob/main/plugins/Unswayed/docs/EXPLANATION.md) — Deep dive into `GameCamera.GetCameraBaseOffset`, `CollideRay2`, `Character.m_eye` bone parenting, and smooth damp math.
+- 📖 [**Field Workbook & Scenario Playbook**](https://github.com/djcdevelopment/deepnorthtesting/blob/main/plugins/Unswayed/docs/WORKBOOK.md) — Step-by-step walkthrough of the Request-Snipe methodology, dungeon test scenarios (Burial Crypts, Sunken Crypts, Plains Sprinting), and live observability commands.
+- 🗺️ [**Interactive Archify Diagram**](https://github.com/djcdevelopment/deepnorthtesting/blob/main/plugins/Unswayed/docs/unswayed-architecture.html) ([Live Web Preview](https://htmlpreview.github.io/?https://github.com/djcdevelopment/deepnorthtesting/blob/main/plugins/Unswayed/docs/unswayed-architecture.html)) — Standalone responsive HTML architecture map with theme toggling, component isolation, and guided story perspectives.
+- 💡 [**Knowledgebase FAQ-005**](https://github.com/djcdevelopment/deepnorthtesting/blob/main/docs/FAQ.md#faq-005-why-does-the-valheim-10-run-animation-cause-rigid-bobbing-and-vertigo-in-burial-crypts-and-can-it-be-reverted) — Comprehensive root-cause investigation into the 1.0 run animation bounce.
 
 ---
 

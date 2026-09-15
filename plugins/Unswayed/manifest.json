@@ -1,9 +1,9 @@
-﻿{
+{
   "name": "Unswayed",
   "version_number": "1.0.0",
   "website_url": "https://github.com/djcdevelopment/deepnorthtesting",
   "description": "Ergonomic camera & locomotion bobbing stabilizer for Valheim 1.0. Eliminates vertigo, springy stride bounce, and point-blank dungeon camera crushing in burial crypts.",
   "dependencies": [
-    "denikson-BepInExPack_Valheim-5.4.2350"
+    "denikson-BepInExPack_Valheim-5.4.2202"
   ]
 }
