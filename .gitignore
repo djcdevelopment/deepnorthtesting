@@ -10,6 +10,7 @@ obj/
 *.log
 *.tmp
 *.mp4
+!plugins/Unfaded/docs/*.mp4
 *.zip
 !plugins/*/*.zip
 tools/video_preview/

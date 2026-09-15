@@ -130,13 +130,16 @@ Testing ragdoll physics, killer cameras, or recording clips without risking surv
 
 ---
 
-## 🎬 Official Showcase Video
+## 🎬 Official In-Game Showcase Video
 
-Check out the full in-game showcase demonstrating Unfaded's zero-blackout death experience, 0.35x bullet-time physics, killer tracking, free-fly drone scouting, and instant spacebar respawn:
+Watch the in-game showcase demonstrating Unfaded's zero-blackout death experience, 0.35x bullet-time physics, combat recap banner, killer tracking, free-fly drone scouting, and instant spacebar respawn:
 
-[![Unfaded In-Game Showcase Video Preview](https://raw.githubusercontent.com/djcdevelopment/Unfaded/main/docs/preview_titlecard.jpg)](https://github.com/djcdevelopment/Unfaded/blob/main/docs/SHOWCASE_VIDEO_SCRIPT.md)
+[![Unfaded In-Game Action Preview](https://raw.githubusercontent.com/djcdevelopment/Unfaded/main/docs/unfaded-showcase.gif)](https://github.com/djcdevelopment/Unfaded/raw/main/docs/Unfaded_Showcase_Discord_Web.mp4)
 
-- 🎥 **[Showcase Production Guide & Storyboard](https://github.com/djcdevelopment/Unfaded/blob/main/docs/SHOWCASE_VIDEO_SCRIPT.md)** — Shot-by-shot breakdown and community post templates.
+https://github.com/djcdevelopment/Unfaded/raw/main/docs/Unfaded_Showcase_Discord_Web.mp4
+
+▶️ **[Click to Watch Full 1080p In-Game Showcase Video (MP4)](https://github.com/djcdevelopment/Unfaded/raw/main/docs/Unfaded_Showcase_Discord_Web.mp4)**  
+🎥 **[Showcase Production Guide & Storyboard](https://github.com/djcdevelopment/Unfaded/blob/main/docs/SHOWCASE_VIDEO_SCRIPT.md)** — Shot-by-shot breakdown and community post templates.
 
 ---
 

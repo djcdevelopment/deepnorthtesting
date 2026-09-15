@@ -8,3 +8,4 @@ obj/
 *.zip
 !Unfaded-*.zip
 *.mp4
+!docs/*.mp4
