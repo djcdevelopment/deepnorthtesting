@@ -1,6 +1,6 @@
 {
   "name": "Unfaded",
-  "version_number": "1.0.4",
+  "version_number": "1.0.5",
   "website_url": "https://github.com/djcdevelopment/Unfaded",
   "description": "Eliminate the 9.5s death blackout. 360 ragdoll spectator camera, killer tracking, free-fly drone scouting, and instant spacebar respawn.",
   "dependencies": [

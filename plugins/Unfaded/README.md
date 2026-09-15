@@ -223,21 +223,21 @@ unfaded status       # Prints complete live configuration and active hotkeys
 
 Verified BepInEx Chainloader Log:
 ```text
-[Info   :   BepInEx] Loading [Unfaded 1.0.4]
-[Info   :   Unfaded] Unfaded v1.0.4 loaded successfully. Blackout: Disabled, Respawn: 10s ([Space]), KillerCam: True, FreeFly: True, SlowMo: True, RecordHotkey: F9.
+[Info   :   BepInEx] Loading [Unfaded 1.0.5]
+[Info   :   Unfaded] Unfaded v1.0.5 loaded successfully. Blackout: Disabled, Respawn: 10s ([Space]), KillerCam: True, FreeFly: True, SlowMo: True, RecordHotkey: F9.
 ```
 
 ---
 
 ## 📋 Changelog
 
-### v1.0.4 (2026-09-14)
-- **Embedded In-Game Showcase Video**: Added live 1080p showcase video embed and 60 FPS animated preview GIF directly into documentation.
+### v1.0.5 (2026-09-14)
+- **Top-Level In-Game Showcase Video**: Reordered documentation to place the moving slow-mo action GIF and full 1080p video player immediately beneath the initial mod request for instant proof of features.
+- **Embedded Showcase Video & GIF**: 60 FPS animated preview GIF and full 38-second in-game showcase video hosted directly via repository media.
 - **Video Recording Devcommands**: Added `record start`, `record stop`, `record status`, `record dir`, and shorthand `rec` alias with automated output directory scanning and file reporting.
 - **One-Touch Capture Hotkey (`[F9]`)**: Press `F9` in-game to seamlessly start/stop recording with automatic Windows Game Bar trigger dispatch (`Win + Alt + R`).
 - **Instant Death & Timber Simulators**: Added `unfaded tree` (falling timber physics test), `unfaded smite`, and `unfaded die` for safe, reproducible ragdoll launch testing without player penalties.
 - **Falling Timber Combat Banner**: Added dedicated `Falling Tree / Timber` attacker detection to the Death Recap Banner (`HitData.HitType.Tree`).
-- **Showcase Video Assets**: Added `SHOWCASE_VIDEO_SCRIPT.md` storyboard and high-res screenshot previews.
 
 ### v1.0.1 (2026-09-13)
 - Fixed Thunderstore documentation relative link 404s with absolute repository URLs.
