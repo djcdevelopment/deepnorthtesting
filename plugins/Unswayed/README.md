@@ -17,11 +17,14 @@ Unswayed (Valheim 1.0)
 - [💻 In-Game Commands & Hotkeys](#-in-game-commands--hotkeys)
 - [🏗️ Technical Architecture](#️-technical-architecture)
 - [🚀 Quickstart & Installation](#-quickstart--installation)
+- [🙏 Credits & Acknowledgments](#-credits--acknowledgments)
 - [📜 License](#-license)
 
 ---
 
 ## 🌟 The Problem
+> *"Anyone make a mod to restore the pre 1.0 run animations yet? All that rigid bobbing is giving me vertigo. Especially in the burial crypts."*  
+> — **Crusnik**, Valheim Modding Community
 
 In the Valheim 1.0 (Deep North) update, IronGate overhauled character locomotion with a new, springier running animation featuring an exaggerated vertical stride bounce. 
 
@@ -185,6 +188,13 @@ flowchart TD
 2. Download `Unswayed.dll`.
 3. Place `Unswayed.dll` into your `Valheim/BepInEx/plugins/` directory.
 4. Launch Valheim.
+
+---
+
+## 🙏 Credits & Acknowledgments
+
+- **Crusnik**: For raising the critical community inquiry regarding 1.0 run animation rigid bobbing and Burial Crypt vertigo, directly inspiring the inception and ergonomic design of this plugin.
+- **Deep North Testing**: Autonomous test harness, Cecil reflection audit tooling, and Valheim 1.0 modding research.
 
 ---
 

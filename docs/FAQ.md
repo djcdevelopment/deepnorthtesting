@@ -1396,7 +1396,7 @@ Narrow FOV dramatically increases the perception of motion sickness. Using a ver
 3. A wider focal cone creates a larger peripheral anchor, which significantly stabilizes the horizon in tight crypts and suppresses vertigo.
 
 ##### Solution D: Install `Unswayed` — Sovereign Valheim 1.0 Camera Stabilizer
-For players and server hosts seeking an immediate, clean fix without bulky dependencies, this repository provides **[`Unswayed`](../plugins/Unswayed)**. It directly resolves the 1.0 motion sickness bug at the camera anchor level:
+Directly inspired by community member **Crusnik's** inquiry regarding 1.0 run bobbing and crypt vertigo, this repository provides **[`Unswayed`](../plugins/Unswayed)**. It directly resolves the 1.0 motion sickness bug at the camera anchor level:
 
 1. **Zero-Dependency Plugin**: Drop `Unswayed.dll` into `Valheim/BepInEx/plugins/`.
 2. **Instant Head-Bob Decoupling**: Decouples `GameCamera` from the animated head bone and stabilizes camera pivot height at `1.65m`, completely eliminating the 1.0 vertical running bounce while preserving natural mouse look.

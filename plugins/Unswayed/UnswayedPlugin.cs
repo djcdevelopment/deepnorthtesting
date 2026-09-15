@@ -1,4 +1,4 @@
-﻿namespace Unswayed;
+namespace Unswayed;
 
 using System.Reflection;
 using BepInEx;
@@ -7,6 +7,11 @@ using Unswayed.Configuration;
 using Unswayed.Core;
 using UnityEngine;
 
+/// <summary>
+/// Unswayed: Ergonomic Camera & Locomotion Bobbing Stabilizer for Valheim 1.0 (Deep North).
+/// Conceived and engineered in direct response to community member Crusnik's inquiry
+/// regarding motion sickness and camera vertigo in Burial Crypts.
+/// </summary>
 [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
 public sealed class UnswayedPlugin : BaseUnityPlugin
 {
