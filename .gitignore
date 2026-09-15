@@ -11,6 +11,7 @@ obj/
 *.tmp
 *.mp4
 *.zip
+!plugins/*/*.zip
 tools/video_preview/
 .vs/
 .vscode/
