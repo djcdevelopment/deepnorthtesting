@@ -134,7 +134,7 @@ This repository develops and tests sovereign Valheim 1.0 plugins built for perfo
 - **Combat Recap Banner**: Identifies attacker name, stars, lethal damage, and falling timber (`HitType.Tree`).
 - **Video Recording Suite (`[F9]`)**: One-touch Windows Game Bar trigger dispatch (`Win + Alt + R`) with session timer and clip directory auto-indexer.
 - **In-Game CLI & Simulators**: `record start|stop`, `unfaded tree` (timber launch test), and `unfaded test` (safe 6s spectator mode).
-- 📦 **Thunderstore Package**: [`Unfaded-1.0.2.zip`](./plugins/Unfaded/Unfaded-1.0.2.zip)
+- 📦 **Thunderstore Package**: [`Unfaded-1.0.4.zip`](./plugins/Unfaded/Unfaded-1.0.4.zip)
 
 ### [Unswayed](./plugins/Unswayed) (Ergonomic Camera & Locomotion Bobbing Stabilizer)
 - **Decouples Camera Stride Bounce**: Anchors base camera height to a stabilized ground offset, decoupling it from the 1.0 animated head bone to completely eliminate running vertical bounce.
