@@ -1347,6 +1347,11 @@ At 0.6m distance:
 
 #### 📊 Architectural Data Flow
 
+- 🌐 [**Open Live Interactive Archify Diagram**](../plugins/Unswayed/docs/unswayed-architecture.html) *(Guided perspective tours, dark/light theme switching, and live node isolation)*
+- 📄 [View Typed JSON Specification](../plugins/Unswayed/docs/unswayed-architecture.json)
+
+[![Unswayed System Architecture](../plugins/Unswayed/docs/unswayed-architecture.visual-check.1440x900.dark.png)](../plugins/Unswayed/docs/unswayed-architecture.html)
+
 ```mermaid
 flowchart TD
     subgraph Animation ["1. Locomotion Cycle (Player.prefab)"]

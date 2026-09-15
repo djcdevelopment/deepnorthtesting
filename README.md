@@ -16,6 +16,7 @@
 - [🗺️ Interactive Archify System Maps](#️-interactive-archify-system-maps)
   - [1. Backpack Status Effect Architecture (FAQ-001)](#1-backpack-status-effect-architecture-faq-001)
   - [2. Unfaded Death Spectator & Blackout Removal](#2-unfaded-death-spectator--blackout-removal)
+  - [3. Unswayed Locomotion & Camera Bobbing Stabilizer](#3-unswayed-locomotion--camera-bobbing-stabilizer)
 - [🧩 Sovereign Mod Plugins](#-sovereign-mod-plugins)
   - [Unfaded (Death Spectator & Blackout Suppression)](#unfaded-death-spectator--blackout-suppression)
   - [Unswayed (Ergonomic Camera & Locomotion Bobbing Stabilizer)](#unswayed-ergonomic-camera--locomotion-bobbing-stabilizer)
@@ -103,6 +104,19 @@ Maps the full lifecycle of lethal hits in Valheim 1.0, including HUD blackout su
 - 📦 [Explore Unfaded Source Code](./plugins/Unfaded)
 
 [![Unfaded System Architecture](./plugins/Unfaded/docs/unfaded-architecture.visual-check.1440x900.dark.png)](./plugins/Unfaded/docs/unfaded-architecture.html)
+
+---
+
+### 3. Unswayed Locomotion & Camera Bobbing Stabilizer
+
+Maps the Valheim 1.0 character locomotion blend tree, head-bone tracking decoupling, Burial Crypt collision anti-crush clamp, adaptive shoulder lift, dynamic FOV expansion, and live in-game tuning.
+
+- 🌐 [**Open Interactive HTML Viewer**](./plugins/Unswayed/docs/unswayed-architecture.html)
+- 📄 [View Typed JSON Specification](./plugins/Unswayed/docs/unswayed-architecture.json)
+- 📦 [Explore Unswayed Source Code](./plugins/Unswayed)
+- 📖 [Read FAQ-005 Deep Dive](./docs/FAQ.md#faq-005-why-does-the-valheim-10-run-animation-cause-rigid-bobbing-and-vertigo-in-burial-crypts-and-can-it-be-reverted)
+
+[![Unswayed System Architecture](./plugins/Unswayed/docs/unswayed-architecture.visual-check.1440x900.dark.png)](./plugins/Unswayed/docs/unswayed-architecture.html)
 
 ---
 

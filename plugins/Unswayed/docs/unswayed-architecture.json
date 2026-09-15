@@ -1,0 +1,292 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Unswayed System Architecture",
+    "output": "docs/unswayed-architecture.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "stride-decoupling",
+        "label": "Locomotion stride decoupling",
+        "focus": [
+          "player_locomotion",
+          "offset_stabilizer",
+          "stable_horizon",
+          "stabilizer_manager"
+        ],
+        "note": "Follow the 1.0 running bounce as it gets decoupled from camera base offset to eliminate vertical oscillation."
+      },
+      {
+        "id": "dungeon-ergonomics",
+        "label": "Dungeon collision and anti-crush",
+        "focus": [
+          "dungeon_anti_crush",
+          "burial_crypt",
+          "stabilizer_manager",
+          "ergonomic_viewport"
+        ],
+        "note": "Inspect how minimum distance clamping, adaptive shoulder lift, and dynamic FOV eliminate point-blank camera crushing in crypts."
+      },
+      {
+        "id": "live-controls",
+        "label": "Live tuning and runtime controls",
+        "focus": [
+          "player_input",
+          "console_cmd",
+          "stabilizer_manager",
+          "ergonomic_viewport"
+        ],
+        "note": "See how F7 hotkey, in-game console CLI, and damping sliders tune camera stabilization on the fly."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "player_input",
+      "type": "external",
+      "label": "Player Controls",
+      "sublabel": "[F7] / Look / WASD",
+      "pos": [
+        50,
+        310
+      ],
+      "size": [
+        130,
+        60
+      ]
+    },
+    {
+      "id": "console_cmd",
+      "type": "external",
+      "label": "In-Game Console",
+      "sublabel": "'unswayed' CLI",
+      "pos": [
+        50,
+        470
+      ],
+      "size": [
+        130,
+        60
+      ],
+      "tag": "Live Tuning"
+    },
+    {
+      "id": "player_locomotion",
+      "type": "backend",
+      "label": "Player Locomotion",
+      "sublabel": "1.0 Run Stride Keyframes",
+      "pos": [
+        280,
+        160
+      ],
+      "size": [
+        130,
+        60
+      ]
+    },
+    {
+      "id": "game_camera",
+      "type": "frontend",
+      "label": "GameCamera",
+      "sublabel": "Active Viewport Anchor",
+      "pos": [
+        280,
+        310
+      ],
+      "size": [
+        130,
+        60
+      ]
+    },
+    {
+      "id": "offset_stabilizer",
+      "type": "security",
+      "label": "Offset Decoupler",
+      "sublabel": "GetCameraBaseOffsetPatch",
+      "pos": [
+        510,
+        160
+      ],
+      "size": [
+        150,
+        60
+      ],
+      "tag": "Root 1.65m"
+    },
+    {
+      "id": "stabilizer_manager",
+      "type": "frontend",
+      "label": "Stabilizer Engine",
+      "sublabel": "State & Damping Slider",
+      "pos": [
+        510,
+        310
+      ],
+      "size": [
+        150,
+        60
+      ],
+      "tag": "Active Damping"
+    },
+    {
+      "id": "dungeon_anti_crush",
+      "type": "security",
+      "label": "Dungeon Anti-Crush",
+      "sublabel": "Floor 1.35m & Shoulder Lift",
+      "pos": [
+        510,
+        470
+      ],
+      "size": [
+        150,
+        60
+      ],
+      "tag": "Clamp & FOV"
+    },
+    {
+      "id": "stable_horizon",
+      "type": "backend",
+      "label": "Stable Horizon",
+      "sublabel": "Zero Stride Bounce",
+      "pos": [
+        770,
+        160
+      ],
+      "size": [
+        140,
+        60
+      ]
+    },
+    {
+      "id": "ergonomic_viewport",
+      "type": "frontend",
+      "label": "Ergonomic Viewport",
+      "sublabel": "Smooth Third-Person View",
+      "pos": [
+        770,
+        310
+      ],
+      "size": [
+        140,
+        60
+      ]
+    },
+    {
+      "id": "burial_crypt",
+      "type": "database",
+      "label": "Burial Crypts",
+      "sublabel": "Low Ceilings & Doorways",
+      "pos": [
+        770,
+        470
+      ],
+      "size": [
+        140,
+        60
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Unswayed Harmony Interceptors",
+      "wraps": [
+        "offset_stabilizer",
+        "stabilizer_manager",
+        "dungeon_anti_crush"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "Valheim Engine Runtime",
+      "wraps": [
+        "player_locomotion",
+        "game_camera",
+        "stable_horizon",
+        "ergonomic_viewport",
+        "burial_crypt"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "input_to_camera",
+      "from": "player_input",
+      "to": "game_camera",
+      "label": "mouse & F7",
+      "variant": "emphasis"
+    },
+    {
+      "id": "camera_to_manager",
+      "from": "game_camera",
+      "to": "stabilizer_manager",
+      "label": "camera position",
+      "variant": "emphasis"
+    },
+    {
+      "id": "console_to_crush",
+      "from": "console_cmd",
+      "to": "dungeon_anti_crush",
+      "label": "test & tuning",
+      "variant": "dashed"
+    },
+    {
+      "id": "loco_to_offset",
+      "from": "player_locomotion",
+      "to": "offset_stabilizer",
+      "label": "m_eye bounce",
+      "variant": "security"
+    },
+    {
+      "id": "offset_to_horizon",
+      "from": "offset_stabilizer",
+      "to": "stable_horizon",
+      "label": "1.65m base",
+      "variant": "emphasis"
+    },
+    {
+      "id": "manager_to_viewport",
+      "from": "stabilizer_manager",
+      "to": "ergonomic_viewport",
+      "label": "stable view",
+      "variant": "emphasis"
+    },
+    {
+      "id": "crush_to_crypt",
+      "from": "dungeon_anti_crush",
+      "to": "burial_crypt",
+      "label": "collide raycast",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Locomotion Decoupling",
+      "items": [
+        "Root Height Anchor: Decouples camera from animated head bone to eliminate running stride bounce",
+        "Continuous Damping Slider: Tune from 1.0 (rock-solid horizon) to 0.0 (vanilla bounce)",
+        "Preserves Sitting & Bed Overrides: Natural animations maintained when sleeping or resting"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Dungeon Anti-Crush & Ergonomics",
+      "items": [
+        "Min Distance Clamp: Prevents CollideRay2 from crushing camera to point-blank (<1m) in crypts",
+        "Adaptive Shoulder Lift: Softly raises camera by +0.35m in tight spaces for clear sightlines",
+        "Dynamic FOV Expansion: Automatically expands FOV by +10\u00b0 in narrow corridors to suppress vertigo"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Live Tuning & In-Game CLI",
+      "items": [
+        "Live Hotkey: Press F7 to toggle stabilization on/off instantly during gameplay",
+        "In-Game Console: 'unswayed status', 'unswayed height', 'unswayed damping', 'unswayed shake'",
+        "100% Client-Side: Zero server dependencies, safe for multiplayer dedicated servers"
+      ]
+    }
+  ]
+}
