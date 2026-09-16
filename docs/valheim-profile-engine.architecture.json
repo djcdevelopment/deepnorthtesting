@@ -30,7 +30,7 @@
         "id": "fleet-mesh-flow",
         "label": "Fleet Gateway & Conflict Audit",
         "focus": ["omen_node", "am4_server", "mcp_gateway", "conflict_audit", "offline_cache"],
-        "note": "Multi-node inventory discovery and Harmony hook conflict auditing across OMEN and AM4."
+        "note": "Multi-node inventory discovery and Harmony hook conflict auditing across distributed fleet nodes."
       }
     ]
   },
@@ -128,7 +128,7 @@
     {
       "id": "omen_node",
       "type": "frontend",
-      "label": "OMEN Rig",
+      "label": "Primary Rig",
       "sublabel": "Windows / Dual Arc B70",
       "tag": "Local Gaming Node",
       "pos": [40, 340],
@@ -137,7 +137,7 @@
     {
       "id": "am4_server",
       "type": "cloud",
-      "label": "AM4 Server",
+      "label": "Dedicated Server",
       "sublabel": "Linux / Docker Valheim",
       "tag": "Dedicated Server",
       "pos": [280, 340],
@@ -300,7 +300,7 @@
       "dot": "emerald",
       "title": "Zero-Copy NTFS Junctions",
       "items": [
-        "Swaps mod profiles in under 50ms (39ms-72ms measured on OMEN)",
+        "Swaps mod profiles in under 50ms (39ms-72ms measured on primary rig)",
         "Zero bytes copied: reparse point redirects BepInEx/plugins directly to target folder",
         "No administrator elevation required (unlike Windows symlinks)"
       ]
@@ -318,7 +318,7 @@
       "dot": "rose",
       "title": "Fleet Intelligence & Conflict Audit",
       "items": [
-        "Automated parallel inventory scanning across OMEN, AM4, FX99, and i5",
+        "Automated parallel inventory scanning across Primary Rig, Dedicated Server, Linux Workstation, and Test Laptop",
         "Detects keybind collisions (F7, F9, V) and Harmony hook contention before launch",
         "Exposes FastMCP tool surface and HTTP REST endpoints for autonomous agent control"
       ]

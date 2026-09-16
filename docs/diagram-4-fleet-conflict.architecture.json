@@ -60,7 +60,7 @@
     {
       "id": "omen_rig",
       "type": "frontend",
-      "label": "OMEN Rig",
+      "label": "Primary Rig",
       "sublabel": "Local Windows (4.8ms)",
       "tag": "Primary Gaming",
       "pos": [
@@ -75,7 +75,7 @@
     {
       "id": "am4_host",
       "type": "cloud",
-      "label": "AM4 Server",
+      "label": "Dedicated Server",
       "sublabel": "Linux Dedicated (Cached)",
       "tag": "Docker Host",
       "pos": [
@@ -90,7 +90,7 @@
     {
       "id": "fx99_host",
       "type": "cloud",
-      "label": "FX99 Workstation",
+      "label": "Linux Client",
       "sublabel": "SSH Linux (259ms)",
       "tag": "AI Workstation",
       "pos": [

@@ -175,12 +175,12 @@ Each mod assembly can expose metadata: dependencies, keybinds, Harmony patches (
 * **Path A (Without MCP)**:
   ```powershell
   # Run the pre-flight conflict audit script
-  python -c "from comfy_gateway.toolsurface.fleet import fleet_conflict_audit; import pprint; pprint.pprint(fleet_conflict_audit('OMEN'))"
+  python -c "from comfy_gateway.toolsurface.fleet import fleet_conflict_audit; import pprint; pprint.pprint(fleet_conflict_audit('local'))"
   ```
 * **Path B (With MCP)**:
   ```python
   # FastMCP tool call
-  audit = fleet_conflict_audit(node="OMEN")
+  audit = fleet_conflict_audit(node="local")
   # Returns:
   # {
   #   "has_keybind_conflicts": False,
@@ -203,7 +203,7 @@ Each mod assembly can expose metadata: dependencies, keybinds, Harmony patches (
   ```
 * **Path B (With MCP)**:
   ```python
-  fleet_toggle_mod(mod="Unfaded.dll", enabled=False, machine="OMEN")
+  fleet_toggle_mod(mod="Unfaded.dll", enabled=False, machine="local")
   ```
 
 ---
@@ -283,7 +283,7 @@ Switch between entire mod environments in under 50ms without copying files:
 
 * **Path B (With MCP)**:
   ```python
-  fleet_swap_profile(profile="sovereign-trio", machine="OMEN")
+  fleet_swap_profile(profile="sovereign-trio", machine="local")
   ```
 
 ---
@@ -314,12 +314,12 @@ Switch between different manifest sets (e.g. testing against local server vs rem
 
 * **Path A (Without MCP)**:
   ```powershell
-  powershell -ExecutionPolicy Bypass -File tools\switch-profile.ps1 -Manifest manifests\profiles-am4-server.json -Profile server-test
+  powershell -ExecutionPolicy Bypass -File tools\switch-profile.ps1 -Manifest manifests\profiles-server.json -Profile server-test
   ```
 
 * **Path B (With MCP)**:
   ```python
-  fleet_load_manifest(manifest_path="manifests/profiles-am4-server.json")
+  fleet_load_manifest(manifest_path="manifests/profiles-server.json")
   ```
 
 ---
@@ -344,7 +344,7 @@ powershell -ExecutionPolicy Bypass -File tools\switch-profile.ps1 -Status
 Output:
 ```text
 ======================================================
-  Deep North Testing :: BepInEx Profile State (OMEN)
+  Valheim Profile Engine :: BepInEx Profile State (local)
 ======================================================
  Plugins Path   : C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\plugins
  Is Zero-Copy   : YES (NTFS Junction)
@@ -360,8 +360,8 @@ powershell -ExecutionPolicy Bypass -File tools\Verify-ProfileState.ps1
 
 ---
 
-### 5.2 Local Web Dashboard on Isolate
-The repository includes a lightweight, zero-dependency Python dashboard server in `tools/serve-dashboard.py`.
+### 5.2 Developer-Grade Fleet Mod Matrix Dashboard
+The repository includes a lightweight, zero-dependency Python dashboard server in `tools/serve-dashboard.py` designed specifically for serious mod developers:
 
 #### Launching the Dashboard:
 ```powershell
@@ -369,11 +369,12 @@ python tools\serve-dashboard.py
 ```
 
 #### What It Provides:
-* Accessible locally at **`http://localhost:8725`** and across Tailscale at **`http://100.116.82.60:8725`**.
-* **Fleet Node Status Cards**: Real-time ping, online/offline state, and active profiles for **OMEN**, **AM4**, **FX99**, and **i5**.
-* **1-Click Profile Swapping**: Dropdown and button triggering zero-copy swaps via backend API.
-* **Live Conflict Radar Matrix**: Visual badges displaying keybind conflicts and Harmony hook collisions.
-* **Direct Links**: Embedded navigation to the Archify interactive viewers.
+* Accessible locally at **`http://localhost:8725`** (and across your LAN/Tailscale mesh at **`http://<node-ip>:8725`**).
+* **Sticky Top Header Ping Bar**: Shows connection latency and online/cached status pills for each node (`Primary Rig`, `Dedicated Server`, `Linux Client`, `Test Laptop`).
+* **Side-by-Side Mod Columns**: Pure developer focus—shows the exact list of mods currently or last known running across every machine.
+* **Instant Filter**: Interactive search bar filters assemblies across all 4 columns simultaneously in real time.
+* **Assembly Metadata**: File sizes, last-modified dates, and relative paths per DLL.
+* **Direct Links**: Quick navigation to Archify architecture diagrams.
 
 ---
 
@@ -383,7 +384,7 @@ Standalone interactive SVG/HTML diagrams rendered in dark and light mode:
 * [**Chapter 1: Junction Swap**](diagram-1-junction-swap.html) — Explores the NTFS Reparse Point pointer redirect mechanics.
 * [**Chapter 2: Sovereign Mod Matrix**](diagram-2-sovereign-matrix.html) — Visualizes the 3-mod isolation layer (`IsModded`, `Unfaded`, `TotemSentinel`).
 * [**Chapter 3: Synthetic Pipeline**](diagram-3-synthetic-pipeline.html) — Visualizes the zero-deploy compiler build loop.
-* [**Chapter 4: Fleet Conflict Radar**](diagram-4-fleet-conflict.html) — Topology of OMEN, AM4, FX99, and i5 conflict scanning.
+* [**Chapter 4: Fleet Conflict Radar**](diagram-4-fleet-conflict.html) — Topology of multi-node fleet conflict scanning.
 * [**Macro Compendium**](valheim-profile-engine.html) — Full unified system topology.
 
 ---
@@ -432,13 +433,13 @@ git commit -m "feat(profiles): add sovereign-trio profile with zero-copy compile
 ```
 
 ### Multi-Node Git Sync Across the Fleet
-When a profile is added or modified on OMEN:
+When a profile is added or modified on the primary rig:
 1. Push the commit to the central repo:
    ```powershell
    git push origin main
    ```
-2. On remote nodes (e.g. AM4 dedicated server or FX99):
+2. On remote nodes (e.g. dedicated server or secondary workstation):
    ```bash
-   ssh am4 "cd /home/derek/valheim-profile-engine && git pull"
+   ssh valheim-server "cd /home/steam/valheim-profile-engine && git pull"
    ```
 3. Remote nodes now have access to the exact same profile manifest without copying large mod packs across the network.

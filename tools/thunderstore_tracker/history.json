@@ -306,5 +306,38 @@
       "Unswayed": 53,
       "TotemSentinel": 15
     }
+  },
+  {
+    "timestamp": 1789548379.289793,
+    "pt_time": "2026-09-16 01:46:19 AM PDT",
+    "counts": {
+      "IsModded": 125,
+      "SelfieStick": 30,
+      "Unfaded": 181,
+      "Unswayed": 54,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789549281.9662888,
+    "pt_time": "2026-09-16 02:01:21 AM PDT",
+    "counts": {
+      "IsModded": 125,
+      "SelfieStick": 30,
+      "Unfaded": 181,
+      "Unswayed": 54,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789550185.0551112,
+    "pt_time": "2026-09-16 02:16:25 AM PDT",
+    "counts": {
+      "IsModded": 125,
+      "SelfieStick": 30,
+      "Unfaded": 181,
+      "Unswayed": 54,
+      "TotemSentinel": 15
+    }
   }
 ]

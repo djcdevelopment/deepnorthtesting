@@ -22,12 +22,12 @@ A real multiplayer mod test involves multiple distinct roles and machines:
          +---------------------------+---------------------------+
          |                           |                           |
          v                           v                           v
-+------------------+        +------------------+        +------------------+
-|   OMEN [Node 1]  |        |   AM4 [Node 2]   |        |  FX99 / i5 [N3]  |
-| Primary Client   | <====> | Dedicated Server | <====> | Secondary Client |
-| Profile: gaming  |        | Profile: server  |        | Profile: test    |
-| (65 Mods Active) |        | (Headless Sync)  |        | (Clean Baseline) |
-+------------------+        +------------------+        +------------------+
++------------------+        +--------------------+        +------------------+
+|  Rig-01 [Node 1] |        | Server-01 [Node 2] |        |  Client-02 [N3]  |
+| Primary Client   | <====> |  Dedicated Server  | <====> | Secondary Client |
+| Profile: gaming  |        |  Profile: server   |        | Profile: test    |
+| (65 Mods Active) |        |  (Headless Sync)   |        | (Clean Baseline) |
++------------------+        +--------------------+        +------------------+
 ```
 
 ---

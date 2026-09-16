@@ -1,5 +1,5 @@
 # Zero-Copy Manifest Manager & Profile Switcher for Valheim BepInEx
-# Deep North Testing :: OMEN Autonomous Test Harness
+# Valheim Profile Engine :: Autonomous Test Harness
 
 [CmdletBinding()]
 param(
@@ -28,7 +28,16 @@ if (-not (Test-Path $ManifestPath)) {
 }
 
 $manifest = Get-Content $ManifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
-$machineConfig = $manifest.machines.OMEN
+$machineKey = if ($manifest.default_machine -and $manifest.machines.$($manifest.default_machine)) {
+    $manifest.default_machine
+} elseif ($manifest.machines.local) {
+    "local"
+} elseif ($manifest.machines.default) {
+    "default"
+} else {
+    ($manifest.machines.PSObject.Properties | Select-Object -First 1).Name
+}
+$machineConfig = $manifest.machines.$machineKey
 $gameDir = $machineConfig.game_dir
 $bepDir = $machineConfig.bepinex_dir
 $pluginsDir = Join-Path $bepDir "plugins"
@@ -96,7 +105,7 @@ function Resolve-Profile([string]$Query) {
 # Helper: Display current status
 function Show-Status {
     Write-Host "`n======================================================" -ForegroundColor Cyan
-    Write-Host "  Deep North Testing :: BepInEx Profile State (OMEN)" -ForegroundColor Cyan
+    Write-Host "  Valheim Profile Engine :: BepInEx Profile State ($machineKey)" -ForegroundColor Cyan
     Write-Host "======================================================" -ForegroundColor Cyan
 
     $isJunction = Test-ReparsePoint $pluginsDir

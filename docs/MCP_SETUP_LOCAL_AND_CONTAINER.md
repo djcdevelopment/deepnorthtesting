@@ -20,7 +20,7 @@ This guide details how to configure, run, and connect the **Comfy MCP Gateway** 
 |                                                                             |
 |  * Port 8720 (direct source) / Port 8722 (Docker Compose loopback)          |
 |  * Tools: fleet_mod_inventory, fleet_conflict_audit, fleet_swap_profile     |
-|  * Tailscale & SSH Bridge: OMEN (Local) | AM4 | FX99 | i5                   |
+|  * Tailscale & SSH Bridge: Primary Rig | Dedicated Server | Linux Client     |
 +-----------------------------------------------------------------------------+
 ```
 
@@ -28,7 +28,7 @@ This guide details how to configure, run, and connect the **Comfy MCP Gateway** 
 
 ## 2. Option A: Local Python Setup (Recommended for Development)
 
-The gateway runs natively on Windows (OMEN) or Linux workstations using Python 3.10+.
+The gateway runs natively on Windows or Linux workstations using Python 3.10+.
 
 ### Prerequisites
 - Python 3.12 installed and on `PATH`
@@ -65,7 +65,7 @@ python -m comfy_gateway.kernel.entrypoint
 
 ## 3. Option B: Containerized Setup (Docker / Podman)
 
-Containerization isolates Python dependencies, standardizes Linux toolchains, and enables running headless on remote servers (e.g. AM4).
+Containerization isolates Python dependencies, standardizes Linux toolchains, and enables running headless on remote dedicated servers.
 
 ### Container Specification (`c:\work\isolate\network\mcp\Dockerfile`)
 The gateway container builds from `python:3.12-slim`:
@@ -116,7 +116,7 @@ services:
       - COMFY_MCP_PORT=8720
       - X_COMFY_KEY=comfy-dev-local
     volumes:
-      # Mount SSH keys for remote fleet discovery (AM4, FX99, i5)
+      # Mount SSH keys for remote fleet discovery
       - ${HOME}/.ssh:/root/.ssh:ro
       # Persist fleet telemetry and cache
       - ./network/mcp/var:/app/network/mcp/var

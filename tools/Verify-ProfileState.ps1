@@ -72,7 +72,16 @@ try {
 
 # 2. Filesystem Reparse Point Inspection
 Write-Host "`n[2/4] Inspecting BepInEx Plugins Junction..." -ForegroundColor Yellow
-$gameDir = $manifest.machines.OMEN.game_dir
+$machineKey = if ($manifest.default_machine -and $manifest.machines.$($manifest.default_machine)) {
+    $manifest.default_machine
+} elseif ($manifest.machines.local) {
+    "local"
+} elseif ($manifest.machines.default) {
+    "default"
+} else {
+    ($manifest.machines.PSObject.Properties | Select-Object -First 1).Name
+}
+$gameDir = $manifest.machines.$machineKey.game_dir
 $bepinexDir = Join-Path $gameDir "BepInEx"
 $pluginsDir = Join-Path $bepinexDir "plugins"
 
