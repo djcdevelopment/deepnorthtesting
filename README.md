@@ -138,6 +138,8 @@ Swapping between a 65-mod multiplayer server pack, clean cinematic recording, an
 
 The **Zero-Copy Profile Engine** replaces physical copies with sub-50ms NTFS directory junctions (`mklink /J`), requiring **zero administrator elevation** and copying **0 bytes**:
 
+> 💡 **Genesis & Architectural Credit**: Conceived by **TylerS76** on Discord who originally proposed replacing destructive file copying with filesystem linking (`"Maybe something with file linking?... like hardlinks or symlinks"`) to swap mod shells and keep isolated test builds in sync without tooling overhead.
+
 ```powershell
 # List all configured profiles
 powershell -ExecutionPolicy Bypass -File tools\switch-profile.ps1 -List
@@ -314,5 +316,6 @@ We pointed this harness at the complete 51-mod suite from [Redseiko's ComfyMods]
 ## 📜 License & Acknowledgments
 
 - Harness tools, guides, and workbook released under the MIT License.
+- Special thanks to **TylerS76** (Discord `@TylerS76`) for the foundational architectural idea of using filesystem linking (hardlinks/symlinks/junctions) to manage isolated mod test profiles and eliminate file copy overhead.
 - Special thanks to [redseiko](https://github.com/redseiko) for the exceptional architecture of the ComfyMods ecosystem.
 - Special thanks to [blaxxun / Smoothbrain](https://github.com/blaxxun-boop) and [Azumatt](https://github.com/AzumattDev) for their foundational work across the Valheim modding scene.

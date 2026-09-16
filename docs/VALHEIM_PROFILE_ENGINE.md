@@ -32,6 +32,8 @@ If you mod Valheim, play across multiple servers, record cinematic videos, or de
 | 🎯 **Pre-Flight Conflict Audit** | Detects hotkey overlaps (e.g. `[F7]`, `[F9]`, `[V]`) and Harmony hook contention before launch so you don't crash in-game. |
 | 🌐 **Multi-Machine Fleet Ready** | Extensible to distributed fleets across local Windows gaming rigs, Linux dedicated servers, and test laptops via FastMCP. |
 
+> 💡 **Genesis & Architectural Credit**: The foundational architectural insight behind this engine—replacing destructive file copying with filesystem-level links (`"Maybe something with file linking?... like hardlinks or symlinks"`) to swap mod shells and keep isolated test builds in sync—was originally proposed by **TylerS76** on Discord during an architectural discussion with `durracktu`. That spark eliminated hours of tooling overhead and inspired this zero-copy NTFS engine.
+
 ---
 
 ## 🚀 60-Second Quickstart
@@ -311,6 +313,15 @@ For high-level system review, this macro architecture compendium connects all la
 2. **Sovereign Trio Testing**: Tracing synthetic compiler links for `IsModded`, `Unfaded`, and `TotemSentinel`.
 3. **Process Safety Interlock**: Validation of process lock guards and automatic physical backups.
 4. **Fleet Gateway & Conflict Audit**: Multi-node inventory discovery across OMEN, AM4, FX99, and i5.
+
+---
+
+## 🙏 Acknowledgments & Credits
+
+- **TylerS76** (Discord `@TylerS76`): The original ideator who proposed using filesystem linking (hardlinks/symlinks/junctions) to manage isolated test profiles and mod shells without file copy overhead.
+- **durracktu / djcdevelopment**: Engine architecture, zero-copy PowerShell reparse point switcher, declarative manifest catalog, synthetic compiler build pipelines, and FastMCP fleet tool surface.
+- **BepInEx Team**: The bedrock of Valheim modding and runtime assembly injection.
+- **Comfy Community**: The real-world 65-mod testbed and multiplayer telemetry proving ground.
 
 ---
 
