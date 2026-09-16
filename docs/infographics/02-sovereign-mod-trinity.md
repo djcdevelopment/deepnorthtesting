@@ -1,5 +1,10 @@
 # The Sovereign Mod Trinity: Zero Conflicts in the Deep North
 
+![The Sovereign Trinity Infographic](../assets/infographic-2-sovereign-trinity.png)
+
+*Illustration / Mood Art:*  
+![Sovereign Mod Trinity Hero Art](../assets/art-2-sovereign-trinity-hero.png)
+
 **Most Valheim modpacks collapse under broken patches and conflicting keybinds. The Sovereign Mod Trinity proves three complex mods can run in total harmony.**
 
 ---

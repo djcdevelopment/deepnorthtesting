@@ -1,5 +1,10 @@
 # Fleet Radar: Eliminating Keybind and Patch Collisions Before Launch
 
+![Tactical Prevention of Mod Collisions Infographic](../assets/infographic-4-fleet-radar.png)
+
+*Illustration / Mood Art:*  
+![Fleet Radar Operations Bunker Art](../assets/art-4-fleet-radar-bunker.png)
+
 **Testing multiplayer mods across multiple machines usually ends in mystery crashes and desyncs. Fleet Radar audits every node before the server boots.**
 
 ---

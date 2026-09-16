@@ -1,4 +1,4 @@
-# Valheim Profile Engine :: Zero-Copy Mod Manifest Manager
+﻿# Valheim Profile Engine :: Zero-Copy Mod Manifest Manager
 ### *Sub-50ms BepInEx profile switching, synthetic compiler linking, and conflict auditing for Valheim 1.0*
 
 [![Valheim 1.0](https://img.shields.io/badge/Valheim-1.0%20(Deep%20North)-blue.svg)](#)
@@ -6,37 +6,37 @@
 [![Switch Latency](https://img.shields.io/badge/Profile%20Swap-%3C50ms%20(Zero--Copy)-success.svg)](#)
 [![Elevation](https://img.shields.io/badge/Windows%20Elevation-No%20Admin%20Required-blueviolet.svg)](#)
 [![Zero File Wear](https://img.shields.io/badge/Disk%20Writes-0%20Bytes%20Copied-brightgreen.svg)](#)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](../LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
 
-## 💡 Why Use This? Why Keep Reading?
+## ðŸ’¡ Why Use This? Why Keep Reading?
 
 If you mod Valheim, play across multiple servers, record cinematic videos, or develop C# mods, you know the daily pain of **managing `BepInEx/plugins`**:
 
-- 🛑 **Tired of waiting 15+ seconds** copying and deleting 60+ DLL files (~85 MB) just to test a single mod?
-- 🛑 **Tired of burning gigabytes of SSD write wear** and IOPS just to toggle between a multiplayer modpack and a clean client?
-- 🛑 **Tired of moving or renaming folders manually**, losing track of which backup is active, or dealing with half-copied corrupted files?
-- 🛑 **Tired of Windows symlink errors** (`mklink /D`) demanding Administrator UAC elevation every single time you want to link a folder?
-- 🛑 **Tired of rebuilding your C# project in Rider/Visual Studio**, finding the output DLL, and manually pasting it into the game folder?
+- ðŸ›‘ **Tired of waiting 15+ seconds** copying and deleting 60+ DLL files (~85 MB) just to test a single mod?
+- ðŸ›‘ **Tired of burning gigabytes of SSD write wear** and IOPS just to toggle between a multiplayer modpack and a clean client?
+- ðŸ›‘ **Tired of moving or renaming folders manually**, losing track of which backup is active, or dealing with half-copied corrupted files?
+- ðŸ›‘ **Tired of Windows symlink errors** (`mklink /D`) demanding Administrator UAC elevation every single time you want to link a folder?
+- ðŸ›‘ **Tired of rebuilding your C# project in Rider/Visual Studio**, finding the output DLL, and manually pasting it into the game folder?
 
 ### What You Get in Under 50 Milliseconds:
 
 | Capability | What It Means for You |
 | :--- | :--- |
-| ⚡ **Sub-50ms Profile Swapping** | Switch between a massive 65-mod server pack, a clean cinematic camera setup, and an isolated mod build in **39ms - 72ms** (182x faster than copying). |
-| 💾 **Zero Bytes Copied** | Uses native **NTFS Directory Junctions** (`mklink /J`) and hardlinks. **0 bytes written to disk**. Zero SSD wear. |
-| 🛡️ **Zero Admin Elevation** | Junctions work on standard Windows user accounts. **No UAC prompts**, no admin terminal required. |
-| 🔗 **Instant Compiler Links** | Synthetic profiles point directly to your `bin/Release` or `bin/Debug` build folders. Compile in your IDE, launch the game—your changes are already there. |
-| 🔒 **Rock-Solid Safety** | Automatic running-process guard (`Get-Process valheim*`) prevents swapping while the game is running. Automatic backup saves existing files before the first junction conversion. |
-| 🎯 **Pre-Flight Conflict Audit** | Detects hotkey overlaps (e.g. `[F7]`, `[F9]`, `[V]`) and Harmony hook contention before launch so you don't crash in-game. |
-| 🌐 **Multi-Machine Fleet Ready** | Extensible to distributed fleets across local Windows gaming rigs, Linux dedicated servers, and test laptops via FastMCP. |
+| âš¡ **Sub-50ms Profile Swapping** | Switch between a massive 65-mod server pack, a clean cinematic camera setup, and an isolated mod build in **39ms - 72ms** (182x faster than copying). |
+| ðŸ’¾ **Zero Bytes Copied** | Uses native **NTFS Directory Junctions** (`mklink /J`) and hardlinks. **0 bytes written to disk**. Zero SSD wear. |
+| ðŸ›¡ï¸ **Zero Admin Elevation** | Junctions work on standard Windows user accounts. **No UAC prompts**, no admin terminal required. |
+| ðŸ”— **Instant Compiler Links** | Synthetic profiles point directly to your `bin/Release` or `bin/Debug` build folders. Compile in your IDE, launch the gameâ€”your changes are already there. |
+| ðŸ”’ **Rock-Solid Safety** | Automatic running-process guard (`Get-Process valheim*`) prevents swapping while the game is running. Automatic backup saves existing files before the first junction conversion. |
+| ðŸŽ¯ **Pre-Flight Conflict Audit** | Detects hotkey overlaps (e.g. `[F7]`, `[F9]`, `[V]`) and Harmony hook contention before launch so you don't crash in-game. |
+| ðŸŒ **Multi-Machine Fleet Ready** | Extensible to distributed fleets across local Windows gaming rigs, Linux dedicated servers, and test laptops via FastMCP. |
 
-> 💡 **Genesis & Architectural Credit**: The foundational architectural insight behind this engine—replacing destructive file copying with filesystem-level links (`"Maybe something with file linking?... like hardlinks or symlinks"`) to swap mod shells and keep isolated test builds in sync—was originally proposed by **TylerS76** on Discord during an architectural discussion with `durracktu`. That spark eliminated hours of tooling overhead and inspired this zero-copy NTFS engine.
+> ðŸ’¡ **Genesis & Architectural Credit**: The foundational architectural insight behind this engineâ€”replacing destructive file copying with filesystem-level links (`"Maybe something with file linking?... like hardlinks or symlinks"`) to swap mod shells and keep isolated test builds in syncâ€”was originally proposed by **TylerS76** on Discord during an architectural discussion with `durracktu`. That spark eliminated hours of tooling overhead and inspired this zero-copy NTFS engine.
 
 ---
 
-## 🚀 60-Second Quickstart
+## ðŸš€ 60-Second Quickstart
 
 Get up and running immediately with zero prerequisites beyond PowerShell:
 
@@ -90,7 +90,7 @@ python tools\serve-dashboard.py
 
 ---
 
-## 📑 Table of Contents
+## ðŸ“‘ Table of Contents
 
 1. [Chapter 1: Zero-Copy NTFS Junction Swapping](#chapter-1-zero-copy-ntfs-junction-swapping)
 2. [Chapter 2: Sovereign Mod Showcase & Gameplay Hooks](#chapter-2-sovereign-mod-showcase--gameplay-hooks)
@@ -102,16 +102,18 @@ python tools\serve-dashboard.py
 4. [Chapter 4: Pre-Flight Keybind & Conflict Auditing](#chapter-4-pre-flight-keybind--conflict-auditing)
 5. [Chapter 5: Empirical Benchmarks (OMEN Silicon)](#chapter-5-empirical-benchmarks-omen-silicon)
 6. [Chapter 6: Automated Verification & Safety Interlocks](#chapter-6-automated-verification--safety-interlocks)
-7. [🗺️ Comprehensive Architecture Compendium (Macro Overview)](#️-comprehensive-architecture-compendium-macro-overview)
-8. [📖 Operations & Dual-Path Use Cases Guide (CLI & FastMCP)](OPERATIONS_AND_USE_CASES.md)
-9. [⚙️ Setting Up FastMCP (Local & Containerized)](MCP_SETUP_LOCAL_AND_CONTAINER.md)
-10. [📊 Infographics & Visual Summaries](#-infographics--visual-summaries)
-11. [🙏 Acknowledgments & Credits](#-acknowledgments--credits)
-12. [📜 License](#-license)
+7. [ðŸ—ºï¸ Comprehensive Architecture Compendium (Macro Overview)](#ï¸-comprehensive-architecture-compendium-macro-overview)
+8. [ðŸ“– Operations & Dual-Path Use Cases Guide (CLI & FastMCP)](OPERATIONS_AND_USE_CASES.md)
+9. [âš™ï¸ Setting Up FastMCP (Local & Containerized)](MCP_SETUP_LOCAL_AND_CONTAINER.md)
+10. [ðŸ“Š Infographics & Visual Summaries](#-infographics--visual-summaries)
+11. [ðŸ™ Acknowledgments & Credits](#-acknowledgments--credits)
+12. [ðŸ“œ License](#-license)
 
 ---
 
 ## Chapter 1: Zero-Copy NTFS Junction Swapping
+
+![The Zero-Copy Revolution Infographic](assets/infographic-1-zero-copy-swap.png)
 
 Traditional mod loaders delete and rewrite hundreds of files inside `BepInEx/plugins`. The **Valheim Profile Engine** changes the paradigm: `BepInEx/plugins` itself is converted into an **NTFS Directory Junction** (`IO_REPARSE_TAG_MOUNT_POINT`).
 
@@ -122,30 +124,32 @@ When switching profiles:
 
 ![Chapter 1 Architecture](assets/diagram-1-junction-swap-dark.png)
 
-> 🌐 [**Open Interactive Chapter 1 Viewer**](diagram-1-junction-swap.html) | 📄 [View Typed JSON Spec](diagram-1-junction-swap.architecture.json)
+> ðŸŒ [**Open Interactive Chapter 1 Viewer**](diagram-1-junction-swap.html) | ðŸ“„ [View Typed JSON Spec](diagram-1-junction-swap.architecture.json)
 
 ---
 
 ## Chapter 2: Sovereign Mod Showcase & Gameplay Hooks
 
+![The Sovereign Trinity Infographic](assets/infographic-2-sovereign-trinity.png)
+
 The engine natively features and demonstrates our sovereign Valheim 1.0 mod suite. Each mod hooks into specific runtime events to provide gameplay enhancements without mutual interference:
 
 ![Chapter 2 Architecture](assets/diagram-2-sovereign-matrix-dark.png)
 
-> 🌐 [**Open Interactive Chapter 2 Viewer**](diagram-2-sovereign-matrix.html) | 📄 [View Typed JSON Spec](diagram-2-sovereign-matrix.architecture.json)
+> ðŸŒ [**Open Interactive Chapter 2 Viewer**](diagram-2-sovereign-matrix.html) | ðŸ“„ [View Typed JSON Spec](diagram-2-sovereign-matrix.architecture.json)
 
 ```
-                  ┌──────────────────────────────────────────────┐
-                  │    BepInEx / plugins  (NTFS Junction)        │
-                  └──────────────────────┬───────────────────────┘
-                                         │
-         ┌───────────────────────────────┼───────────────────────────────┐
-         ▼                               ▼                               ▼
-┌──────────────────┐           ┌──────────────────┐            ┌──────────────────┐
-│   IsModded.dll   │           │   Unfaded.dll    │            │TotemSentinel.dll │
-│ 1.0 Achievements │           │ Death Spectator, │            │Camp Radar & Greed│
-│  Enabler & Guard │           │  Drone & Recap   │            │ Gambit Retribut. │
-└──────────────────┘           └──────────────────┘            └──────────────────┘
+                  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+                  â”‚    BepInEx / plugins  (NTFS Junction)        â”‚
+                  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                                         â”‚
+         â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+         â–¼                               â–¼                               â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”           â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”            â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚   IsModded.dll   â”‚           â”‚   Unfaded.dll    â”‚            â”‚TotemSentinel.dll â”‚
+â”‚ 1.0 Achievements â”‚           â”‚ Death Spectator, â”‚            â”‚Camp Radar & Greedâ”‚
+â”‚  Enabler & Guard â”‚           â”‚  Drone & Recap   â”‚            â”‚ Gambit Retribut. â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜           â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜            â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 ### 1. [IsModded](https://github.com/djcdevelopment/ismodded) (Valheim 1.0 Steam Achievement Enabler)
@@ -154,12 +158,12 @@ The engine natively features and demonstrates our sovereign Valheim 1.0 mod suit
 - **The Problem**: In Valheim 1.0, BepInEx automatically sets `Game.isModded = true`. `Achievements.IsCheatedAtAll()` tests this field directly, causing all Steam achievement progress to be silently dropped on modded games.
 - **The Fix**: An 8.7 KB Harmony prefix that decouples `Game.isModded` from cheat evaluation while strictly preserving legitimate cheat detection (console cheats, devcommands, item spawning).
 - **In-Game Audit**: Press **`F5`** and run `ismodded` to see live memory status of your achievement gate.
-- 📦 **Standalone Repo**: [`github.com/djcdevelopment/ismodded`](https://github.com/djcdevelopment/ismodded)
+- ðŸ“¦ **Standalone Repo**: [`github.com/djcdevelopment/ismodded`](https://github.com/djcdevelopment/ismodded)
 
 ### 2. [Unfaded](https://github.com/djcdevelopment/deepnorthtesting/tree/main/plugins/Unfaded) (Death Spectator, Drone & Zero Blackout)
 > *Eliminate the punitive 9.5-second blackout screen and turn player death into tactical cinema.*
 
-- **Blackout Elimination**: Suppresses the black canvas overlay upon lethal damage—keep sight of the battlefield instantly.
+- **Blackout Elimination**: Suppresses the black canvas overlay upon lethal damageâ€”keep sight of the battlefield instantly.
 - **Triple Spectator Modes**:
   - `[K]` **KillerCam**: Snaps the camera directly onto the creature that struck the lethal hit.
   - `[F]` **FreeFly Drone**: Detaches camera anchors for full orbital 6-DoF flight across the battlefield.
@@ -167,7 +171,7 @@ The engine natively features and demonstrates our sovereign Valheim 1.0 mod suit
 - **Combat Recap Banner**: High-visibility banner attributing killer name, stars, hit damage, and falling timber.
 - **Cinematic Bullet-Time**: Configurable slow-mo timescale (`0.35x`) on fatal hits.
 - **Recording Sync (`[F9]`)**: One-touch Windows Game Bar trigger with session timer.
-- 📦 **Thunderstore Package**: [`Unfaded-1.0.6.zip`](https://github.com/djcdevelopment/deepnorthtesting/tree/main/plugins/Unfaded)
+- ðŸ“¦ **Thunderstore Package**: [`Unfaded-1.0.6.zip`](https://github.com/djcdevelopment/deepnorthtesting/tree/main/plugins/Unfaded)
 
 ### 3. [TotemSentinel](https://github.com/djcdevelopment/TotemSentinel) (Fuling Radar & Greed's Gambit)
 > *Tactical camp-check radar and risk-versus-reward retribution centered on Fuling Totems.*
@@ -175,7 +179,7 @@ The engine natively features and demonstrates our sovereign Valheim 1.0 mod suit
 - **Sonar Camp Pulse (`[V]`)**: Consumes a banked radar charge from carried Fuling Totems to pulse a 64m radius, highlighting Fulings, Shamans, and Berserkers through structures.
 - **Greed's Gambit (`[LeftAlt+V]`)**: Wide-area loot scan granting **2.5x drop rate multipliers** on all defeated enemies while **doubling all incoming player damage** for 120 seconds.
 - **Dynamic Threat HUD**: In-game cards tracking active threats, remaining banked charges, and retribution countdowns.
-- 📦 **Thunderstore Package**: [`TotemSentinel-1.5.1.zip`](https://github.com/djcdevelopment/TotemSentinel)
+- ðŸ“¦ **Thunderstore Package**: [`TotemSentinel-1.5.1.zip`](https://github.com/djcdevelopment/TotemSentinel)
 
 ### 4. [SelfieStick / CameraProof](https://github.com/djcdevelopment/deepnorthtesting/tree/main/SelfieStick) (Cinematic Frame Capture)
 > *High-precision camera projection, framing guides, and decoupled photo mode.*
@@ -188,6 +192,8 @@ The engine natively features and demonstrates our sovereign Valheim 1.0 mod suit
 
 ## Chapter 3: Synthetic Dev Pipeline (Build-to-Test Loop)
 
+![Zero-Deploy Dev Loop Infographic](assets/infographic-3-zero-deploy-loop.png)
+
 For mod developers, the engine introduces **Synthetic Profiles**. Instead of running post-build copy scripts or manual deployment steps:
 
 1. Define a synthetic profile in `manifests/profiles.json` with entries pointing to your compiler output directories (`bin/Release` or `bin/Debug`).
@@ -196,11 +202,13 @@ For mod developers, the engine introduces **Synthetic Profiles**. Instead of run
 
 ![Chapter 3 Architecture](assets/diagram-3-synthetic-pipeline-dark.png)
 
-> 🌐 [**Open Interactive Chapter 3 Viewer**](diagram-3-synthetic-pipeline.html) | 📄 [View Typed JSON Spec](diagram-3-synthetic-pipeline.architecture.json)
+> ðŸŒ [**Open Interactive Chapter 3 Viewer**](diagram-3-synthetic-pipeline.html) | ðŸ“„ [View Typed JSON Spec](diagram-3-synthetic-pipeline.architecture.json)
 
 ---
 
 ## Chapter 4: Pre-Flight Keybind & Conflict Auditing
+
+![Fleet Conflict Radar Infographic](assets/infographic-4-fleet-radar.png)
 
 Modding crashes often stem from silent conflicts: two mods binding the same hotkey, or multiple Harmony transpilers contending for the same method.
 
@@ -208,7 +216,7 @@ The engine includes a pre-flight conflict scanner that audits active assemblies 
 
 ![Chapter 4 Architecture](assets/diagram-4-fleet-conflict-dark.png)
 
-> 🌐 [**Open Interactive Chapter 4 Viewer**](diagram-4-fleet-conflict.html) | 📄 [View Typed JSON Spec](diagram-4-fleet-conflict.architecture.json)
+> ðŸŒ [**Open Interactive Chapter 4 Viewer**](diagram-4-fleet-conflict.html) | ðŸ“„ [View Typed JSON Spec](diagram-4-fleet-conflict.architecture.json)
 
 ### Registered Hotkeys in Sovereign Trio
 - `[V]`: TotemSentinel -> *Sonar Camp Pulse*
@@ -306,17 +314,17 @@ powershell -ExecutionPolicy Bypass -File tools\Verify-ProfileState.ps1
 
 ---
 
-## 🗺️ Comprehensive Architecture Compendium (Macro Overview)
+## ðŸ—ºï¸ Comprehensive Architecture Compendium (Macro Overview)
 
 For high-level system review, this macro architecture compendium connects all layers into a single unified topology: the CLI control surface, the declarative manifest catalog, the zero-copy NTFS junction engine, the sovereign mod matrix, and the multi-node FastMCP fleet gateway:
 
 ![Macro Architecture Compendium](assets/architecture-archify-dark.png)
 
 ### Compendium Interactive Model
-- 🌐 [**Open Interactive Macro Compendium Viewer**](valheim-profile-engine.html)
-- 📄 [View Macro Typed JSON Specification](valheim-profile-engine.architecture.json)
-- 🖼️ [High-Res Showcase Dark Preview](assets/architecture-archify-dark.png)
-- 🖼️ [High-Res Showcase Light Preview](assets/architecture-archify-light.png)
+- ðŸŒ [**Open Interactive Macro Compendium Viewer**](valheim-profile-engine.html)
+- ðŸ“„ [View Macro Typed JSON Specification](valheim-profile-engine.architecture.json)
+- ðŸ–¼ï¸ [High-Res Showcase Dark Preview](assets/architecture-archify-dark.png)
+- ðŸ–¼ï¸ [High-Res Showcase Light Preview](assets/architecture-archify-light.png)
 
 ### Four Macro Story Modes in the Compendium Viewer:
 1. **Full Gaming Profile Swap**: End-to-end activation of the 65-mod gaming suite via junction retargeting.
@@ -326,7 +334,9 @@ For high-level system review, this macro architecture compendium connects all la
 
 ---
 
-## 📊 Infographics & Visual Summaries
+## ðŸ“Š Infographics & Visual Summaries
+
+![The 48ms Breakthrough: Killing File Copying Infographic](assets/infographic-5-genesis-tylers76.png)
 
 For community announcements, release cards, or visual learning, the repository includes ready-to-generate infographic specifications (one `.md` source per visual) optimized for **NotebookLM** and designer pipelines:
 
@@ -338,11 +348,11 @@ For community announcements, release cards, or visual learning, the repository i
 | [**04: Fleet Conflict Radar**](infographics/04-fleet-conflict-radar.md) | Pre-flight keybind collision scanner & multi-node topology | Server Admin Brief |
 | [**05: Discord Genesis (TylerS76)**](infographics/05-discord-genesis-tylers76.md) | TylerS76's Discord spark unlocking unprivileged NTFS junctions | Origin Story / Community |
 
-🎨 **Looking for banner and illustrative art prompts?** See [OpenArt / Flux / Midjourney Prompts](infographics/openart-prompts.md).
+ðŸŽ¨ **Looking for banner and illustrative art prompts?** See [OpenArt / Flux / Midjourney Prompts](infographics/openart-prompts.md).
 
 ---
 
-## 🙏 Acknowledgments & Credits
+## ðŸ™ Acknowledgments & Credits
 
 - **TylerS76** (Discord `@TylerS76`): The original ideator who proposed using filesystem linking (hardlinks/symlinks/junctions) to manage isolated test profiles and mod shells without file copy overhead.
 - **durracktu / djcdevelopment**: Engine architecture, zero-copy PowerShell reparse point switcher, declarative manifest catalog, synthetic compiler build pipelines, and FastMCP fleet tool surface.
@@ -351,7 +361,8 @@ For community announcements, release cards, or visual learning, the repository i
 
 ---
 
-## 📜 License
+## ðŸ“œ License
 
-This project is licensed under the **MIT License** — see the [LICENSE](../LICENSE) file for details.  
+This project is licensed under the **MIT License** â€” see the [LICENSE](../LICENSE) file for details.  
 All sovereign mod plugins ([`IsModded`](https://github.com/djcdevelopment/ismodded), [`Unfaded`](https://github.com/djcdevelopment/deepnorthtesting/tree/main/plugins/Unfaded), [`TotemSentinel`](https://github.com/djcdevelopment/TotemSentinel), [`SelfieStick`](https://github.com/djcdevelopment/deepnorthtesting/tree/main/SelfieStick)) are open source and maintained by `djcdevelopment`.
+

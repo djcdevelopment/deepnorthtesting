@@ -1,5 +1,10 @@
 # Genesis of the Engine: How a Discord Question Killed File Copying
 
+![The 48ms Breakthrough: Killing File Copying Infographic](../assets/infographic-5-genesis-tylers76.png)
+
+*Illustration / Mood Art:*  
+![TylerS76 Genesis Spark Crystal Lattice Art](../assets/art-5-genesis-spark-crystal.png)
+
 **Great tools rarely start in corporate planning meetings. The Valheim Profile Engine started with a casual suggestion in a modding Discord from community member TylerS76.**
 
 ---

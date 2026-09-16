@@ -1,5 +1,10 @@
 # The Zero-Deploy Dev Loop: From Code Edit to In-Game Test in 0 Seconds
 
+![Mastering the Instant Modding Loop Infographic](../assets/infographic-3-zero-deploy-loop.png)
+
+*Illustration / Mood Art:*  
+![Zero-Deploy Viking Hologram Loop](../assets/art-3-zero-deploy-viking-loop.png)
+
 **The traditional Valheim mod dev loop is choked with file copies, post-build scripts, and stale DLLs. Synthetic profiles eliminate deployment entirely.**
 
 ---

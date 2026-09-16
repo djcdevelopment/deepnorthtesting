@@ -1,5 +1,10 @@
 # Zero-Copy Profile Swapping: 48 Milliseconds vs 12.4 Seconds
 
+![The Zero-Copy Revolution Infographic](../assets/infographic-1-zero-copy-swap.png)
+
+*Illustration / Mood Art:*  
+![Zero-Copy Speed Split Art](../assets/art-1-zero-copy-speed-split.png)
+
 **Traditional mod managers copy megabytes of files back and forth on disk. The Valheim Profile Engine flips a single filesystem pointer in 48 milliseconds.**
 
 ---
