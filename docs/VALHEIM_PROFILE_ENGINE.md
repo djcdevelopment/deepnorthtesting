@@ -97,7 +97,9 @@ powershell -ExecutionPolicy Bypass -File tools\Verify-ProfileState.ps1
 5. [Chapter 5: Empirical Benchmarks (OMEN Silicon)](#chapter-5-empirical-benchmarks-omen-silicon)
 6. [Chapter 6: Automated Verification & Safety Interlocks](#chapter-6-automated-verification--safety-interlocks)
 7. [🗺️ Comprehensive Architecture Compendium (Macro Overview)](#️-comprehensive-architecture-compendium-macro-overview)
-8. [📜 License](#-license)
+8. [📊 Infographics & Visual Summaries](#-infographics--visual-summaries)
+9. [🙏 Acknowledgments & Credits](#-acknowledgments--credits)
+10. [📜 License](#-license)
 
 ---
 
@@ -313,6 +315,22 @@ For high-level system review, this macro architecture compendium connects all la
 2. **Sovereign Trio Testing**: Tracing synthetic compiler links for `IsModded`, `Unfaded`, and `TotemSentinel`.
 3. **Process Safety Interlock**: Validation of process lock guards and automatic physical backups.
 4. **Fleet Gateway & Conflict Audit**: Multi-node inventory discovery across OMEN, AM4, FX99, and i5.
+
+---
+
+## 📊 Infographics & Visual Summaries
+
+For community announcements, release cards, or visual learning, the repository includes ready-to-generate infographic specifications (one `.md` source per visual) optimized for **NotebookLM** and designer pipelines:
+
+| Infographic Specification | Focus / Visual Story | Target Channel |
+|---|---|---|
+| [**01: Zero-Copy Swapping**](infographics/01-zero-copy-junction-swap.md) | 48ms pointer swap vs 12.4s brute-force copy (85MB saved) | Feature Cards / Nexus |
+| [**02: Sovereign Mod Trinity**](infographics/02-sovereign-mod-trinity.md) | Zero-conflict matrix across `IsModded`, `Unfaded`, `TotemSentinel` | Showcase Poster |
+| [**03: Zero-Deploy Dev Loop**](infographics/03-zero-deploy-developer-loop.md) | Instant compiler-to-game loop with 0-second deployment | Developer Guide |
+| [**04: Fleet Conflict Radar**](infographics/04-fleet-conflict-radar.md) | Pre-flight keybind collision scanner & multi-node topology | Server Admin Brief |
+| [**05: Discord Genesis (TylerS76)**](infographics/05-discord-genesis-tylers76.md) | TylerS76's Discord spark unlocking unprivileged NTFS junctions | Origin Story / Community |
+
+🎨 **Looking for banner and illustrative art prompts?** See [OpenArt / Flux / Midjourney Prompts](infographics/openart-prompts.md).
 
 ---
 
