@@ -105,9 +105,12 @@ python tools\serve-dashboard.py
 7. [🗺️ Comprehensive Architecture Compendium (Macro Overview)](#️-comprehensive-architecture-compendium-macro-overview)
 8. [📖 Operations & Dual-Path Use Cases Guide (CLI & FastMCP)](docs/OPERATIONS_AND_USE_CASES.md)
 9. [⚙️ Setting Up FastMCP (Local & Containerized)](docs/MCP_SETUP_LOCAL_AND_CONTAINER.md)
-10. [📊 Infographics & Visual Summaries](#-infographics--visual-summaries)
-11. [🙏 Acknowledgments & Credits](#-acknowledgments--credits)
-12. [📜 License](#-license)
+10. [❓ Frequently Asked Questions & Troubleshooting](docs/FAQ_AND_TROUBLESHOOTING.md)
+11. [📊 Infographics & Visual Summaries](#-infographics--visual-summaries)
+12. [🤝 Contributing Guidelines](CONTRIBUTING.md)
+13. [📝 Changelog](CHANGELOG.md)
+14. [🙏 Acknowledgments & Credits](#-acknowledgments--credits)
+15. [📜 License](#-license)
 
 ---
 
