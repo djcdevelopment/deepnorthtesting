@@ -82,6 +82,12 @@ powershell -ExecutionPolicy Bypass -File tools\switch-profile.ps1 -Status
 powershell -ExecutionPolicy Bypass -File tools\Verify-ProfileState.ps1
 ```
 
+### 5. Launch the Local Web Dashboard (Optional)
+```powershell
+python tools\serve-dashboard.py
+# Opens dashboard on http://localhost:8725 with 1-click swapping and conflict radar
+```
+
 ---
 
 ## 📑 Table of Contents
@@ -97,9 +103,11 @@ powershell -ExecutionPolicy Bypass -File tools\Verify-ProfileState.ps1
 5. [Chapter 5: Empirical Benchmarks (OMEN Silicon)](#chapter-5-empirical-benchmarks-omen-silicon)
 6. [Chapter 6: Automated Verification & Safety Interlocks](#chapter-6-automated-verification--safety-interlocks)
 7. [🗺️ Comprehensive Architecture Compendium (Macro Overview)](#️-comprehensive-architecture-compendium-macro-overview)
-8. [📊 Infographics & Visual Summaries](#-infographics--visual-summaries)
-9. [🙏 Acknowledgments & Credits](#-acknowledgments--credits)
-10. [📜 License](#-license)
+8. [📖 Operations & Dual-Path Use Cases Guide (CLI & FastMCP)](OPERATIONS_AND_USE_CASES.md)
+9. [⚙️ Setting Up FastMCP (Local & Containerized)](MCP_SETUP_LOCAL_AND_CONTAINER.md)
+10. [📊 Infographics & Visual Summaries](#-infographics--visual-summaries)
+11. [🙏 Acknowledgments & Credits](#-acknowledgments--credits)
+12. [📜 License](#-license)
 
 ---
 
