@@ -83,7 +83,19 @@ flowchart TD
 
 Our system maps are compiled deterministically into standalone, explorable HTML artifacts powered by **Archify**. Open the interactive maps directly in your browser to inspect preset views, trace directed execution routes, and toggle between dark and light themes.
 
-### 1. Backpack Status Effect Architecture (FAQ-001)
+### 1. Valheim Profile Engine & Zero-Copy Switcher (NEW)
+
+Visualizes the sub-50ms NTFS directory junction swapping architecture, synthetic compiler build links (`IsModded`, `Unfaded`, `TotemSentinel`), process safety guards, and distributed fleet conflict auditing.
+
+- 🌐 [**Open Interactive HTML Viewer**](./docs/valheim-profile-engine.html)
+- 📄 [View Typed JSON Specification](./docs/valheim-profile-engine.architecture.json)
+- 📖 [Read Comprehensive Profile Engine Guide](./docs/VALHEIM_PROFILE_ENGINE.md)
+
+[![Valheim Profile Engine Architecture](./docs/assets/architecture-archify-dark.png)](./docs/valheim-profile-engine.html)
+
+---
+
+### 2. Backpack Status Effect Architecture (FAQ-001)
 
 Visualizes YAML configuration parsing, literal hash resolution, `ObjectDB` catalog constraints, single equipment slot limitations, and the Harmony companion interceptor.
 
@@ -95,7 +107,7 @@ Visualizes YAML configuration parsing, literal hash resolution, `ObjectDB` catal
 
 ---
 
-### 2. Unfaded Death Spectator & Blackout Removal
+### 3. Unfaded Death Spectator & Blackout Removal
 
 Maps the full lifecycle of lethal hits in Valheim 1.0, including HUD blackout suppression (`HudBlackScreenPatch`), triple spectator modes (Corpse Orbit, Killer Cam, Free-Fly Drone), slow-mo bullet-time, and in-game console tuning.
 
@@ -107,7 +119,7 @@ Maps the full lifecycle of lethal hits in Valheim 1.0, including HUD blackout su
 
 ---
 
-### 3. Unswayed Locomotion & Camera Bobbing Stabilizer
+### 4. Unswayed Locomotion & Camera Bobbing Stabilizer
 
 Maps the Valheim 1.0 character locomotion blend tree, head-bone tracking decoupling, Burial Crypt collision anti-crush clamp, adaptive shoulder lift, dynamic FOV expansion, and live in-game tuning.
 
@@ -120,35 +132,79 @@ Maps the Valheim 1.0 character locomotion blend tree, head-bone tracking decoupl
 
 ---
 
+## ⚡ Zero-Copy Profile Engine & Fleet Switcher
+
+Swapping between a 65-mod multiplayer server pack, clean cinematic recording, and isolated mod development previously required slow, destructive file copying (~12.4s, 85MB copied per switch). 
+
+The **Zero-Copy Profile Engine** replaces physical copies with sub-50ms NTFS directory junctions (`mklink /J`), requiring **zero administrator elevation** and copying **0 bytes**:
+
+```powershell
+# List all configured profiles
+powershell -ExecutionPolicy Bypass -File tools\switch-profile.ps1 -List
+
+# Inspect active profile and junction status
+powershell -ExecutionPolicy Bypass -File tools\switch-profile.ps1 -Status
+
+# Switch to the Sovereign Mod Showcase Trio in <50ms
+powershell -ExecutionPolicy Bypass -File tools\switch-profile.ps1 -Profile sovereign-trio
+
+# Switch to full 65-mod gaming suite
+powershell -ExecutionPolicy Bypass -File tools\switch-profile.ps1 -Profile full-gaming
+
+# Run automated integrity verification suite
+powershell -ExecutionPolicy Bypass -File tools\Verify-ProfileState.ps1
+```
+
+### Empirical Switching Benchmarks (OMEN Hardware)
+
+| Target Profile | Mode | Junction Swap | Total Process | Bytes Copied | Active DLLs |
+| :--- | :--- | :---: | :---: | :---: | :---: |
+| **`sovereign-trio`** | Synthetic Junction Chain | **47.6 ms** | 325.8 ms | **0 Bytes** | 4 DLLs |
+| **`isolated-unfaded`** | Compiler Build Link | **42.1 ms** | 311.3 ms | **0 Bytes** | 2 DLLs |
+| **`isolated-totemsentinel`** | Compiler Build Link | **45.8 ms** | 314.7 ms | **0 Bytes** | 2 DLLs |
+| **`isolated-ismodded`** | Compiler Build Link | **39.4 ms** | 295.1 ms | **0 Bytes** | 2 DLLs |
+| **`clean-recording`** | Synthetic Recording | **48.2 ms** | 324.0 ms | **0 Bytes** | 3 DLLs |
+| **`full-gaming`** | Physical Directory Link | **68.2 ms** | 280.1 ms | **0 Bytes** | 65 DLLs |
+
+---
+
 ## 🧩 Sovereign Mod Plugins
 
 This repository develops and tests sovereign Valheim 1.0 plugins built for performance, stability, and zero-error game loops:
+
+### [IsModded](https://github.com/djcdevelopment/ismodded) (Valheim 1.0 Steam Achievement Enabler)
+- **Root-Cause Analysis**: Decouples `Game.isModded` telemetry flag from 1.0 cheat validation logic via Harmony prefix on `Achievements.IsCheatedAtAll()`.
+- **Steam Progression**: Restores Steam achievements on BepInEx modded clients while preserving genuine cheat protections.
+- **In-Game Audit**: F5 console command `ismodded` displays live memory state of cheat evaluators.
+- 📦 **Standalone Repo**: [`github.com/djcdevelopment/ismodded`](https://github.com/djcdevelopment/ismodded)
 
 ### [Unfaded](./plugins/Unfaded) (Death Spectator, Combat Recap, & Video Suite)
 - **Eliminates Blackout Canvas**: Suppresses Valheim's 9.5-second black screen canvas fadeout on death.
 - **Triple Spectator Modes**:
   - **Corpse Orbit**: 360° mouse look and scroll wheel distance zoom around your ragdoll.
-  - **Killer Cam**: Press **[K]** to snap the camera to the creature that struck the killing blow.
-  - **Free-Fly Drone**: Press **[F]** to disconnect camera anchors and fly freely across the battlefield.
-- **Cinematic Bullet-Time**: Configurable slow-motion timescale (`0.35x` default) upon lethal hit.
-- **Combat Recap Banner**: Identifies attacker name, stars, lethal damage, and falling timber (`HitType.Tree`).
-- **Video Recording Suite (`[F9]`)**: One-touch Windows Game Bar trigger dispatch (`Win + Alt + R`) with session timer and clip directory auto-indexer.
-- **In-Game CLI & Simulators**: `record start|stop`, `unfaded tree` (timber launch test), and `unfaded test` (safe 6s spectator mode).
-- 📦 **Thunderstore Package**: [`Unfaded-1.0.5.zip`](./plugins/Unfaded/Unfaded-1.0.5.zip)
+  - **Killer Cam (`[K]`)**: Snaps camera focus to the creature that struck the killing blow.
+  - **Free-Fly Drone (`[F]`)**: Disconnects camera anchors for free orbital flight.
+  - **Manual Respawn (`[Space]`)**: Instant respawn override.
+- **Combat Recap Banner**: Identifies attacker name, stars, lethal damage, and falling timber.
+- **Video Recording Suite (`[F9]`)**: One-touch Windows Game Bar trigger dispatch.
+- 📦 **Thunderstore Package**: [`Unfaded-1.0.6.zip`](./plugins/Unfaded/Unfaded-1.0.6.zip)
+
+### [TotemSentinel](https://github.com/djcdevelopment/TotemSentinel) (Fuling Totem Radar & Greed's Gambit)
+- **Camp-Check Radar (`[V]`)**: Player-triggered tactical sonar pulse scanning 64m around picked-up Fuling Totems.
+- **Greed's Gambit (`[LeftAlt+V]`)**: High-risk loot scanner granting 2.5x drop rate multipliers while doubling incoming damage for 120 seconds.
+- **In-Game HUD**: Real-time threat cards, remaining sonar charges, and dynamic combat summary.
+- 📦 **Thunderstore Package**: [`TotemSentinel-1.5.1.zip`](../totemalert/TotemSentinel-1.5.1.zip)
+
+### [SelfieStick / CameraProof](../SelfieStick) (Cinematic Camera & Exact Pixel Capture)
+- **Projection Diagnostics**: Real-time camera matrix overlay and framing grid.
+- **Perspective Snap (`[F9]`)**: Snaps to predefined cinematic camera angles for high-resolution screenshots.
+- **Decoupled Free-Look (`[F8]`)**: Unbinds third-person camera from character pitch and roll.
 
 ### [Unswayed](./plugins/Unswayed) (Ergonomic Camera & Locomotion Bobbing Stabilizer)
-- **Decouples Camera Stride Bounce**: Anchors base camera height to a stabilized ground offset, decoupling it from the 1.0 animated head bone to completely eliminate running vertical bounce.
-- **Dungeon Ergonomics & Anti-Crush**:
-  - **Min Distance Clamp**: Prevents camera collision raycasts from crushing point-blank against the player's skull in narrow burial crypt corridors.
-  - **Adaptive Shoulder Lift**: Gently raises the camera over the Viking's shoulders in low-clearance crypts for clear sightlines.
-  - **Dynamic Dungeon FOV**: Automatically widens FOV in cramped dungeons (e.g. +10°–15°) to stabilize peripheral vision and suppress vertigo.
-- **Motion Sickness Toolkit**: Configurable camera shake multiplier (`0.0` to `1.0`), sailing ship tilt suppression, continuous vertical damping slider (`0.0` to `1.0`), and live hotkey toggling (`F7`).
-- **In-Game CLI**: Type `unswayed status`, `unswayed toggle`, or tune live parameters directly in console.
-
-### [EarnYourKeep](./plugins/EarnYourKeep) (Modded Achievement Enabler)
-- **Decoupled Cheat Detection**: Permits earning Steam achievements while playing with BepInEx and mods.
-- **Devcommand Bypass**: Configurable override for worlds where admin/creative commands were activated.
-- **Watermark Suppression**: Optionally hides the main menu `"Modded"` watermark.
+- **Decouples Camera Stride Bounce**: Anchors base camera height to a stabilized ground offset, decoupling it from the 1.0 animated head bone.
+- **Dungeon Ergonomics & Anti-Crush**: Minimum distance clamp and adaptive shoulder lift in low-clearance burial crypts.
+- **Motion Sickness Toolkit**: Configurable camera shake multiplier, ship tilt suppression, and continuous damping.
+- **In-Game CLI**: Type `unswayed status` or toggle live via `[F7]`.
 
 ---
 

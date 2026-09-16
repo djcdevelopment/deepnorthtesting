@@ -1,0 +1,9 @@
+{
+  "name": "ValheimProfileEngine",
+  "version_number": "1.0.0",
+  "website_url": "https://github.com/djcdevelopment/deepnorthtesting",
+  "description": "Zero-copy sub-50ms BepInEx mod profile switcher, compiler build linker, and multi-node fleet conflict auditor for Valheim 1.0.",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2202"
+  ]
+}

@@ -1,0 +1,149 @@
+﻿{
+    "$schema":  "http://json-schema.org/draft-07/schema#",
+    "version":  "1.0.0",
+    "active_profile":  "full-gaming",
+    "default_machine":  "OMEN",
+    "machines":  {
+                     "OMEN":  {
+                                  "game_dir":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim",
+                                  "bepinex_dir":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx",
+                                  "workspace_dir":  "C:/work/deepnorthtesting"
+                              }
+                 },
+    "profiles":  {
+                     "full-gaming":  {
+                                         "alias":  [
+                                                       "full",
+                                                       "gaming",
+                                                       "comfymods"
+                                                   ],
+                                         "description":  "Full 65 ComfyMods suite for primary gameplay and compatibility audits",
+                                         "type":  "directory",
+                                         "path":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/full-comfymods"
+                                     },
+                     "sovereign-trio":  {
+                                            "alias":  [
+                                                          "sovereign",
+                                                          "trio",
+                                                          "showcase"
+                                                      ],
+                                            "description":  "Sovereign Showcase Trio: IsModded (achievements) + Unfaded (death spectator) + TotemSentinel (Fuling radar)",
+                                            "type":  "synthetic",
+                                            "target_dir":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/sovereign-trio",
+                                            "entries":  [
+                                                            {
+                                                                "name":  "IsModded.dll",
+                                                                "source":  "C:/work/ismodded/bin/Release/IsModded.dll",
+                                                                "link_type":  "hardlink"
+                                                            },
+                                                            {
+                                                                "name":  "Unfaded.dll",
+                                                                "source":  "C:/work/Unfaded/bin/Release/Unfaded.dll",
+                                                                "link_type":  "hardlink"
+                                                            },
+                                                            {
+                                                                "name":  "TotemSentinel.dll",
+                                                                "source":  "C:/work/totemalert/bin/Release/TotemSentinel.dll",
+                                                                "link_type":  "hardlink"
+                                                            },
+                                                            {
+                                                                "name":  "ComfyNetworkSense.dll",
+                                                                "source":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/full-comfymods/ComfyNetworkSense.dll",
+                                                                "link_type":  "hardlink"
+                                                            }
+                                                        ]
+                                        },
+                     "isolated-unfaded":  {
+                                              "alias":  [
+                                                            "unfaded",
+                                                            "spectator"
+                                                        ],
+                                              "description":  "Direct compiler link to Unfaded death spectator \u0026 zero-blackout build",
+                                              "type":  "synthetic",
+                                              "target_dir":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/isolated-unfaded",
+                                              "entries":  [
+                                                              {
+                                                                  "name":  "Unfaded.dll",
+                                                                  "source":  "C:/work/Unfaded/bin/Release/Unfaded.dll",
+                                                                  "link_type":  "hardlink"
+                                                              },
+                                                              {
+                                                                  "name":  "ComfyNetworkSense.dll",
+                                                                  "source":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/full-comfymods/ComfyNetworkSense.dll",
+                                                                  "link_type":  "hardlink"
+                                                              }
+                                                          ]
+                                          },
+                     "isolated-totemsentinel":  {
+                                                    "alias":  [
+                                                                  "totem",
+                                                                  "totemsentinel",
+                                                                  "radar"
+                                                              ],
+                                                    "description":  "Direct compiler link to TotemSentinel Fuling radar \u0026 Greed\u0027s Gambit build",
+                                                    "type":  "synthetic",
+                                                    "target_dir":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/isolated-totemsentinel",
+                                                    "entries":  [
+                                                                    {
+                                                                        "name":  "TotemSentinel.dll",
+                                                                        "source":  "C:/work/totemalert/bin/Release/TotemSentinel.dll",
+                                                                        "link_type":  "hardlink"
+                                                                    },
+                                                                    {
+                                                                        "name":  "ComfyNetworkSense.dll",
+                                                                        "source":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/full-comfymods/ComfyNetworkSense.dll",
+                                                                        "link_type":  "hardlink"
+                                                                    }
+                                                                ]
+                                                },
+                     "isolated-ismodded":  {
+                                               "alias":  [
+                                                             "ismodded",
+                                                             "achievements"
+                                                         ],
+                                               "description":  "Direct compiler link to IsModded 1.0 Steam achievement decoupling build",
+                                               "type":  "synthetic",
+                                               "target_dir":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/isolated-ismodded",
+                                               "entries":  [
+                                                               {
+                                                                   "name":  "IsModded.dll",
+                                                                   "source":  "C:/work/ismodded/bin/Release/IsModded.dll",
+                                                                   "link_type":  "hardlink"
+                                                               },
+                                                               {
+                                                                   "name":  "ComfyNetworkSense.dll",
+                                                                   "source":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/full-comfymods/ComfyNetworkSense.dll",
+                                                                   "link_type":  "hardlink"
+                                                               }
+                                                           ]
+                                           },
+                     "clean-recording":  {
+                                             "alias":  [
+                                                           "clean",
+                                                           "recording",
+                                                           "selfiestick",
+                                                           "photo"
+                                                       ],
+                                             "description":  "Minimal cinematic recording harness (SelfieStick CameraProof + Unfaded spectator)",
+                                             "type":  "synthetic",
+                                             "target_dir":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/clean-recording",
+                                             "entries":  [
+                                                             {
+                                                                 "name":  "CameraProof.dll",
+                                                                 "source":  "C:/work/SelfieStick/CameraProof.dll",
+                                                                 "link_type":  "hardlink"
+                                                             },
+                                                             {
+                                                                 "name":  "Unfaded.dll",
+                                                                 "source":  "C:/work/Unfaded/bin/Release/Unfaded.dll",
+                                                                 "link_type":  "hardlink"
+                                                             },
+                                                             {
+                                                                 "name":  "ComfyNetworkSense.dll",
+                                                                 "source":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/full-comfymods/ComfyNetworkSense.dll",
+                                                                 "link_type":  "hardlink"
+                                                             }
+                                                         ]
+                                         }
+                 }
+}
