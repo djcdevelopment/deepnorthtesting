@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>djcdevelopment • Thunderstore Vanity Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+    .glow-dot { animation: pulseGlow 2s infinite ease-in-out; }
+    .badge-transition { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+  </style>
+</head>
+<body class="bg-neutral-950 text-neutral-100 min-h-screen flex flex-col items-center justify-center p-4 selection:bg-orange-500/30">
+
+  <!-- Main Widget Card -->
+  <div class="w-full max-w-lg bg-neutral-900/90 border border-neutral-800 backdrop-blur-xl rounded-2xl shadow-2xl p-5 relative overflow-hidden">
+    <!-- Top accent glow line -->
+    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 via-amber-400 to-orange-600"></div>
+
+    <!-- Header Section -->
+    <div class="flex items-center justify-between pb-4 border-b border-neutral-800/80 mb-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-xl shadow-inner">
+          ⚡
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-bold text-lg tracking-tight text-white">djcdevelopment</h1>
+            <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 glow-dot"></span> Live
+            </span>
+          </div>
+          <p class="text-xs text-neutral-400">Valheim Mods • Thunderstore</p>
+        </div>
+      </div>
+
+      <!-- Grand Total Display -->
+      <div class="text-right">
+        <div class="text-[10px] uppercase font-semibold text-neutral-400 tracking-wider">Total Downloads</div>
+        <div id="grand-total" class="text-2xl font-black tracking-tight text-orange-400 font-mono">
+          ...
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeframe Rotation Bar with Arrows -->
+    <div class="bg-neutral-950/70 border border-neutral-800 rounded-xl p-1.5 mb-4 flex items-center justify-between">
+      <!-- Left Arrow -->
+      <button id="prev-btn" class="p-2 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 active:scale-95 transition" title="Previous timeframe">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+      </button>
+
+      <!-- Center Timeframe Display & Quick Select Tabs -->
+      <div class="flex items-center gap-1.5">
+        <button data-mode="last_1h" class="mode-tab px-3 py-1 rounded-lg text-xs font-semibold transition text-neutral-400 hover:text-white">
+          Last Hour
+        </button>
+        <button data-mode="last_12h" class="mode-tab px-3 py-1 rounded-lg text-xs font-semibold transition text-neutral-400 hover:text-white">
+          Last 12 Hours
+        </button>
+        <button data-mode="cumulative" class="mode-tab px-3 py-1 rounded-lg text-xs font-semibold transition bg-orange-500 text-white shadow-md">
+          Cumulative
+        </button>
+      </div>
+
+      <!-- Right Arrow -->
+      <button id="next-btn" class="p-2 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 active:scale-95 transition" title="Next timeframe">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <!-- Active Mode Subtitle Banner -->
+    <div class="flex items-center justify-between text-xs px-1 mb-3 text-neutral-400">
+      <span id="mode-description" class="font-medium text-neutral-300">All-time lifetime downloads per mod</span>
+      <span id="mode-tag" class="text-[11px] font-mono text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded border border-orange-500/20">TOTAL</span>
+    </div>
+
+    <!-- Mod Cards List -->
+    <div id="mods-list" class="space-y-2">
+      <!-- Loading Skeleton -->
+      <div class="p-3 bg-neutral-950/40 rounded-xl border border-neutral-800/80 animate-pulse text-xs text-neutral-500 text-center">
+        Fetching live package metrics...
+      </div>
+    </div>
+
+    <!-- Footer Controls & Meta -->
+    <div class="mt-5 pt-3 border-t border-neutral-800/80 flex items-center justify-between text-xs text-neutral-400">
+      <div class="flex items-center gap-2">
+        <button id="refresh-btn" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-neutral-800/80 hover:bg-neutral-800 text-neutral-300 hover:text-white transition border border-neutral-700/60 active:scale-95">
+          <svg id="refresh-spinner" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          <span>Refresh</span>
+        </button>
+        <span id="sync-time" class="text-[11px] text-neutral-500">Checking...</span>
+      </div>
+
+      <a href="https://thunderstore.io/c/valheim/p/djcdevelopment/" target="_blank" rel="noopener noreferrer" class="hover:text-orange-400 flex items-center gap-1 transition">
+        Storefront
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const MODES = [
+      { id: "cumulative", label: "Cumulative", desc: "All-time lifetime downloads per mod", tag: "TOTAL", color: "text-orange-400", badgeColor: "bg-orange-500 text-white" },
+      { id: "last_12h", label: "Last 12 Hours", desc: "Downloads gained over the last 12 hours", tag: "12-HOUR DELTA", color: "text-indigo-400", badgeColor: "bg-indigo-500 text-white" },
+      { id: "last_1h", label: "Last Hour", desc: "Downloads gained over the trailing 60 minutes", tag: "1-HOUR VELOCITY", color: "text-emerald-400", badgeColor: "bg-emerald-500 text-white" }
+    ];
+
+    let currentModeIdx = 0; // Starts on cumulative
+    let currentData = null;
+
+    const DEFAULT_MODS = [
+      { name: "Unfaded", latest_version: "1.0.6", cumulative: 173, last_12h: 76, last_1h: 6, icon: "https://gcdn.thunderstore.io/live/repository/icons/djcdevelopment-Unfaded-1.0.6.png", url: "https://thunderstore.io/c/valheim/p/djcdevelopment/Unfaded/" },
+      { name: "IsModded", latest_version: "1.0.0", cumulative: 85, last_12h: 85, last_1h: 11, icon: "https://gcdn.thunderstore.io/live/repository/icons/djcdevelopment-IsModded-1.0.0.png", url: "https://thunderstore.io/c/valheim/p/djcdevelopment/IsModded/" },
+      { name: "Unswayed", latest_version: "1.0.0", cumulative: 49, last_12h: 49, last_1h: 3, icon: "https://gcdn.thunderstore.io/live/repository/icons/djcdevelopment-Unswayed-1.0.0.png", url: "https://thunderstore.io/c/valheim/p/djcdevelopment/Unswayed/" },
+      { name: "SelfieStick", latest_version: "0.3.0", cumulative: 29, last_12h: 21, last_1h: 2, icon: "https://gcdn.thunderstore.io/live/repository/icons/djcdevelopment-SelfieStick-0.3.0.png", url: "https://thunderstore.io/c/valheim/p/djcdevelopment/SelfieStick/" },
+      { name: "TotemSentinel", latest_version: "1.5.0", cumulative: 15, last_12h: 3, last_1h: 0, icon: "https://gcdn.thunderstore.io/live/repository/icons/djcdevelopment-TotemSentinel-1.5.0.png", url: "https://thunderstore.io/c/valheim/p/djcdevelopment/TotemSentinel/" }
+    ];
+
+    async function loadData() {
+      const spinner = document.getElementById("refresh-spinner");
+      spinner.classList.add("animate-spin");
+
+      try {
+        // Try local python API first if running locally
+        const resp = await fetch("/api/stats");
+        if (resp.ok) {
+          const json = await resp.json();
+          currentData = json.mods;
+        }
+      } catch (err) {
+        // Standalone browser mode: query Thunderstore API directly
+        try {
+          const mods = JSON.parse(JSON.stringify(DEFAULT_MODS));
+          for (const m of mods) {
+            try {
+              const r = await fetch(`https://thunderstore.io/api/v1/package-metrics/djcdevelopment/${m.name}/`);
+              if (r.ok) {
+                const met = await r.json();
+                if (met.downloads !== undefined) m.cumulative = met.downloads;
+                if (met.latest_version) m.latest_version = met.latest_version;
+              }
+            } catch (e) {}
+          }
+          currentData = mods;
+        } catch (e) {
+          currentData = DEFAULT_MODS;
+        }
+      } finally {
+        spinner.classList.remove("animate-spin");
+        document.getElementById("sync-time").textContent = `Synced ${new Date().toLocaleTimeString()}`;
+        render();
+      }
+    }
+
+    function render() {
+      const mode = MODES[currentModeIdx];
+      const mods = currentData || DEFAULT_MODS;
+
+      // Update Header Text & Description
+      document.getElementById("mode-description").textContent = mode.desc;
+      const tagEl = document.getElementById("mode-tag");
+      tagEl.textContent = mode.tag;
+      tagEl.className = `text-[11px] font-mono px-2 py-0.5 rounded border ${mode.color.replace('text-', 'text-')} ${mode.color.replace('text-', 'border-')}/30 bg-neutral-900`;
+
+      // Update Tab Styles
+      document.querySelectorAll(".mode-tab").forEach(tab => {
+        if (tab.dataset.mode === mode.id) {
+          tab.className = `mode-tab px-3 py-1 rounded-lg text-xs font-semibold transition ${mode.badgeColor} shadow-md`;
+        } else {
+          tab.className = "mode-tab px-3 py-1 rounded-lg text-xs font-semibold transition text-neutral-400 hover:text-white";
+        }
+      });
+
+      // Calculate sum & render cards
+      let total = 0;
+      const listContainer = document.getElementById("mods-list");
+      listContainer.innerHTML = "";
+
+      // Sort by the current mode's value descending
+      const sortedMods = [...mods].sort((a, b) => (b[mode.id] || 0) - (a[mode.id] || 0));
+
+      sortedMods.forEach(mod => {
+        const val = mod[mode.id] ?? 0;
+        total += val;
+        const prefix = mode.id === "cumulative" ? "" : "+";
+
+        const card = document.createElement("a");
+        card.href = mod.url;
+        card.target = "_blank";
+        card.rel = "noopener noreferrer";
+        card.className = "flex items-center justify-between p-3 rounded-xl bg-neutral-950/60 border border-neutral-800 hover:border-orange-500/40 hover:bg-neutral-800/40 transition group";
+
+        card.innerHTML = `
+          <div class="flex items-center gap-3 min-w-0">
+            <img src="${mod.icon}" alt="${mod.name}" class="w-9 h-9 rounded-lg object-cover bg-neutral-800 border border-neutral-700/60 shrink-0" onerror="this.src='https://thunderstore.io/static/images/logo.png'">
+            <div class="min-w-0">
+              <div class="flex items-center gap-1.5">
+                <span class="font-bold text-sm text-neutral-100 group-hover:text-orange-400 transition truncate">${mod.name}</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-neutral-800 border border-neutral-700 text-neutral-300 font-mono">v${mod.latest_version || '1.0.0'}</span>
+              </div>
+              <span class="text-xs text-neutral-500">Valheim mod</span>
+            </div>
+          </div>
+          <div class="text-right pl-3 shrink-0">
+            <div class="text-base font-black font-mono tracking-tight ${mode.color}">
+              ${prefix}${val.toLocaleString()}
+            </div>
+            <div class="text-[10px] text-neutral-400 uppercase tracking-wider font-semibold">
+              ${mode.id === 'cumulative' ? 'downloads' : 'new installs'}
+            </div>
+          </div>
+        `;
+        listContainer.appendChild(card);
+      });
+
+      const grandTotalEl = document.getElementById("grand-total");
+      const grandPrefix = mode.id === "cumulative" ? "" : "+";
+      grandTotalEl.textContent = `${grandPrefix}${total.toLocaleString()}`;
+      grandTotalEl.className = `text-2xl font-black tracking-tight font-mono ${mode.color}`;
+    }
+
+    // Navigation Controls
+    document.getElementById("prev-btn").addEventListener("click", () => {
+      currentModeIdx = (currentModeIdx - 1 + MODES.length) % MODES.length;
+      render();
+    });
+
+    document.getElementById("next-btn").addEventListener("click", () => {
+      currentModeIdx = (currentModeIdx + 1) % MODES.length;
+      render();
+    });
+
+    document.querySelectorAll(".mode-tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        currentModeIdx = MODES.findIndex(m => m.id === tab.dataset.mode);
+        render();
+      });
+    });
+
+    document.getElementById("refresh-btn").addEventListener("click", loadData);
+
+    // Initial load
+    loadData();
+
+    // Auto-refresh every 2 minutes
+    setInterval(loadData, 120000);
+  </script>
+</body>
+</html>

@@ -12,7 +12,7 @@
 
 ## 💡 Why Use This? Why Keep Reading?
 
-If you mod Valheim, play across multiple servers, record gameplay, or write code, you know the daily pain of **managing `BepInEx/plugins`**:
+If you mod Valheim, play across multiple servers, record cinematic videos, or develop C# mods, you know the daily pain of **managing `BepInEx/plugins`**:
 
 - 🛑 **Tired of waiting 15+ seconds** copying and deleting 60+ DLL files (~85 MB) just to test a single mod?
 - 🛑 **Tired of burning gigabytes of SSD write wear** and IOPS just to toggle between a multiplayer modpack and a clean client?
@@ -84,28 +84,43 @@ powershell -ExecutionPolicy Bypass -File tools\Verify-ProfileState.ps1
 
 ## 📑 Table of Contents
 
-- [💡 Why Use This? Why Keep Reading?](#-why-use-this-why-keep-reading)
-- [🚀 60-Second Quickstart](#-60-second-quickstart)
-- [🧩 Sovereign Mod Showcase & Featured Profiles](#-sovereign-mod-showcase--featured-profiles)
-  - [1. IsModded (Valheim 1.0 Steam Achievement Enabler)](#1-ismodded-valheim-10-steam-achievement-enabler)
-  - [2. Unfaded (Death Spectator, Drone & Zero Blackout)](#2-unfaded-death-spectator-drone--zero-blackout)
-  - [3. TotemSentinel (Fuling Radar & Greed's Gambit)](#3-totemsentinel-fuling-radar--greeds-gambit)
-  - [4. SelfieStick / CameraProof (Cinematic Frame Capture)](#4-selfiestick--cameraproof-cinematic-frame-capture)
-- [🗺️ System Architecture (Archify Model)](#️-system-architecture-archify-model)
-  - [Interactive Viewer & Guided Views](#interactive-viewer--guided-views)
-- [⚡ Empirical Benchmarks (OMEN Silicon)](#-empirical-benchmarks-omen-silicon)
-  - [Profile Switching Latency Table](#profile-switching-latency-table)
-  - [Traditional Copy vs. Zero-Copy Junction Comparison](#traditional-copy-vs-zero-copy-junction-comparison)
-- [🔍 Pre-Flight Conflict & Keybind Audit](#-pre-flight-conflict--keybind-audit)
-- [🌐 Multi-Node Fleet Intelligence & Comfy Gateway](#-multi-node-fleet-intelligence--comfy-gateway)
-- [🔒 Safety & Crash Recovery Guarantees](#-safety--crash-recovery-guarantees)
-- [📜 License](#-license)
+1. [Chapter 1: Zero-Copy NTFS Junction Swapping](#chapter-1-zero-copy-ntfs-junction-swapping)
+2. [Chapter 2: Sovereign Mod Showcase & Gameplay Hooks](#chapter-2-sovereign-mod-showcase--gameplay-hooks)
+   - [IsModded (Steam Achievements Enabler)](#1-ismodded-valheim-10-steam-achievement-enabler)
+   - [Unfaded (Death Spectator, Drone & Zero Blackout)](#2-unfaded-death-spectator-drone--zero-blackout)
+   - [TotemSentinel (Fuling Radar & Greed's Gambit)](#3-totemsentinel-fuling-radar--greeds-gambit)
+   - [SelfieStick / CameraProof (Cinematic Frame Capture)](#4-selfiestick--cameraproof-cinematic-frame-capture)
+3. [Chapter 3: Synthetic Dev Pipeline (Build-to-Test Loop)](#chapter-3-synthetic-dev-pipeline-build-to-test-loop)
+4. [Chapter 4: Pre-Flight Keybind & Conflict Auditing](#chapter-4-pre-flight-keybind--conflict-auditing)
+5. [Chapter 5: Empirical Benchmarks (OMEN Silicon)](#chapter-5-empirical-benchmarks-omen-silicon)
+6. [Chapter 6: Automated Verification & Safety Interlocks](#chapter-6-automated-verification--safety-interlocks)
+7. [🗺️ Comprehensive Architecture Compendium (Macro Overview)](#️-comprehensive-architecture-compendium-macro-overview)
+8. [📜 License](#-license)
 
 ---
 
-## 🧩 Sovereign Mod Showcase & Featured Profiles
+## Chapter 1: Zero-Copy NTFS Junction Swapping
 
-The profile engine natively features and demonstrates our sovereign Valheim 1.0 mod suite:
+Traditional mod loaders delete and rewrite hundreds of files inside `BepInEx/plugins`. The **Valheim Profile Engine** changes the paradigm: `BepInEx/plugins` itself is converted into an **NTFS Directory Junction** (`IO_REPARSE_TAG_MOUNT_POINT`).
+
+When switching profiles:
+1. `switch-profile.ps1` calls `cmd /c rmdir "BepInEx\plugins"`, which deletes **only the 1 KB reparse point**. The underlying physical files in the target directory are 100% preserved.
+2. `cmd /c mklink /J "BepInEx\plugins" "<TargetProfileDir>"` rebinds the pointer to the desired profile folder.
+3. The swap completes in **39ms - 72ms** with **0 bytes copied**.
+
+![Chapter 1 Architecture](assets/diagram-1-junction-swap-dark.png)
+
+> 🌐 [**Open Interactive Chapter 1 Viewer**](diagram-1-junction-swap.html) | 📄 [View Typed JSON Spec](diagram-1-junction-swap.architecture.json)
+
+---
+
+## Chapter 2: Sovereign Mod Showcase & Gameplay Hooks
+
+The engine natively features and demonstrates our sovereign Valheim 1.0 mod suite. Each mod hooks into specific runtime events to provide gameplay enhancements without mutual interference:
+
+![Chapter 2 Architecture](assets/diagram-2-sovereign-matrix-dark.png)
+
+> 🌐 [**Open Interactive Chapter 2 Viewer**](diagram-2-sovereign-matrix.html) | 📄 [View Typed JSON Spec](diagram-2-sovereign-matrix.architecture.json)
 
 ```
                   ┌──────────────────────────────────────────────┐
@@ -121,8 +136,6 @@ The profile engine natively features and demonstrates our sovereign Valheim 1.0 
 └──────────────────┘           └──────────────────┘            └──────────────────┘
 ```
 
----
-
 ### 1. [IsModded](https://github.com/djcdevelopment/ismodded) (Valheim 1.0 Steam Achievement Enabler)
 > *Because playing with QoL mods shouldn't lock you out of your hard-earned boss trophies.*
 
@@ -130,8 +143,6 @@ The profile engine natively features and demonstrates our sovereign Valheim 1.0 
 - **The Fix**: An 8.7 KB Harmony prefix that decouples `Game.isModded` from cheat evaluation while strictly preserving legitimate cheat detection (console cheats, devcommands, item spawning).
 - **In-Game Audit**: Press **`F5`** and run `ismodded` to see live memory status of your achievement gate.
 - 📦 **Standalone Repo**: [`github.com/djcdevelopment/ismodded`](https://github.com/djcdevelopment/ismodded)
-
----
 
 ### 2. [Unfaded](https://github.com/djcdevelopment/deepnorthtesting/tree/main/plugins/Unfaded) (Death Spectator, Drone & Zero Blackout)
 > *Eliminate the punitive 9.5-second blackout screen and turn player death into tactical cinema.*
@@ -146,8 +157,6 @@ The profile engine natively features and demonstrates our sovereign Valheim 1.0 
 - **Recording Sync (`[F9]`)**: One-touch Windows Game Bar trigger with session timer.
 - 📦 **Thunderstore Package**: [`Unfaded-1.0.6.zip`](https://github.com/djcdevelopment/deepnorthtesting/tree/main/plugins/Unfaded)
 
----
-
 ### 3. [TotemSentinel](https://github.com/djcdevelopment/TotemSentinel) (Fuling Radar & Greed's Gambit)
 > *Tactical camp-check radar and risk-versus-reward retribution centered on Fuling Totems.*
 
@@ -155,8 +164,6 @@ The profile engine natively features and demonstrates our sovereign Valheim 1.0 
 - **Greed's Gambit (`[LeftAlt+V]`)**: Wide-area loot scan granting **2.5x drop rate multipliers** on all defeated enemies while **doubling all incoming player damage** for 120 seconds.
 - **Dynamic Threat HUD**: In-game cards tracking active threats, remaining banked charges, and retribution countdowns.
 - 📦 **Thunderstore Package**: [`TotemSentinel-1.5.1.zip`](https://github.com/djcdevelopment/TotemSentinel)
-
----
 
 ### 4. [SelfieStick / CameraProof](https://github.com/djcdevelopment/deepnorthtesting/tree/main/SelfieStick) (Cinematic Frame Capture)
 > *High-precision camera projection, framing guides, and decoupled photo mode.*
@@ -167,29 +174,50 @@ The profile engine natively features and demonstrates our sovereign Valheim 1.0 
 
 ---
 
-## 🗺️ System Architecture (Archify Model)
+## Chapter 3: Synthetic Dev Pipeline (Build-to-Test Loop)
 
-The entire profile engine architecture is modeled as a formal specification using [Archify](https://github.com/tt-a1i/archify):
+For mod developers, the engine introduces **Synthetic Profiles**. Instead of running post-build copy scripts or manual deployment steps:
 
-![Valheim Profile Engine Architecture](assets/architecture-archify-dark.png)
+1. Define a synthetic profile in `manifests/profiles.json` with entries pointing to your compiler output directories (`bin/Release` or `bin/Debug`).
+2. When activated, the engine builds a virtual directory of hardlinks and nested junctions pointing directly to compiler outputs.
+3. You compile in Rider or Visual Studio, hit Launch, and the newly compiled DLL is loaded by BepInEx with zero intermediate copy steps.
 
-### Interactive Viewer & Guided Views
+![Chapter 3 Architecture](assets/diagram-3-synthetic-pipeline-dark.png)
 
-Open [`docs/valheim-profile-engine.html`](valheim-profile-engine.html) in any browser for interactive exploration:
-
-1. **Full Gaming Profile Swap**: Trace the execution path from CLI to `manifests/profiles.json` through `switch-profile.ps1` to the 65-mod `full-comfymods` directory junction in <50ms.
-2. **Sovereign Trio Testing**: Inspect how synthetic profiles chain directory junctions directly into `bin/Release` outputs for `IsModded`, `Unfaded`, and `TotemSentinel`.
-3. **Process Safety Interlock**: Verify how the running-process guard inspects `Get-Process valheim*` to prevent disk corruption.
-4. **Fleet Gateway & Conflict Audit**: Map how `comfy_gateway.toolsurface.fleet` audits keybinds and queries distributed nodes.
-
-- 🌐 [**Open Interactive HTML Viewer**](valheim-profile-engine.html)
-- 📄 [View Typed JSON Specification](valheim-profile-engine.architecture.json)
-- 🖼️ [High-Res Showcase Dark Vector](assets/architecture-archify-dark.png)
-- 🖼️ [High-Res Showcase Light Vector](assets/architecture-archify-light.png)
+> 🌐 [**Open Interactive Chapter 3 Viewer**](diagram-3-synthetic-pipeline.html) | 📄 [View Typed JSON Spec](diagram-3-synthetic-pipeline.architecture.json)
 
 ---
 
-## ⚡ Empirical Benchmarks (OMEN Silicon)
+## Chapter 4: Pre-Flight Keybind & Conflict Auditing
+
+Modding crashes often stem from silent conflicts: two mods binding the same hotkey, or multiple Harmony transpilers contending for the same method.
+
+The engine includes a pre-flight conflict scanner that audits active assemblies before launch:
+
+![Chapter 4 Architecture](assets/diagram-4-fleet-conflict-dark.png)
+
+> 🌐 [**Open Interactive Chapter 4 Viewer**](diagram-4-fleet-conflict.html) | 📄 [View Typed JSON Spec](diagram-4-fleet-conflict.architecture.json)
+
+### Registered Hotkeys in Sovereign Trio
+- `[V]`: TotemSentinel -> *Sonar Camp Pulse*
+- `[LeftAlt+V]`: TotemSentinel -> *Greed's Gambit Wide Scan*
+- `[K]`: Unfaded -> *KillerCam Focus*
+- `[F]`: Unfaded -> *FreeFly Drone Camera*
+- `[Space]`: Unfaded -> *Manual Respawn Override*
+- `[F9]`: Unfaded -> *Screen Record Trigger*
+
+```text
+=== CONFLICT AUDIT FOR SOVEREIGN-TRIO ON OMEN ===
+Node: OMEN | Status: ONLINE | Active Mods: 4
+Active Keybinds: 6 registered
+Keybind Conflicts: 0
+Harmony Hook Overlaps: 0
+>>> CLEAN FLIGHT: ZERO KEYBIND OR HOOK CONFLICTS IN SOVEREIGN-TRIO! <<<
+```
+
+---
+
+## Chapter 5: Empirical Benchmarks (OMEN Silicon)
 
 Measured on **OMEN** (*Intel Core Ultra 9 285K, Dual Intel Arc Pro B70 GPUs, Samsung 990 Pro NVMe, Windows 11 64-bit*):
 
@@ -222,77 +250,71 @@ Average Junction Latency: 48.5 ms | Total Disk Bytes Written: 0 Bytes | UAC Prom
 
 ---
 
-## 🔍 Pre-Flight Conflict & Keybind Audit
+## Chapter 6: Automated Verification & Safety Interlocks
 
-The engine includes conflict auditing that parses active assemblies before launching the game:
+### Safety Interlocks
+1. **Running Process Guard**: Inspects `Get-Process valheim*` before attempting any filesystem modifications. If the game client or server is running, the operation aborts to prevent file locking (override with `-Force`).
+2. **First-Run Physical Backup**: If `BepInEx\plugins` is currently a physical folder with files, the switcher backs up all contents to `BepInEx\profiles\backup-before-junction` before converting to a junction.
+3. **Safe Unlink**: Uses `cmd /c rmdir`, which deletes only the reparse point link. Target profile directories are never modified or purged.
 
-### Registered Keybinds in Sovereign Trio
-- `[V]`: TotemSentinel -> *Sonar Camp Pulse*
-- `[LeftAlt+V]`: TotemSentinel -> *Greed's Gambit Wide Scan*
-- `[K]`: Unfaded -> *KillerCam Focus*
-- `[F]`: Unfaded -> *FreeFly Drone Camera*
-- `[Space]`: Unfaded -> *Manual Respawn Override*
-- `[F9]`: Unfaded -> *Screen Record Trigger*
-
-```text
-=== CONFLICT AUDIT FOR SOVEREIGN-TRIO ON OMEN ===
-Node: OMEN | Status: ONLINE | Active Mods: 4
-Active Keybinds: 6 registered
-Keybind Conflicts: 0
-Harmony Hook Overlaps: 0
->>> CLEAN FLIGHT: ZERO KEYBIND OR HOOK CONFLICTS IN SOVEREIGN-TRIO! <<<
+### Running the Verification Suite
+```powershell
+powershell -ExecutionPolicy Bypass -File tools\Verify-ProfileState.ps1
 ```
+```text
+=================================================================
+   Valheim Profile Engine :: Automated Verification Suite       
+=================================================================
 
-When scanning the full 65-mod gaming suite, the conflict auditor detects known community collisions:
-- `[F7]`: Collision between `ArcaneSight` (Night Vision) and `Unswayed` (Locomotion Stabilizer).
-- `[F9]`: Collision between `Unfaded` (Record Trigger) and `ComfyCameraProof` (Perspective Snap).
-- `GameCamera.UpdateCamera`: Hook contention between `Unfaded` and `ComfyCameraProof`.
+[1/4] Verifying Manifest Integrity...
+[+] Manifest loaded successfully: version 1.0.0
+    Profiles defined: 6
+    Active Profile in manifest: full-gaming
+
+[2/4] Inspecting BepInEx Plugins Junction...
+[+] PASS: BepInEx\plugins is an active NTFS Directory Junction
+    Junction Target: C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\profiles\full-comfymods
+
+[3/4] Auditing Active Assemblies...
+[+] Found 65 active assemblies in plugins directory.
+    * IsModded.dll (11776 bytes)
+    * Unfaded.dll (46080 bytes)
+    * TotemSentinel.dll (39936 bytes)
+    * ComfyNetworkSense.dll (408064 bytes)
+[+] Sovereign Mod Detection: 4 sovereign modules active.
+
+[4/4] Benchmarking Junction Resolution Latency...
+[+] 100 Directory Iteration Passes: 22 ms total (avg 0.22 ms/pass)
+    Reparse Point Traversal Overhead: < 0.05 ms per lookup
+
+=================================================================
+   Verification Summary: ALL CHECKS PASSED (Zero Defects)       
+=================================================================
+```
 
 ---
 
-## 🌐 Multi-Node Fleet Intelligence & Comfy Gateway
+## 🗺️ Comprehensive Architecture Compendium (Macro Overview)
 
-The engine connects into the multi-node Comfy Gateway (`network/mcp`) running on port `:8725`, scanning across machines on Tailscale:
+For high-level system review, this macro architecture compendium connects all layers into a single unified topology: the CLI control surface, the declarative manifest catalog, the zero-copy NTFS junction engine, the sovereign mod matrix, and the multi-node FastMCP fleet gateway:
 
-```text
-┌─────────────────────────────────────────────────────────────┐
-│                    Comfy Gateway (:8725)                    │
-│      FastMCP Surface: comfy_gateway.toolsurface.fleet       │
-└───────┬──────────────┬──────────────┬──────────────┬────────┘
-        │              │              │              │
-        ▼              ▼              ▼              ▼
-   ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐
-   │  OMEN   │    │   AM4   │    │  FX99   │    │   i5    │
-   │ Local   │    │ Dedicated│   │ AI Work-│    │ Mobile  │
-   │ Gaming  │    │ Server  │    │ station │    │ Laptop  │
-   │ (4.8ms) │    │(Cached) │    │ (259ms) │    │(Cached) │
-   └─────────┘    └─────────┘    └─────────┘    └─────────┘
-```
+![Macro Architecture Compendium](assets/architecture-archify-dark.png)
 
-### Available FastMCP Tools
-- `fleet_mod_inventory()`: Parallel inventory scan reporting active DLLs, versions, and active profiles.
-- `fleet_conflict_audit(node="OMEN")`: Audits keybinds and Harmony hook contention across active plugins.
-- `fleet_swap_profile(profile_name)`: Triggers sub-50ms junction profile swapping remotely.
-- `fleet_node_status()`: Rapid health and connectivity summary.
+### Compendium Interactive Model
+- 🌐 [**Open Interactive Macro Compendium Viewer**](valheim-profile-engine.html)
+- 📄 [View Macro Typed JSON Specification](valheim-profile-engine.architecture.json)
+- 🖼️ [High-Res Showcase Dark Preview](assets/architecture-archify-dark.png)
+- 🖼️ [High-Res Showcase Light Preview](assets/architecture-archify-light.png)
 
-### REST API Endpoints
-- `GET http://127.0.0.1:8725/fleet/inventory`: Full multi-node inventory JSON.
-- `GET http://127.0.0.1:8725/fleet/conflicts`: Live conflict report.
-- `GET http://127.0.0.1:8725/fleet/status`: Node connectivity status.
-- `POST http://127.0.0.1:8725/fleet/swap`: Switch profile with `{"profile": "sovereign-trio"}`.
-
----
-
-## 🔒 Safety & Crash Recovery Guarantees
-
-1. **Running Process Interlock**: Inspects `Get-Process valheim*` before attempting any junction modifications. If the game client or dedicated server is running, the switch is aborted unless explicitly overridden with `-Force`.
-2. **First-Run Physical Backup**: If `BepInEx\plugins` is a physical folder containing files, the switcher automatically creates a full physical backup at `BepInEx\profiles\backup-before-junction` before converting to a reparse point.
-3. **Safe Unlinking**: Unlinking is performed strictly via `cmd /c rmdir <plugins>` which deletes only the reparse point link. Underlying files and directories in the target profile are 100% preserved.
-4. **State Persistence**: The active profile is recorded in `manifests/profiles.json` upon completion, ensuring consistent status reporting across reboots and tool surfaces.
+### Four Macro Story Modes in the Compendium Viewer:
+1. **Full Gaming Profile Swap**: End-to-end activation of the 65-mod gaming suite via junction retargeting.
+2. **Sovereign Trio Testing**: Tracing synthetic compiler links for `IsModded`, `Unfaded`, and `TotemSentinel`.
+3. **Process Safety Interlock**: Validation of process lock guards and automatic physical backups.
+4. **Fleet Gateway & Conflict Audit**: Multi-node inventory discovery across OMEN, AM4, FX99, and i5.
 
 ---
 
 ## 📜 License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.  
+This project is licensed under the **MIT License** — see the [LICENSE](../LICENSE) file for details.  
 All sovereign mod plugins ([`IsModded`](https://github.com/djcdevelopment/ismodded), [`Unfaded`](https://github.com/djcdevelopment/deepnorthtesting/tree/main/plugins/Unfaded), [`TotemSentinel`](https://github.com/djcdevelopment/TotemSentinel), [`SelfieStick`](https://github.com/djcdevelopment/deepnorthtesting/tree/main/SelfieStick)) are open source and maintained by `djcdevelopment`.

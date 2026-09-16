@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Chapter 3 :: Synthetic Dev Pipeline (Build-to-Test)",
+    "subtitle": "Zero-deploy compiler outputs linked directly into BepInEx",
+    "quality_profile": "showcase",
+    "visual_preset": "signal-flow",
+    "viewBox": [
+      1160,
+      340
+    ],
+    "views": [
+      {
+        "id": "synthetic-flow",
+        "label": "Synthetic Build Pipeline",
+        "focus": [
+          "ide_compiler",
+          "bin_release",
+          "synthetic_profile",
+          "plugins_junction",
+          "valheim_runtime"
+        ],
+        "note": "Compile directly to disk and launch Valheim with zero intermediate copy steps."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "ide_compiler",
+      "type": "external",
+      "label": "IDE Build Tool",
+      "sublabel": "dotnet build / Rider",
+      "tag": "Dev Workflow",
+      "pos": [
+        40,
+        110
+      ],
+      "size": [
+        150,
+        60
+      ]
+    },
+    {
+      "id": "bin_release",
+      "type": "database",
+      "label": "Compiler Output",
+      "sublabel": "plugins/Unfaded/bin/Debug",
+      "tag": "Raw DLL",
+      "pos": [
+        270,
+        110
+      ],
+      "size": [
+        160,
+        60
+      ]
+    },
+    {
+      "id": "synthetic_profile",
+      "type": "backend",
+      "label": "Synthetic Profile",
+      "sublabel": "profiles/isolated-unfaded",
+      "tag": "Junction Chain",
+      "pos": [
+        510,
+        110
+      ],
+      "size": [
+        160,
+        60
+      ]
+    },
+    {
+      "id": "plugins_junction",
+      "type": "security",
+      "label": "BepInEx/plugins",
+      "sublabel": "Active Reparse Pointer",
+      "tag": "NTFS Junction",
+      "pos": [
+        750,
+        110
+      ],
+      "size": [
+        160,
+        60
+      ]
+    },
+    {
+      "id": "valheim_runtime",
+      "type": "frontend",
+      "label": "Valheim 1.0 Client",
+      "sublabel": "Direct In-Memory Load",
+      "tag": "Live Game",
+      "pos": [
+        980,
+        110
+      ],
+      "size": [
+        140,
+        60
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "ide-to-bin",
+      "from": "ide_compiler",
+      "to": "bin_release",
+      "label": "outputs binary",
+      "labelDy": -24,
+      "variant": "emphasis"
+    },
+    {
+      "id": "bin-to-synthetic",
+      "from": "bin_release",
+      "to": "synthetic_profile",
+      "label": "links output",
+      "labelDy": -24,
+      "variant": "emphasis"
+    },
+    {
+      "id": "synthetic-to-plugins",
+      "from": "synthetic_profile",
+      "to": "plugins_junction",
+      "label": "reparse target",
+      "labelDy": -24,
+      "variant": "emphasis"
+    },
+    {
+      "id": "plugins-to-game",
+      "from": "plugins_junction",
+      "to": "valheim_runtime",
+      "label": "boots new code",
+      "labelDy": -24,
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Instant Compile-and-Test",
+      "items": [
+        "Synthetic profiles link directly to compiler bin/Release or bin/Debug directories",
+        "No post-build copy scripts or manual deployment steps required",
+        "Mod rebuilds are active the moment Valheim boots"
+      ]
+    }
+  ]
+}

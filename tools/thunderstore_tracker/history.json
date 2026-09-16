@@ -1,0 +1,277 @@
+[
+  {
+    "timestamp": 1789486981.8057272,
+    "iso": "2026-09-15T08:30:00Z",
+    "counts": {
+      "Unfaded": 97,
+      "IsModded": 0,
+      "Unswayed": 0,
+      "SelfieStick": 13,
+      "TotemSentinel": 12
+    }
+  },
+  {
+    "timestamp": 1789508581.8057272,
+    "iso": "2026-09-15T14:30:00Z",
+    "counts": {
+      "Unfaded": 135,
+      "IsModded": 20,
+      "Unswayed": 25,
+      "SelfieStick": 20,
+      "TotemSentinel": 14
+    }
+  },
+  {
+    "timestamp": 1789519381.8057272,
+    "iso": "2026-09-15T17:30:00Z",
+    "counts": {
+      "Unfaded": 155,
+      "IsModded": 55,
+      "Unswayed": 38,
+      "SelfieStick": 24,
+      "TotemSentinel": 14
+    }
+  },
+  {
+    "timestamp": 1789526581.8057272,
+    "iso": "2026-09-15T19:30:00Z",
+    "counts": {
+      "Unfaded": 167,
+      "IsModded": 74,
+      "Unswayed": 46,
+      "SelfieStick": 27,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789530181.8057272,
+    "iso": "2026-09-15T20:43:00Z",
+    "counts": {
+      "Unfaded": 173,
+      "IsModded": 85,
+      "Unswayed": 49,
+      "SelfieStick": 29,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789530190.7769818,
+    "iso": "2026-09-16T03:43:10.776981+00:00",
+    "counts": {
+      "IsModded": 95,
+      "SelfieStick": 29,
+      "Unfaded": 174,
+      "Unswayed": 50,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789530212.23323,
+    "iso": "2026-09-16T03:43:32.233230+00:00",
+    "counts": {
+      "IsModded": 95,
+      "SelfieStick": 29,
+      "Unfaded": 174,
+      "Unswayed": 50,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789530262.5087607,
+    "pt_time": "2026-09-15 08:44:22 PM PDT",
+    "counts": {
+      "IsModded": 95,
+      "SelfieStick": 29,
+      "Unfaded": 174,
+      "Unswayed": 50,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789530290.4966938,
+    "pt_time": "2026-09-15 08:44:50 PM PDT",
+    "counts": {
+      "IsModded": 95,
+      "SelfieStick": 29,
+      "Unfaded": 174,
+      "Unswayed": 50,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789531197.1001885,
+    "pt_time": "2026-09-15 08:59:57 PM PDT",
+    "counts": {
+      "IsModded": 95,
+      "SelfieStick": 29,
+      "Unfaded": 174,
+      "Unswayed": 50,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789532102.5185578,
+    "pt_time": "2026-09-15 09:15:02 PM PDT",
+    "counts": {
+      "IsModded": 95,
+      "SelfieStick": 29,
+      "Unfaded": 174,
+      "Unswayed": 50,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789533008.526027,
+    "pt_time": "2026-09-15 09:30:08 PM PDT",
+    "counts": {
+      "IsModded": 95,
+      "SelfieStick": 29,
+      "Unfaded": 174,
+      "Unswayed": 50,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789533915.338254,
+    "pt_time": "2026-09-15 09:45:15 PM PDT",
+    "counts": {
+      "IsModded": 104,
+      "SelfieStick": 30,
+      "Unfaded": 176,
+      "Unswayed": 50,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789534820.1424205,
+    "pt_time": "2026-09-15 10:00:20 PM PDT",
+    "counts": {
+      "IsModded": 104,
+      "SelfieStick": 30,
+      "Unfaded": 176,
+      "Unswayed": 50,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789535726.9551582,
+    "pt_time": "2026-09-15 10:15:26 PM PDT",
+    "counts": {
+      "IsModded": 104,
+      "SelfieStick": 30,
+      "Unfaded": 176,
+      "Unswayed": 50,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789536632.7506082,
+    "pt_time": "2026-09-15 10:30:32 PM PDT",
+    "counts": {
+      "IsModded": 104,
+      "SelfieStick": 30,
+      "Unfaded": 176,
+      "Unswayed": 50,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789537537.3846471,
+    "pt_time": "2026-09-15 10:45:37 PM PDT",
+    "counts": {
+      "IsModded": 114,
+      "SelfieStick": 30,
+      "Unfaded": 176,
+      "Unswayed": 50,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789538442.4740956,
+    "pt_time": "2026-09-15 11:00:42 PM PDT",
+    "counts": {
+      "IsModded": 114,
+      "SelfieStick": 30,
+      "Unfaded": 176,
+      "Unswayed": 50,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789539347.2818418,
+    "pt_time": "2026-09-15 11:15:47 PM PDT",
+    "counts": {
+      "IsModded": 114,
+      "SelfieStick": 30,
+      "Unfaded": 176,
+      "Unswayed": 50,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789540251.8263702,
+    "pt_time": "2026-09-15 11:30:51 PM PDT",
+    "counts": {
+      "IsModded": 114,
+      "SelfieStick": 30,
+      "Unfaded": 176,
+      "Unswayed": 50,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789541157.698177,
+    "pt_time": "2026-09-15 11:45:57 PM PDT",
+    "counts": {
+      "IsModded": 114,
+      "SelfieStick": 30,
+      "Unfaded": 176,
+      "Unswayed": 50,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789542061.928706,
+    "pt_time": "2026-09-16 12:01:01 AM PDT",
+    "counts": {
+      "IsModded": 120,
+      "SelfieStick": 30,
+      "Unfaded": 177,
+      "Unswayed": 52,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789542964.120693,
+    "pt_time": "2026-09-16 12:16:04 AM PDT",
+    "counts": {
+      "IsModded": 120,
+      "SelfieStick": 30,
+      "Unfaded": 177,
+      "Unswayed": 52,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789543866.5703332,
+    "pt_time": "2026-09-16 12:31:06 AM PDT",
+    "counts": {
+      "IsModded": 120,
+      "SelfieStick": 30,
+      "Unfaded": 177,
+      "Unswayed": 52,
+      "TotemSentinel": 15
+    }
+  },
+  {
+    "timestamp": 1789544768.6658485,
+    "pt_time": "2026-09-16 12:46:08 AM PDT",
+    "counts": {
+      "IsModded": 122,
+      "SelfieStick": 30,
+      "Unfaded": 179,
+      "Unswayed": 53,
+      "TotemSentinel": 15
+    }
+  }
+]

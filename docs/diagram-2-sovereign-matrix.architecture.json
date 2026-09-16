@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Chapter 2 :: Sovereign Mod Runtime & Gameplay Hooks",
+    "subtitle": "How IsModded, Unfaded, and TotemSentinel hook into Valheim 1.0",
+    "quality_profile": "showcase",
+    "visual_preset": "signal-flow",
+    "viewBox": [
+      1080,
+      440
+    ],
+    "views": [
+      {
+        "id": "sovereign-flow",
+        "label": "Sovereign Gameplay Execution",
+        "focus": [
+          "game_events",
+          "ismodded_dll",
+          "unfaded_dll",
+          "totem_dll",
+          "steam_client",
+          "player_viewport"
+        ],
+        "note": "Parallel execution paths for achievement decoupling, death spectator, and camp radar."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "game_events",
+      "type": "external",
+      "label": "Valheim 1.0 Engine",
+      "sublabel": "Boss / Lethal Damage / Totem",
+      "tag": "Engine Hook",
+      "pos": [
+        40,
+        180
+      ],
+      "size": [
+        160,
+        60
+      ]
+    },
+    {
+      "id": "ismodded_dll",
+      "type": "security",
+      "label": "IsModded.dll",
+      "sublabel": "Prefix on IsCheatedAtAll",
+      "tag": "Achievements",
+      "pos": [
+        380,
+        60
+      ],
+      "size": [
+        160,
+        60
+      ]
+    },
+    {
+      "id": "unfaded_dll",
+      "type": "frontend",
+      "label": "Unfaded.dll",
+      "sublabel": "KillerCam & FreeFly Drone",
+      "tag": "Death Spectator",
+      "pos": [
+        380,
+        180
+      ],
+      "size": [
+        160,
+        60
+      ]
+    },
+    {
+      "id": "totem_dll",
+      "type": "backend",
+      "label": "TotemSentinel.dll",
+      "sublabel": "Sonar Pulse & Greed's Gambit",
+      "tag": "Camp Radar",
+      "pos": [
+        380,
+        300
+      ],
+      "size": [
+        160,
+        60
+      ]
+    },
+    {
+      "id": "steam_client",
+      "type": "cloud",
+      "label": "Steam Client",
+      "sublabel": "Steamworks.NET Sync",
+      "tag": "Unlocked",
+      "pos": [
+        720,
+        60
+      ],
+      "size": [
+        160,
+        60
+      ]
+    },
+    {
+      "id": "player_viewport",
+      "type": "frontend",
+      "label": "Player HUD & Camera",
+      "sublabel": "Spectator Drone & Threat HUD",
+      "tag": "In-Game Display",
+      "pos": [
+        720,
+        240
+      ],
+      "size": [
+        160,
+        60
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "engine-to-ismodded",
+      "from": "game_events",
+      "to": "ismodded_dll",
+      "label": "cheat validation",
+      "labelDy": -20,
+      "variant": "security",
+      "fromSide": "top",
+      "toSide": "left"
+    },
+    {
+      "id": "engine-to-unfaded",
+      "from": "game_events",
+      "to": "unfaded_dll",
+      "label": "lethal hit event",
+      "labelDy": -24,
+      "variant": "emphasis"
+    },
+    {
+      "id": "engine-to-totem",
+      "from": "game_events",
+      "to": "totem_dll",
+      "label": "pickup / hotkey V",
+      "labelDy": 20,
+      "variant": "default",
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "id": "ismodded-to-steam",
+      "from": "ismodded_dll",
+      "to": "steam_client",
+      "label": "StoreStats() allowed",
+      "labelDy": -24,
+      "variant": "emphasis"
+    },
+    {
+      "id": "unfaded-to-view",
+      "from": "unfaded_dll",
+      "to": "player_viewport",
+      "label": "renders KillerCam",
+      "labelDy": -20,
+      "variant": "emphasis"
+    },
+    {
+      "id": "totem-to-view",
+      "from": "totem_dll",
+      "to": "player_viewport",
+      "label": "draws threat cards",
+      "labelDy": 20,
+      "variant": "default"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Decoupled Sovereign Mechanics",
+      "items": [
+        "IsModded: Decouples Game.isModded so modded players earn achievements legitimately",
+        "Unfaded: Replaces the 9.5s blackout screen with FreeFly drone and instant recap",
+        "TotemSentinel: Spends carried Fuling Totems as consumable tactical camp radar pulses"
+      ]
+    }
+  ]
+}

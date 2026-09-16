@@ -1,0 +1,309 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Zero-Copy NTFS Junction Profile Switcher",
+    "subtitle": "Sub-50ms mod profile switching via directory junctions and hardlinks",
+    "output": "docs/fleet-switcher.architecture.html",
+    "quality_profile": "showcase",
+    "visual_preset": "signal-flow",
+    "viewBox": [1300, 600],
+    "views": [
+      {
+        "id": "full-gaming-switch",
+        "label": "Full gaming profile activation",
+        "focus": ["cli_user", "switch_ps1", "manifest_json", "profile_dirs", "plugins_junction", "game_client"],
+        "note": "Follow how switch-profile.ps1 resolves 'full-gaming' and retargets the NTFS junction."
+      },
+      {
+        "id": "isolated-dev",
+        "label": "Isolated dev build linkage",
+        "focus": ["cli_user", "switch_ps1", "manifest_json", "synthetic_profile", "dev_workspace", "plugins_junction"],
+        "note": "Synthetic profiles chain junctions to compiler output for instant build-test cycles."
+      },
+      {
+        "id": "safety-checks",
+        "label": "Safety interlocks and backup",
+        "focus": ["switch_ps1", "valheim_process", "backup_store", "plugins_junction"],
+        "note": "Running process detection, physical directory backup, and safe rmdir before relink."
+      },
+      {
+        "id": "mcp-integration",
+        "label": "MCP gateway remote swap",
+        "focus": ["mcp_gateway", "fleet_surface", "switch_ps1", "manifest_json", "plugins_junction"],
+        "note": "Any agent can invoke fleet_swap_profile via MCP to switch profiles remotely."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "cli_user",
+      "type": "external",
+      "label": "Developer CLI",
+      "sublabel": "-Profile full-gaming",
+      "tag": "User Input",
+      "pos": [60, 120],
+      "size": [140, 60]
+    },
+    {
+      "id": "switch_ps1",
+      "type": "backend",
+      "label": "switch-profile.ps1",
+      "sublabel": "Junction Orchestrator",
+      "tag": "<50ms",
+      "pos": [310, 120],
+      "size": [160, 60]
+    },
+    {
+      "id": "manifest_json",
+      "type": "database",
+      "label": "profiles.json",
+      "sublabel": "Declarative Manifest",
+      "tag": "4 Profiles",
+      "pos": [310, 280],
+      "size": [160, 60]
+    },
+    {
+      "id": "profile_dirs",
+      "type": "database",
+      "label": "Profile Directories",
+      "sublabel": "profiles/full-comfymods",
+      "tag": "Physical Store",
+      "pos": [590, 280],
+      "size": [160, 60]
+    },
+    {
+      "id": "plugins_junction",
+      "type": "security",
+      "label": "BepInEx/plugins",
+      "sublabel": "NTFS Directory Junction",
+      "tag": "Reparse Point",
+      "pos": [870, 120],
+      "size": [160, 60]
+    },
+    {
+      "id": "game_client",
+      "type": "frontend",
+      "label": "Valheim Client",
+      "sublabel": "BepInEx Chainloader",
+      "tag": "Live Game",
+      "pos": [1120, 120],
+      "size": [140, 60]
+    },
+    {
+      "id": "valheim_process",
+      "type": "security",
+      "label": "Process Guard",
+      "sublabel": "Get-Process valheim*",
+      "tag": "Safety Check",
+      "pos": [870, 280],
+      "size": [160, 60]
+    },
+    {
+      "id": "backup_store",
+      "type": "database",
+      "label": "Backup Directory",
+      "sublabel": "backup-before-junction",
+      "tag": "One-Time Save",
+      "pos": [1120, 280],
+      "size": [160, 60]
+    },
+    {
+      "id": "synthetic_profile",
+      "type": "backend",
+      "label": "Synthetic Profile",
+      "sublabel": "Junction + Hardlink Chain",
+      "tag": "Zero-Copy",
+      "pos": [590, 430],
+      "size": [160, 60]
+    },
+    {
+      "id": "dev_workspace",
+      "type": "external",
+      "label": "Dev Workspace",
+      "sublabel": "plugins/Unfaded/bin/Debug",
+      "tag": "Compiler Output",
+      "pos": [310, 430],
+      "size": [160, 60]
+    },
+    {
+      "id": "mcp_gateway",
+      "type": "messagebus",
+      "label": "Comfy Gateway",
+      "sublabel": "FastMCP :8725",
+      "tag": "MCP Server",
+      "pos": [60, 430],
+      "size": [140, 60]
+    },
+    {
+      "id": "fleet_surface",
+      "type": "backend",
+      "label": "fleet.py",
+      "sublabel": "fleet_swap_profile()",
+      "tag": "Tool Surface",
+      "pos": [60, 280],
+      "size": [140, 60]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "OMEN Profile Engine",
+      "wraps": ["switch_ps1", "manifest_json", "profile_dirs", "plugins_junction", "valheim_process", "backup_store", "synthetic_profile"]
+    },
+    {
+      "kind": "region",
+      "label": "MCP Agent Layer",
+      "wraps": ["mcp_gateway", "fleet_surface"]
+    },
+    {
+      "kind": "region",
+      "label": "Source Development",
+      "wraps": ["dev_workspace"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "cli-to-script",
+      "from": "cli_user",
+      "to": "switch_ps1",
+      "label": "-Profile <name>",
+      "labelDy": -24,
+      "variant": "emphasis"
+    },
+    {
+      "id": "script-to-manifest",
+      "from": "switch_ps1",
+      "to": "manifest_json",
+      "label": "reads manifest",
+      "labelDy": 20,
+      "variant": "default",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "manifest-to-profiles",
+      "from": "manifest_json",
+      "to": "profile_dirs",
+      "label": "resolve path",
+      "labelDy": -24,
+      "variant": "default"
+    },
+    {
+      "id": "script-to-junction",
+      "from": "switch_ps1",
+      "to": "plugins_junction",
+      "label": "mklink /J",
+      "labelDy": -24,
+      "variant": "emphasis"
+    },
+    {
+      "id": "junction-to-game",
+      "from": "plugins_junction",
+      "to": "game_client",
+      "label": "recursive scan",
+      "labelDy": -24,
+      "variant": "emphasis"
+    },
+    {
+      "id": "profiles-to-junction",
+      "from": "profile_dirs",
+      "to": "plugins_junction",
+      "label": "junction target",
+      "labelDy": 20,
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "synthetic-to-profiles",
+      "from": "synthetic_profile",
+      "to": "profile_dirs",
+      "label": "nested junction",
+      "labelDy": 20,
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "dev-to-synthetic",
+      "from": "dev_workspace",
+      "to": "synthetic_profile",
+      "label": "junction link",
+      "labelDy": -24,
+      "variant": "dashed"
+    },
+    {
+      "id": "script-to-process",
+      "from": "switch_ps1",
+      "to": "valheim_process",
+      "label": "abort if running",
+      "labelDy": -24,
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left",
+      "via": [[540, 120], [540, 80], [840, 80], [840, 310]]
+    },
+    {
+      "id": "script-to-backup",
+      "from": "switch_ps1",
+      "to": "backup_store",
+      "label": "first-run backup",
+      "labelDy": -24,
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "top",
+      "via": [[520, 120], [520, 50], [1200, 50]]
+    },
+    {
+      "id": "mcp-to-fleet",
+      "from": "mcp_gateway",
+      "to": "fleet_surface",
+      "label": "MCP call",
+      "labelDy": 20,
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "fleet-to-script",
+      "from": "fleet_surface",
+      "to": "switch_ps1",
+      "label": "subprocess",
+      "labelDy": -20,
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "via": [[130, 200], [390, 200]]
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Zero-Copy Switching",
+      "items": [
+        "NTFS directory junctions swap in <50ms with 0 bytes copied",
+        "rmdir removes only the reparse point—target files are 100% preserved",
+        "Junctions work without admin elevation unlike symlinks"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Synthetic Dev Profiles",
+      "items": [
+        "Chain junctions directly to compiler bin/Debug output directories",
+        "Build once, test immediately—no deploy step required",
+        "Hardlinks share ComfyNetworkSense.dll across profiles without duplication"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Safety Interlocks",
+      "items": [
+        "Process guard aborts switching if Valheim is running (override with -Force)",
+        "Physical plugin directory backed up before first junction conversion",
+        "profiles.json tracks active_profile state for crash recovery"
+      ]
+    }
+  ]
+}

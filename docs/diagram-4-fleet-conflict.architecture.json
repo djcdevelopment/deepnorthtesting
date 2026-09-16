@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Chapter 4 :: Multi-Node Fleet Inventory & Conflict Audit",
+    "subtitle": "Parallel node scanning and pre-flight collision prevention",
+    "quality_profile": "showcase",
+    "visual_preset": "signal-flow",
+    "viewBox": [
+      1160,
+      440
+    ],
+    "views": [
+      {
+        "id": "fleet-audit-flow",
+        "label": "Fleet Discovery & Audit",
+        "focus": [
+          "gateway_core",
+          "fleet_engine",
+          "omen_rig",
+          "am4_host",
+          "fx99_host",
+          "conflict_guard"
+        ],
+        "note": "Scans across all machines via Tailscale and audits active keybinds before launching."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "gateway_core",
+      "type": "messagebus",
+      "label": "Comfy Gateway",
+      "sublabel": "FastMCP :8725 / REST",
+      "tag": "MCP Gateway",
+      "pos": [
+        40,
+        180
+      ],
+      "size": [
+        150,
+        60
+      ]
+    },
+    {
+      "id": "fleet_engine",
+      "type": "backend",
+      "label": "Fleet Scanner",
+      "sublabel": "fleet_mod_inventory()",
+      "tag": "Parallel Engine",
+      "pos": [
+        280,
+        180
+      ],
+      "size": [
+        160,
+        60
+      ]
+    },
+    {
+      "id": "omen_rig",
+      "type": "frontend",
+      "label": "OMEN Rig",
+      "sublabel": "Local Windows (4.8ms)",
+      "tag": "Primary Gaming",
+      "pos": [
+        580,
+        60
+      ],
+      "size": [
+        150,
+        60
+      ]
+    },
+    {
+      "id": "am4_host",
+      "type": "cloud",
+      "label": "AM4 Server",
+      "sublabel": "Linux Dedicated (Cached)",
+      "tag": "Docker Host",
+      "pos": [
+        580,
+        180
+      ],
+      "size": [
+        150,
+        60
+      ]
+    },
+    {
+      "id": "fx99_host",
+      "type": "cloud",
+      "label": "FX99 Workstation",
+      "sublabel": "SSH Linux (259ms)",
+      "tag": "AI Workstation",
+      "pos": [
+        580,
+        300
+      ],
+      "size": [
+        150,
+        60
+      ]
+    },
+    {
+      "id": "conflict_guard",
+      "type": "security",
+      "label": "Conflict Auditor",
+      "sublabel": "Keybinds & Harmony Contention",
+      "tag": "Pre-Flight Guard",
+      "pos": [
+        880,
+        180
+      ],
+      "size": [
+        160,
+        60
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "gw-to-scanner",
+      "from": "gateway_core",
+      "to": "fleet_engine",
+      "label": "dispatches scan",
+      "labelDy": -24,
+      "variant": "emphasis"
+    },
+    {
+      "id": "scanner-to-omen",
+      "from": "fleet_engine",
+      "to": "omen_rig",
+      "label": "local fast scan",
+      "labelDy": -20,
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "left"
+    },
+    {
+      "id": "scanner-to-am4",
+      "from": "fleet_engine",
+      "to": "am4_host",
+      "label": "cache fallback",
+      "labelDy": -24,
+      "variant": "default"
+    },
+    {
+      "id": "scanner-to-fx99",
+      "from": "fleet_engine",
+      "to": "fx99_host",
+      "label": "SSH bash find",
+      "labelDy": 20,
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "id": "omen-to-guard",
+      "from": "omen_rig",
+      "to": "conflict_guard",
+      "label": "keybind map",
+      "labelDy": -20,
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "top"
+    },
+    {
+      "id": "am4-to-guard",
+      "from": "am4_host",
+      "to": "conflict_guard",
+      "label": "netcode hooks",
+      "labelDy": -24,
+      "variant": "default"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Pre-Flight Collision Guard",
+      "items": [
+        "Detects keybind collisions (F7: ArcaneSight vs Unswayed, F9: Unfaded vs CameraProof)",
+        "Flags Harmony hook contention on GameCamera.UpdateCamera before boot",
+        "Provides cross-node inventory visibility to prevent version drift between client and server"
+      ]
+    }
+  ]
+}
