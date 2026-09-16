@@ -8,6 +8,7 @@ param(
 
     [switch]$Status,
     [switch]$List,
+    [switch]$Fleet,
     [switch]$Force,
     [string]$ManifestPath
 )
@@ -133,7 +134,13 @@ if ($List) {
     return
 }
 
-# 3. Handle -Status or empty Profile param
+# 3. Handle -Fleet
+if ($Fleet) {
+    python -c "import sys; sys.path.insert(0, r'c:\work\isolate\network\mcp'); from comfy_gateway.toolsurface.fleet import fleet_mod_matrix; print(fleet_mod_matrix())"
+    return
+}
+
+# 4. Handle -Status or empty Profile param
 if ($Status -or [string]::IsNullOrWhiteSpace($Profile)) {
     Show-Status
     return
