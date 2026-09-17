@@ -1480,16 +1480,24 @@ A community member in the modding Discord inquired:
 > *"hello, i'm having some trouble trying to load mods on linux. i'm using gale, the cachyos package, and i'm using  
 > `/home/ele/.local/share/com.kesomannen.gale/valheim/profiles/Rice/start_game_bepinex.sh %command%` as my launch args on steam (not gale) and it's launching but there's no indication of bepinex or my mods loading. i don't see logs or config files being generated"*
 
+Shortly thereafter, the inquiry reached a surprising resolution:
+
+> **Trobador:**  
+> *"solved...?  
+> i remade the profile in gale and it worked; i'm assuming gale had a hiccup somehow"*
+
 ---
 
 #### ⚡ TL;DR Verdict
 
-The game launches completely vanilla because **`start_game_bepinex.sh` is an in-tree script designed to sit directly inside the Valheim installation folder (`~/.local/share/Steam/steamapps/common/Valheim/`), not as an external wrapper script invoked from a profile directory.**
+**The fastest fix is often to remake or clone the profile in Gale (The 30-Second Fix).**
 
-When you pass the profile script path directly into Steam Launch Options:
-1. **Relative Dynamic Linker Failure**: The script executes with `BASEDIR` pointing to Gale's profile folder (`.../profiles/Rice/`), but attempts to set `LD_PRELOAD="libdoorstop_x64.so"`. Because the library name is relative, `ld.so` looks for it in `LD_LIBRARY_PATH`. When launched via Steam, Steam's launch wrappers override `LD_LIBRARY_PATH`, preventing `libdoorstop_x64.so` from resolving. The dynamic linker logs `ERROR: ld.so: object 'libdoorstop_x64.so' cannot be preloaded: ignored` and silently launches the game without Doorstop.
-2. **Steam Linux Runtime (SLR / pressure-vessel) Isolation**: On modern Linux distributions (especially CachyOS and Arch), Steam launches native titles inside a containerized runtime (`steam-launch-wrapper` / `pressure-vessel`). The container environment strips or resets inherited `LD_PRELOAD` declarations before the Unity engine (`valheim.x86_64`) starts.
-3. **The Proton Collision (The #1 CachyOS Trap)**: CachyOS defaults to running games with Proton (Steam Play). If Steam is forcing Proton for Valheim, Steam runs the Windows binary `valheim.exe`. Linux shell scripts and `.so` libraries cannot inject into Windows binaries running inside Wine/Proton.
+When Gale creates a profile, it unpacks BepInEx and hardlinks assets into the profile directory (`.../profiles/<ProfileName>/`). On Linux, if Gale hits a permission race condition or an incomplete archive extraction on initial profile creation, `start_game_bepinex.sh` is dropped without the executable bit (`+x`), or `doorstop_libs/libdoorstop_x64.so` fails to link. When Steam attempts to invoke a non-executable or unlinked script in launch options, it encounters an immediate execution error (`EACCES`), fails silently, and falls back to launching `%command%` in completely vanilla mode! Remaking the profile triggers a clean hardlink rebuild and restores proper execution permissions.
+
+However, if remaking the profile does not work or mods still fail to load, the failure is caused by:
+1. **Relative Dynamic Linker Failure**: `start_game_bepinex.sh` was written for in-tree execution inside the Valheim root folder, setting `LD_PRELOAD="libdoorstop_x64.so"`. When launched across directories via Steam, Steam's launch wrappers override `LD_LIBRARY_PATH`, preventing `libdoorstop_x64.so` from resolving. The dynamic linker logs `ERROR: ld.so: object 'libdoorstop_x64.so' cannot be preloaded: ignored` and silently launches vanilla.
+2. **Steam Linux Runtime (SLR / pressure-vessel) Isolation**: On modern Linux (particularly CachyOS/Arch), Steam native games run inside containerized runtimes (`pressure-vessel`) which sanitize or strip inherited `LD_PRELOAD` declarations before the Unity engine starts.
+3. **The Proton Collision (The #1 CachyOS Trap)**: CachyOS defaults to running games with Proton (Steam Play). If Steam forces Proton on Valheim, Steam runs the Windows binary `valheim.exe`. Linux shell scripts and `.so` libraries cannot inject into Windows binaries running inside Wine/Proton.
 4. **Gale's Current Architecture**: Unlike `r2modman` which provides an active `linux_wrapper.sh`, Gale's mod loading for Linux native games is currently an open upstream limitation ([Gale Issue #381](https://github.com/Kesomannen/gale/issues/381) & [Issue #503](https://github.com/Kesomannen/gale/issues/503)).
 
 ---
@@ -1540,6 +1548,17 @@ If Valheim's Steam compatibility setting has "Force the use of a specific Steam 
 - Wine cannot link Linux ELF `.so` libraries into Windows PE executables.
 - In Proton, Doorstop hooks via `winhttp.dll` using Wine DLL overrides, not `LD_PRELOAD`.
 
+##### 4. The Gale Profile Extraction & Permission Race Condition ("The Hiccup")
+Gale utilizes hardlinks to deduplicate mod files across profiles while maintaining separate directories for mod configs and BepInEx binaries.
+
+On Linux (particularly on Arch/CachyOS with strict umasks or AUR-packaged binaries):
+- When a profile is first created or a modpack is downloaded, `denikson-BepInExPack_Valheim` is extracted into Gale's storage cache and hardlinked to `/home/<user>/.local/share/com.kesomannen.gale/valheim/profiles/<Profile>/`.
+- If the archive unpacker fails to preserve Unix execution mode bits (`chmod 755`), `start_game_bepinex.sh` and `libdoorstop_x64.so` can be dropped without execute permissions (`-rw-r--r--`).
+- When Steam invokes `/path/to/start_game_bepinex.sh %command%`, the Linux kernel returns `EACCES (Permission denied)`.
+- Steam's internal launch wrapper catches the failure and silently falls back to executing `%command%` directly so the game still launches for the user.
+- **The Result**: The user sees Valheim boot normally, but no BepInEx banner appears and no logs are generated.
+- **Why Remaking Worked**: Deleting and recreating the profile forces Gale's profile manager to re-run the inode link pass and extract fresh files, ensuring the executable permissions and symlinks are cleanly established.
+
 ---
 
 #### 📊 Architectural Injection Lifecycle
@@ -1572,6 +1591,17 @@ flowchart TD
 ---
 
 #### 🛠️ Workable Solutions & Triage Runbook
+
+##### Solution 0: Remake or Clone the Profile in Gale (The 30-Second Fix)
+Before digging into manual wrappers or symlinks, rule out a hardlink or permission glitch:
+1. In Gale, create a **new profile** (or clone the existing one).
+2. Install your mods or import the profile code.
+3. Verify file permissions in terminal:
+   ```bash
+   chmod +x "$HOME/.local/share/com.kesomannen.gale/valheim/profiles/<ProfileName>/start_game_bepinex.sh"
+   chmod +x "$HOME/.local/share/com.kesomannen.gale/valheim/profiles/<ProfileName>/doorstop_libs"/*.so
+   ```
+4. Test launch through Steam with the updated profile path. If Gale had an extraction hiccup, this immediately resolves it.
 
 ##### Solution A: Symlink Gale Profile to Valheim Root (Recommended for Native Linux)
 This allows Gale to continue managing the mods while placing the hooks where Steam's native runtime expects them:
