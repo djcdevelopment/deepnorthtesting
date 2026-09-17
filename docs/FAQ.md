@@ -21,6 +21,8 @@
     - [FAQ-004: Why Does Auto-Pickup Throw MissingMethodException (Character.Message) and Suppress Notifications in Valheim 1.0?](#faq-004-why-does-auto-pickup-throw-missingmethodexception-charactermessage-and-suppress-notifications-in-valheim-10)
   - [Camera Ergonomics & Animation Mechanics](#camera-ergonomics--animation-mechanics)
     - [FAQ-005: Why Does the Valheim 1.0 Run Animation Cause Rigid Bobbing and Vertigo in Burial Crypts, and Can It Be Reverted?](#faq-005-why-does-the-valheim-10-run-animation-cause-rigid-bobbing-and-vertigo-in-burial-crypts-and-can-it-be-reverted)
+  - [Linux Runtime & Mod Manager Architecture](#linux-runtime--mod-manager-architecture)
+    - [FAQ-006: Why Do Valheim Mods and BepInEx Fail to Load on Linux When Launching Gale Profiles via Steam?](#faq-006-why-do-valheim-mods-and-bepinex-fail-to-load-on-linux-when-launching-gale-profiles-via-steam)
 - [Observability Tools & Diagnostic References](#-observability-tools--diagnostic-references)
 
 ---
@@ -1455,4 +1457,227 @@ Toggling freefly with `F10` demonstrates how stabilizing the camera origin insta
 
 ---
 
-*End of FAQ-005. For contributions and additions, see [FAQ Contribution Standard](#-faq-contribution-standard--entry-template).*
+### Linux Runtime & Mod Manager Architecture
+
+---
+
+### FAQ-006: Why Do Valheim Mods and BepInEx Fail to Load on Linux When Launching Gale Profiles via Steam?
+
+| Metadata | Specification |
+| :--- | :--- |
+| **Category** | Linux Runtime & Mod Manager Architecture |
+| **Target Platforms** | Linux (CachyOS / Arch / SteamOS / Ubuntu), Steam, Gale Mod Manager |
+| **Target Mods** | BepInEx 5.4.2202, Doorstop (Unix `libdoorstop_x64.so`), `BepInExPack_Valheim` |
+| **Engine / Game** | Valheim 1.0 (Deep North) Native Linux vs. Proton |
+| **Complexity** | Advanced (Dynamic Linker `LD_PRELOAD`, Steam Linux Runtime Containers, Wine DLL Redirection) |
+| **Status** | Verified & Validated |
+
+#### 💬 Context & Inquiry
+
+A community member in the modding Discord inquired:
+
+> **Trobador:**  
+> *"hello, i'm having some trouble trying to load mods on linux. i'm using gale, the cachyos package, and i'm using  
+> `/home/ele/.local/share/com.kesomannen.gale/valheim/profiles/Rice/start_game_bepinex.sh %command%` as my launch args on steam (not gale) and it's launching but there's no indication of bepinex or my mods loading. i don't see logs or config files being generated"*
+
+---
+
+#### ⚡ TL;DR Verdict
+
+The game launches completely vanilla because **`start_game_bepinex.sh` is an in-tree script designed to sit directly inside the Valheim installation folder (`~/.local/share/Steam/steamapps/common/Valheim/`), not as an external wrapper script invoked from a profile directory.**
+
+When you pass the profile script path directly into Steam Launch Options:
+1. **Relative Dynamic Linker Failure**: The script executes with `BASEDIR` pointing to Gale's profile folder (`.../profiles/Rice/`), but attempts to set `LD_PRELOAD="libdoorstop_x64.so"`. Because the library name is relative, `ld.so` looks for it in `LD_LIBRARY_PATH`. When launched via Steam, Steam's launch wrappers override `LD_LIBRARY_PATH`, preventing `libdoorstop_x64.so` from resolving. The dynamic linker logs `ERROR: ld.so: object 'libdoorstop_x64.so' cannot be preloaded: ignored` and silently launches the game without Doorstop.
+2. **Steam Linux Runtime (SLR / pressure-vessel) Isolation**: On modern Linux distributions (especially CachyOS and Arch), Steam launches native titles inside a containerized runtime (`steam-launch-wrapper` / `pressure-vessel`). The container environment strips or resets inherited `LD_PRELOAD` declarations before the Unity engine (`valheim.x86_64`) starts.
+3. **The Proton Collision (The #1 CachyOS Trap)**: CachyOS defaults to running games with Proton (Steam Play). If Steam is forcing Proton for Valheim, Steam runs the Windows binary `valheim.exe`. Linux shell scripts and `.so` libraries cannot inject into Windows binaries running inside Wine/Proton.
+4. **Gale's Current Architecture**: Unlike `r2modman` which provides an active `linux_wrapper.sh`, Gale's mod loading for Linux native games is currently an open upstream limitation ([Gale Issue #381](https://github.com/Kesomannen/gale/issues/381) & [Issue #503](https://github.com/Kesomannen/gale/issues/503)).
+
+---
+
+#### 🔬 Root Cause Engineering Analysis
+
+##### 1. Path Dissociation in `start_game_bepinex.sh`
+In `denikson/BepInExPack_Valheim`, the startup script relies on its own location to resolve game assets:
+```bash
+#!/bin/sh
+BASEDIR=$(dirname "$0")
+
+export DOORSTOP_ENABLE=TRUE
+export DOORSTOP_INVOKE_DLL_PATH="$BASEDIR/BepInEx/core/BepInEx.Preloader.dll"
+export DOORSTOP_CORLIB_OVERRIDE_PATH="$BASEDIR/unstripped_corlib"
+export LD_LIBRARY_PATH="$BASEDIR/doorstop_libs:$LD_LIBRARY_PATH"
+export LD_PRELOAD="libdoorstop_x64.so:$LD_PRELOAD"
+
+exec "$@"
+```
+When invoked as:
+`/home/ele/.local/share/com.kesomannen.gale/valheim/profiles/Rice/start_game_bepinex.sh %command%`
+
+- `BASEDIR` is evaluated as `/home/ele/.local/share/com.kesomannen.gale/valheim/profiles/Rice`.
+- The actual game executable is located at `$HOME/.local/share/Steam/steamapps/common/Valheim/valheim.x86_64`.
+- `LD_PRELOAD` specifies `libdoorstop_x64.so` without a fully-qualified directory path.
+- When `exec "$@"` hands control to Steam's `%command%`, the Steam launcher initializes its own environment.
+
+##### 2. Steam Linux Runtime Container Environment (SLR)
+On CachyOS, native Linux Steam titles run under Steam Linux Runtime (Sniper/Soldier) via `pressure-vessel-wrap`:
+```text
+[Steam Client]
+      │
+      ▼
+[Steam Launch Wrapper / pressure-vessel]
+      │  ❌ Overwrites LD_LIBRARY_PATH & sanitizes LD_PRELOAD
+      ▼
+[valheim.x86_64 (Native Engine)]
+      │  ❌ libdoorstop_x64.so not found or stripped
+      ▼
+[Vanilla Game Boot (No BepInEx / No Logs / No Configs)]
+```
+Because the dynamic linker encounters an unresolvable preload object, standard Linux behavior is to print a warning to stderr and continue executing the binary. This results in the game booting normally with zero indication that modding was ever attempted.
+
+##### 3. Wine / Proton Incompatibility
+If Valheim's Steam compatibility setting has "Force the use of a specific Steam Play compatibility tool" checked:
+- `%command%` executes `proton run valheim.exe`.
+- Wine cannot link Linux ELF `.so` libraries into Windows PE executables.
+- In Proton, Doorstop hooks via `winhttp.dll` using Wine DLL overrides, not `LD_PRELOAD`.
+
+---
+
+#### 📊 Architectural Injection Lifecycle
+
+```mermaid
+flowchart TD
+    subgraph Problem ["Current Failure Mode (Trobador's Setup)"]
+        A["Steam Launch: start_game_bepinex.sh %command%"] --> B["BASEDIR set to Gale Profile Directory"]
+        B --> C["Export LD_PRELOAD=libdoorstop_x64.so"]
+        C --> D["Steam Runtime Wrapper (pressure-vessel)"]
+        D -- "Strips / Overrides Environment" --> E["valheim.x86_64 launched unhooked"]
+        E --> F["❌ Vanilla Boot (Zero Logs / Zero Mods)"]
+    end
+
+    subgraph SolutionA ["Solution 1: Native Linux In-Tree Link"]
+        G["Symlink Profile to Steam Valheim Root"] --> H["Steam Launch: ./start_game_bepinex.sh %command%"]
+        H --> I["In-Tree Script executed directly in Game Root"]
+        I --> J["libdoorstop_x64.so hooked into Mono runtime"]
+        J --> K["✅ BepInEx 5 Initializes (LogOutput.log generated)"]
+    end
+
+    subgraph SolutionB ["Solution 2: Proton Mode (Wine DLL Override)"]
+        L["Force Proton Compatibility in Steam"] --> M["Copy winhttp.dll to Valheim Root"]
+        M --> N["Steam Launch: WINEDLLOVERRIDES='winhttp=n,b' %command%"]
+        N --> O["Wine redirects winhttp.dll to Doorstop"]
+        O --> P["✅ Modded Valheim boots under Proton"]
+    end
+```
+
+---
+
+#### 🛠️ Workable Solutions & Triage Runbook
+
+##### Solution A: Symlink Gale Profile to Valheim Root (Recommended for Native Linux)
+This allows Gale to continue managing the mods while placing the hooks where Steam's native runtime expects them:
+
+1. **Verify Native Mode**:
+   - In Steam, right-click **Valheim** $\rightarrow$ **Properties** $\rightarrow$ **Compatibility**.
+   - Ensure **"Force the use of a specific Steam Play compatibility tool"** is **UNCHECKED**.
+2. **Symlink Profile into Game Directory**:
+   Open a terminal and run:
+   ```bash
+   VALHEIM_DIR="$HOME/.local/share/Steam/steamapps/common/Valheim"
+   PROFILE_DIR="$HOME/.local/share/com.kesomannen.gale/valheim/profiles/Rice"
+
+   cd "$VALHEIM_DIR"
+
+   # Link BepInEx and Doorstop libraries from Gale profile
+   ln -sfn "$PROFILE_DIR/BepInEx" .
+   ln -sfn "$PROFILE_DIR/doorstop_libs" .
+   cp "$PROFILE_DIR/doorstop_config.ini" .
+   cp "$PROFILE_DIR/start_game_bepinex.sh" .
+
+   # Grant execution permissions
+   chmod +x start_game_bepinex.sh
+   ```
+3. **Set Steam Launch Options**:
+   - In Steam, right-click **Valheim** $\rightarrow$ **Properties** $\rightarrow$ **General**.
+   - In **Launch Options**, set:
+     ```bash
+     ./start_game_bepinex.sh %command%
+     ```
+4. **Launch Valheim through Steam**:
+   BepInEx will now load immediately, generating `$VALHEIM_DIR/BepInEx/LogOutput.log` and populating mod configs in `BepInEx/config/`.
+
+##### Solution B: Standalone Universal Doorstop Wrapper Script
+If you do not want symlinks in your game directory, create a dedicated wrapper script in the Valheim folder that explicitly sets absolute paths and passes Doorstop through the Steam wrapper:
+
+1. Create `$HOME/.local/share/Steam/steamapps/common/Valheim/run_gale.sh`:
+   ```bash
+   #!/bin/bash
+   PROFILE_DIR="$HOME/.local/share/com.kesomannen.gale/valheim/profiles/Rice"
+   GAME_DIR="$(dirname "$(readlink -f "$0")")"
+
+   export DOORSTOP_ENABLE=TRUE
+   export DOORSTOP_INVOKE_DLL_PATH="$PROFILE_DIR/BepInEx/core/BepInEx.Preloader.dll"
+   export DOORSTOP_CORLIB_OVERRIDE_PATH=""
+   export LD_LIBRARY_PATH="$PROFILE_DIR/doorstop_libs:$LD_LIBRARY_PATH"
+   export LD_PRELOAD="$PROFILE_DIR/doorstop_libs/libdoorstop_x64.so:$LD_PRELOAD"
+
+   exec "$GAME_DIR/valheim.x86_64" "$@"
+   ```
+2. Make it executable:
+   ```bash
+   chmod +x "$HOME/.local/share/Steam/steamapps/common/Valheim/run_gale.sh"
+   ```
+3. In Steam Launch Options, enter:
+   ```bash
+   ./run_gale.sh %command%
+   ```
+
+##### Solution C: Running under Proton (For CachyOS Gaming Setups)
+If you prefer running the Windows build via Proton (often chosen for Vulkan performance tweaks or specific Windows-only mod assemblies):
+
+1. In Steam, right-click **Valheim** $\rightarrow$ **Properties** $\rightarrow$ **Compatibility**.
+2. Check **"Force the use of a specific Steam Play compatibility tool"** and select **Proton Experimental** (or Proton-GE).
+3. Ensure `winhttp.dll` and `doorstop_config.ini` are present in the game directory.
+4. Set Steam Launch Options to:
+   ```bash
+   WINEDLLOVERRIDES="winhttp=n,b" %command%
+   ```
+*(Do not include `start_game_bepinex.sh` when running under Proton).*
+
+##### Solution D: Switch to r2modman on Linux
+If you require seamless, multi-profile mod management on Linux without manual symlinks:
+- **`r2modman`** has a dedicated Linux runtime engine that automatically registers a working `linux_wrapper.sh` bridge in Steam:
+  ```bash
+  "/home/ele/.config/r2modmanPlus-local/Valheim/linux_wrapper.sh" --r2profile "Rice" %command%
+  ```
+
+---
+
+#### 🔭 Observability & Diagnostics
+
+##### 1. Inspect Dynamic Linker Output
+To see why `LD_PRELOAD` is failing in real-time, launch Steam from a terminal and capture the loader output:
+```bash
+steam steam://rungameid/892970 > ~/valheim_launch.log 2>&1
+grep -E "(doorstop|LD_PRELOAD|BepInEx)" ~/valheim_launch.log
+```
+If you see:
+```text
+ERROR: ld.so: object 'libdoorstop_x64.so' from LD_PRELOAD cannot be preloaded: ignored.
+```
+This confirms that the relative path failed to resolve inside the Steam runtime.
+
+##### 2. Confirm Clean BepInEx Initialization
+Once configured correctly, check for the creation of the preloader log:
+```bash
+tail -f "$HOME/.local/share/Steam/steamapps/common/Valheim/BepInEx/LogOutput.log"
+```
+Expected output upon successful hook:
+```text
+[Message:   BepInEx] BepInEx 5.4.2202 - Valheim
+[Info   :   BepInEx] Loading [BepInEx.Preloader]
+[Info   :   BepInEx] 1 patcher plugin(s) loaded
+```
+
+---
+
+*End of FAQ-006. For contributions and additions, see [FAQ Contribution Standard](#-faq-contribution-standard--entry-template).*
