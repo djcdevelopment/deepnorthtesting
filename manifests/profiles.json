@@ -1,4 +1,4 @@
-﻿{
+{
     "$schema":  "http://json-schema.org/draft-07/schema#",
     "version":  "1.0.0",
     "active_profile":  "sovereign-trio",
@@ -86,7 +86,7 @@
                                                     "entries":  [
                                                                     {
                                                                         "name":  "SealCompanion.dll",
-                                                                        "source":  "C:/work/deepnorthtesting/plugins/SealCompanion/bin/Debug/SealCompanion.dll",
+                                                                        "source":  "C:/work/sealcompanion/bin/Debug/SealCompanion.dll",
                                                                         "link_type":  "hardlink"
                                                                     },
                                                                     {
@@ -108,7 +108,7 @@
                                             "entries":  [
                                                             {
                                                                 "name":  "SealCompanion.dll",
-                                                                "source":  "C:/work/deepnorthtesting/plugins/SealCompanion/bin/Debug/SealCompanion.dll",
+                                                                "source":  "C:/work/sealcompanion/bin/Debug/SealCompanion.dll",
                                                                 "link_type":  "hardlink"
                                                             },
                                                             {
