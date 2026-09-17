@@ -1,0 +1,343 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Seal Companion System Architecture",
+    "output": "plugins/SealCompanion/docs/seal-companion.architecture.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "fishing-assist",
+        "label": "Fishing retrieval pipeline",
+        "focus": [
+          "player_angler",
+          "fishing_float",
+          "fishing_patch",
+          "guaranteed_catch"
+        ],
+        "note": "Inspect how hooked catches trigger the 35% retrieval roll, retrieving fish directly and preventing line snaps."
+      },
+      {
+        "id": "taming-diet",
+        "label": "Diet injection and taming lifecycle",
+        "focus": [
+          "fish_drop",
+          "znet_scene",
+          "prefab_patch",
+          "tameable_state"
+        ],
+        "note": "Follow fish item consumption, soothing heart emote generation, and progressive taming without breeding bloat."
+      },
+      {
+        "id": "master-defense",
+        "label": "Master protection and combat resilience",
+        "focus": [
+          "hostile_mob",
+          "threat_scan",
+          "seal_combat",
+          "master_defense"
+        ],
+        "note": "See how tamed seals intercept monsters menacing their master using thick blubber resistances and a 35 damage bite."
+      },
+      {
+        "id": "hydration-environment",
+        "label": "Hydration, hot tub, and boat navigation",
+        "focus": [
+          "hot_tub",
+          "water_vessel",
+          "hydration_ctrl",
+          "shore_leap"
+        ],
+        "note": "Trace dryness hunger acceleration, hot tub idle attraction, and automated boat disembarkation near shore."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "fish_drop",
+      "type": "external",
+      "label": "Fish Item Drops",
+      "sublabel": "Fish1-12 / RawFish",
+      "pos": [40, 100],
+      "size": [140, 60],
+      "tag": "Food Source"
+    },
+    {
+      "id": "player_angler",
+      "type": "external",
+      "label": "Viking Angler",
+      "sublabel": "Fishing Rod & Line",
+      "pos": [40, 260],
+      "size": [140, 60],
+      "tag": "Master"
+    },
+    {
+      "id": "hostile_mob",
+      "type": "external",
+      "label": "Hostile Monsters",
+      "sublabel": "Greydwarf / Drake",
+      "pos": [40, 420],
+      "size": [140, 60],
+      "tag": "Threat"
+    },
+    {
+      "id": "hot_tub",
+      "type": "database",
+      "label": "Hot Tub (Bath)",
+      "sublabel": "piece_bathtub",
+      "pos": [40, 580],
+      "size": [140, 60],
+      "tag": "Hydration"
+    },
+    {
+      "id": "znet_scene",
+      "type": "backend",
+      "label": "ZNetScene Catalog",
+      "sublabel": "Prefab Registry",
+      "pos": [280, 100],
+      "size": [160, 60]
+    },
+    {
+      "id": "fishing_float",
+      "type": "backend",
+      "label": "FishingFloat Engine",
+      "sublabel": "FixedUpdate / GetCatch",
+      "pos": [280, 260],
+      "size": [160, 60]
+    },
+    {
+      "id": "threat_scan",
+      "type": "backend",
+      "label": "Master Threat Scanner",
+      "sublabel": "25m Attack Perimeter",
+      "pos": [280, 420],
+      "size": [160, 60]
+    },
+    {
+      "id": "water_vessel",
+      "type": "backend",
+      "label": "Water & Ship Sensors",
+      "sublabel": "Depth & Immersion",
+      "pos": [280, 580],
+      "size": [160, 60]
+    },
+    {
+      "id": "prefab_patch",
+      "type": "security",
+      "label": "SealPrefabPatch",
+      "sublabel": "Tameable & Fish Diet",
+      "pos": [540, 100],
+      "size": [160, 60],
+      "tag": "Harmony Postfix"
+    },
+    {
+      "id": "fishing_patch",
+      "type": "security",
+      "label": "FishingAssistantPatch",
+      "sublabel": "35% Retrieval Roll",
+      "pos": [540, 260],
+      "size": [160, 60],
+      "tag": "Harmony Postfix"
+    },
+    {
+      "id": "seal_combat",
+      "type": "backend",
+      "label": "Seal Combat AI",
+      "sublabel": "Bite Attack (35 Dmg)",
+      "pos": [540, 420],
+      "size": [160, 60],
+      "tag": "MonsterAI"
+    },
+    {
+      "id": "hydration_ctrl",
+      "type": "backend",
+      "label": "Hydration Controller",
+      "sublabel": "Dryness & Hot Tub",
+      "pos": [540, 580],
+      "size": [160, 60],
+      "tag": "MonoBehaviour"
+    },
+    {
+      "id": "tameable_state",
+      "type": "frontend",
+      "label": "Tameable Companion",
+      "sublabel": "Follow / Stay / Hearts",
+      "pos": [800, 100],
+      "size": [160, 60],
+      "tag": "Loyalty"
+    },
+    {
+      "id": "guaranteed_catch",
+      "type": "frontend",
+      "label": "Guaranteed Catch",
+      "sublabel": "No Stamina / No Break",
+      "pos": [800, 260],
+      "size": [160, 60],
+      "tag": "Player Buff"
+    },
+    {
+      "id": "master_defense",
+      "type": "frontend",
+      "label": "Master Protection",
+      "sublabel": "160 HP / Blubber Defense",
+      "pos": [800, 420],
+      "size": [160, 60],
+      "tag": "Combat"
+    },
+    {
+      "id": "shore_leap",
+      "type": "frontend",
+      "label": "Shoreline Disembark",
+      "sublabel": "Shallow Water Leap",
+      "pos": [800, 580],
+      "size": [160, 60],
+      "tag": "Environment"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "World Elements & Player Environment",
+      "wraps": ["fish_drop", "player_angler", "hostile_mob", "hot_tub"]
+    },
+    {
+      "kind": "region",
+      "label": "Valheim Engine Runtime",
+      "wraps": ["znet_scene", "fishing_float", "threat_scan", "water_vessel"]
+    },
+    {
+      "kind": "region",
+      "label": "Seal Companion Sovereign Interceptors",
+      "wraps": ["prefab_patch", "fishing_patch", "seal_combat", "hydration_ctrl"]
+    },
+    {
+      "kind": "region",
+      "label": "Active Gameplay Capabilities",
+      "wraps": ["tameable_state", "guaranteed_catch", "master_defense", "shore_leap"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "c_fish_to_znet",
+      "from": "fish_drop",
+      "to": "znet_scene",
+      "label": "item prefabs",
+      "variant": "default"
+    },
+    {
+      "id": "c_znet_to_patch",
+      "from": "znet_scene",
+      "to": "prefab_patch",
+      "label": "injects diet",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c_patch_to_tame",
+      "from": "prefab_patch",
+      "to": "tameable_state",
+      "label": "enables taming",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c_angler_to_float",
+      "from": "player_angler",
+      "to": "fishing_float",
+      "label": "casts line",
+      "variant": "default"
+    },
+    {
+      "id": "c_float_to_patch",
+      "from": "fishing_float",
+      "to": "fishing_patch",
+      "label": "hooked bite",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c_patch_to_catch",
+      "from": "fishing_patch",
+      "to": "guaranteed_catch",
+      "label": "retrieves catch",
+      "variant": "security"
+    },
+    {
+      "id": "c_mob_to_scan",
+      "from": "hostile_mob",
+      "to": "threat_scan",
+      "label": "menaces master",
+      "variant": "dashed"
+    },
+    {
+      "id": "c_scan_to_combat",
+      "from": "threat_scan",
+      "to": "seal_combat",
+      "label": "targets threat",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c_combat_to_defense",
+      "from": "seal_combat",
+      "to": "master_defense",
+      "label": "intercepts & bites",
+      "variant": "security"
+    },
+    {
+      "id": "c_tub_to_vessel",
+      "from": "hot_tub",
+      "to": "water_vessel",
+      "label": "water immersion",
+      "variant": "default"
+    },
+    {
+      "id": "c_vessel_to_ctrl",
+      "from": "water_vessel",
+      "to": "hydration_ctrl",
+      "label": "resets timer",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c_ctrl_to_leap",
+      "from": "hydration_ctrl",
+      "to": "shore_leap",
+      "label": "shore jump / soak",
+      "variant": "default"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Fishing Retriever Clutch Assist",
+      "items": [
+        "FixedUpdate interceptor detects active hooked catch (GetCatch != null)",
+        "Happy, fed, unalerted seals within 30m evaluate 35% retrieval roll",
+        "Seal swims to fish, executes Catch, bypasses stamina drain & line snap"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Master Defense & Thick Blubber",
+      "items": [
+        "160 Base HP companion durability with blunt/frost/pierce damage resistance",
+        "Autonomous master protection: scans 25m perimeter for attackers engaging master",
+        "Equipped with custom seal_bite_attack dealing 35 physical damage (20 slash / 15 blunt)"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Unbreedable by Design",
+      "items": [
+        "Procreation and Growup components stripped during ZNetScene registration",
+        "Prevents unconstrained companion proliferation while preserving companion value",
+        "Seals remain exclusive, cherished wild-tamed companions"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Environmental Hydration & Boats",
+      "items": [
+        "Semi-aquatic hydration tracker: 10-min grace period before 2.5x hunger acceleration",
+        "Idle attraction to built hot tubs (piece_bathtub) for rest, bubbles, and hearts",
+        "Automated boat disembarkation when depth drops below 2.8m near shore"
+      ]
+    }
+  ]
+}

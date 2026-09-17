@@ -1,14 +1,14 @@
-{
+﻿{
     "$schema":  "http://json-schema.org/draft-07/schema#",
     "version":  "1.0.0",
-    "active_profile":  "full-gaming",
+    "active_profile":  "sovereign-trio",
     "default_machine":  "local",
     "machines":  {
                      "local":  {
-                                  "game_dir":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim",
-                                  "bepinex_dir":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx",
-                                  "workspace_dir":  "C:/work/valheim-profile-engine"
-                              }
+                                   "game_dir":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim",
+                                   "bepinex_dir":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx",
+                                   "workspace_dir":  "C:/work/valheim-profile-engine"
+                               }
                  },
     "profiles":  {
                      "full-gaming":  {
@@ -74,6 +74,70 @@
                                                               }
                                                           ]
                                           },
+                     "isolated-sealcompanion":  {
+                                                    "alias":  [
+                                                                  "seal",
+                                                                  "sealcompanion",
+                                                                  "seals"
+                                                              ],
+                                                    "description":  "Isolated test harness for Seal Companion (diet, taming, master defense, fishing retrieval)",
+                                                    "type":  "synthetic",
+                                                    "target_dir":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/isolated-sealcompanion",
+                                                    "entries":  [
+                                                                    {
+                                                                        "name":  "SealCompanion.dll",
+                                                                        "source":  "C:/work/deepnorthtesting/plugins/SealCompanion/bin/Debug/SealCompanion.dll",
+                                                                        "link_type":  "hardlink"
+                                                                    },
+                                                                    {
+                                                                        "name":  "LetMePlay.dll",
+                                                                        "source":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/full-comfymods/LetMePlay.dll",
+                                                                        "link_type":  "hardlink"
+                                                                    }
+                                                                ]
+                                                },
+                     "sovereign-quad":  {
+                                            "alias":  [
+                                                          "quad",
+                                                          "sovereign-four",
+                                                          "showcase-quad"
+                                                      ],
+                                            "description":  "Sovereign Suite: IsModded + Unfaded + TotemSentinel + SealCompanion",
+                                            "type":  "synthetic",
+                                            "target_dir":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/sovereign-quad",
+                                            "entries":  [
+                                                            {
+                                                                "name":  "SealCompanion.dll",
+                                                                "source":  "C:/work/deepnorthtesting/plugins/SealCompanion/bin/Debug/SealCompanion.dll",
+                                                                "link_type":  "hardlink"
+                                                            },
+                                                            {
+                                                                "name":  "IsModded.dll",
+                                                                "source":  "C:/work/ismodded/bin/Release/IsModded.dll",
+                                                                "link_type":  "hardlink"
+                                                            },
+                                                            {
+                                                                "name":  "Unfaded.dll",
+                                                                "source":  "C:/work/Unfaded/bin/Release/Unfaded.dll",
+                                                                "link_type":  "hardlink"
+                                                            },
+                                                            {
+                                                                "name":  "TotemSentinel.dll",
+                                                                "source":  "C:/work/totemalert/bin/Release/TotemSentinel.dll",
+                                                                "link_type":  "hardlink"
+                                                            },
+                                                            {
+                                                                "name":  "LetMePlay.dll",
+                                                                "source":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/full-comfymods/LetMePlay.dll",
+                                                                "link_type":  "hardlink"
+                                                            },
+                                                            {
+                                                                "name":  "ComfyNetworkSense.dll",
+                                                                "source":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/full-comfymods/ComfyNetworkSense.dll",
+                                                                "link_type":  "hardlink"
+                                                            }
+                                                        ]
+                                        },
                      "isolated-totemsentinel":  {
                                                     "alias":  [
                                                                   "totem",

@@ -1,0 +1,9 @@
+{
+  "name": "SealCompanion",
+  "version_number": "1.0.0",
+  "website_url": "https://github.com/djcdevelopment/deepnorthtesting",
+  "description": "Feed, tame, and bond with seals in Valheim 1.0. Enjoy fishing retrieval assists, thick blubber defense, boat rides, and hot tub soaking.",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2202"
+  ]
+}

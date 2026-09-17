@@ -17,7 +17,9 @@
   - [1. Backpack Status Effect Architecture (FAQ-001)](#1-backpack-status-effect-architecture-faq-001)
   - [2. Unfaded Death Spectator & Blackout Removal](#2-unfaded-death-spectator--blackout-removal)
   - [3. Unswayed Locomotion & Camera Bobbing Stabilizer](#3-unswayed-locomotion--camera-bobbing-stabilizer)
+  - [4. Seal Companion Architecture](#4-seal-companion-architecture)
 - [🧩 Sovereign Mod Plugins](#-sovereign-mod-plugins)
+  - [SealCompanion (Seal Taming, Defense, & Fishing Assistant)](#sealcompanion-seal-taming-defense--fishing-assistant)
   - [Unfaded (Death Spectator & Blackout Suppression)](#unfaded-death-spectator--blackout-suppression)
   - [Unswayed (Ergonomic Camera & Locomotion Bobbing Stabilizer)](#unswayed-ergonomic-camera--locomotion-bobbing-stabilizer)
   - [EarnYourKeep (Modded Achievement Enabler)](#earnyourkeep-modded-achievement-enabler)
@@ -132,6 +134,18 @@ Maps the Valheim 1.0 character locomotion blend tree, head-bone tracking decoupl
 
 ---
 
+### 5. Seal Companion Architecture
+
+Maps the full lifecycle of tamed seals in Valheim 1.0 (Deep North), including fish diet injection, calming threat evaluation, thick blubber defense, 35% fishing retrieval clutch assist, hydration constraints, and boat navigation.
+
+- 🌐 [**Open Interactive HTML Viewer**](./plugins/SealCompanion/docs/seal-companion.architecture.html)
+- 📄 [View Typed JSON Specification](./plugins/SealCompanion/docs/seal-companion.architecture.json)
+- 📦 [Explore Seal Companion Source Code](./plugins/SealCompanion)
+
+[![Seal Companion System Architecture](./plugins/SealCompanion/docs/seal-companion.architecture.visual-check.1440x900.dark.png)](./plugins/SealCompanion/docs/seal-companion.architecture.html)
+
+---
+
 ## ⚡ Zero-Copy Profile Engine & Fleet Switcher
 
 Swapping between a 65-mod multiplayer server pack, clean cinematic recording, and isolated mod development previously required slow, destructive file copying (~12.4s, 85MB copied per switch). 
@@ -179,6 +193,13 @@ This repository develops and tests sovereign Valheim 1.0 plugins built for perfo
 - **Steam Progression**: Restores Steam achievements on BepInEx modded clients while preserving genuine cheat protections.
 - **In-Game Audit**: F5 console command `ismodded` displays live memory state of cheat evaluators.
 - 📦 **Standalone Repo**: [`github.com/djcdevelopment/ismodded`](https://github.com/djcdevelopment/ismodded)
+
+### [SealCompanion](./plugins/SealCompanion) (Seal Taming, Master Defense, & Fishing Assistant)
+- **Taming & Feeding System**: Injects all 12 caught fish species, raw fish, and cooked fish into the seal consumable diet list with soothing heart emotes (`<3`).
+- **Fishing Retriever Buff**: 35% chance to retrieve hooked catches directly to boat or shore, preventing line snaps and stamina loss.
+- **Thick Blubber Defense & Combat**: 160 HP, blunt/frost/pierce damage resistances, 35 damage physical bite weapon (`seal_bite_attack`), and active 25m master perimeter defense.
+- **Environmental Immersion**: 10-minute dry-land grace period before 2.5x hunger acceleration, idle hot tub relaxation (`piece_bathtub`), and automated boat disembarkation near shore (< 2.8m).
+- 📦 **Thunderstore Package**: [`SealCompanion-1.0.0.zip`](./plugins/SealCompanion/SealCompanion-1.0.0.zip)
 
 ### [Unfaded](./plugins/Unfaded) (Death Spectator, Combat Recap, & Video Suite)
 - **Eliminates Blackout Canvas**: Suppresses Valheim's 9.5-second black screen canvas fadeout on death.

@@ -106,7 +106,7 @@ Write-Host "[+] Found $($dlls.Count) active assemblies in plugins directory." -F
 
 # Check for Sovereign Mod Showcase
 $sovereignFound = @()
-$sovereignTargets = @("IsModded.dll", "Unfaded.dll", "TotemSentinel.dll", "CameraProof.dll", "ComfyNetworkSense.dll")
+$sovereignTargets = @("IsModded.dll", "Unfaded.dll", "TotemSentinel.dll", "CameraProof.dll", "ComfyNetworkSense.dll", "SealCompanion.dll")
 foreach ($targetMod in $sovereignTargets) {
     $match = $dlls | Where-Object { $_.Name -ieq $targetMod }
     if ($match) {
