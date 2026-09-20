@@ -545,6 +545,10 @@ try {
             Test-PackageArchive $mod $packagePath
             $candidatePath = Join-Path $packagesDirectory $packageName
             Copy-Item -LiteralPath $packagePath -Destination $candidatePath -Force
+            $configSidecarName = "$([System.IO.Path]::GetFileNameWithoutExtension($packageName)).thunderstore.toml"
+            $configSidecarPath = Join-Path $packagesDirectory $configSidecarName
+            $sourceConfigPath = Resolve-ModPath $mod $mod.package_config
+            Copy-Item -LiteralPath $sourceConfigPath -Destination $configSidecarPath -Force
             $modReport = $report.mods | Where-Object { $_.name -eq $mod.name } | Select-Object -First 1
             if ($null -ne $modReport) {
                 $modReport.package = "packages/$packageName"

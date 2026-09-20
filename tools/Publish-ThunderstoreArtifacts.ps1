@@ -29,6 +29,10 @@ if ($packages.Count -eq 0) { throw "No Thunderstore candidate ZIPs found in $Art
 $candidates = New-Object System.Collections.ArrayList
 $receipts = New-Object System.Collections.ArrayList
 foreach ($package in $packages) {
+    $configPath = Join-Path $ArtifactsDirectory "$($package.BaseName).thunderstore.toml"
+    if (-not (Test-Path -LiteralPath $configPath -PathType Leaf)) {
+        throw "$($package.Name): publishing configuration sidecar missing: $configPath"
+    }
     $archive = [System.IO.Compression.ZipFile]::OpenRead($package.FullName)
     try {
         $manifestEntry = $archive.Entries | Where-Object { $_.FullName -eq "manifest.json" } | Select-Object -First 1
@@ -62,6 +66,7 @@ foreach ($package in $packages) {
         Name = [string]$manifest.name
         Version = $candidateVersion
         LiveVersion = $liveVersion
+        ConfigPath = $configPath
         Receipt = $receipt
     })
     Write-Host "Validated $($manifest.name) $candidateVersion (live: $liveVersion)" -ForegroundColor Green
@@ -83,7 +88,7 @@ if (-not $ValidateOnly) {
         $candidate.Receipt.recorded_utc = (Get-Date).ToUniversalTime().ToString("o")
         Write-Receipt
         try {
-            & tcli publish --file $candidate.Package.FullName --token $Token
+            & tcli publish --file $candidate.Package.FullName --config-path $candidate.ConfigPath --token $Token
             if ($LASTEXITCODE -ne 0) { throw "tcli publish exited with code $LASTEXITCODE" }
             $candidate.Receipt.status = "published"
             $candidate.Receipt.recorded_utc = (Get-Date).ToUniversalTime().ToString("o")

@@ -38,7 +38,7 @@ The run performs these gates in order:
 6. **Package validation** uses pinned `tcli`, opens every ZIP, and verifies `manifest.json`, README, icon, DLL, package identity, and version. DLL and ZIP SHA-256 hashes are recorded.
 7. **Thunderstore preflight** checks every candidate against the live API and rejects the entire set before publishing if any version is stale or reused.
 
-Evidence is written under `artifacts/compatibility/valheim-<version>/<UTC-run-id>/`. The folder contains `compatibility.json`, `compatibility.md`, raw BepInEx logs, the generated runtime profile manifest, and the exact candidate ZIPs.
+Evidence is written under `artifacts/compatibility/valheim-<version>/<UTC-run-id>/`. The folder contains `compatibility.json`, `compatibility.md`, raw BepInEx logs, the generated runtime profile manifest, the exact candidate ZIPs, and their matching `tcli` configuration sidecars.
 
 The committed 1.0.15 result is in [`docs/compatibility/valheim-1.0.15.md`](compatibility/valheim-1.0.15.md).
 
