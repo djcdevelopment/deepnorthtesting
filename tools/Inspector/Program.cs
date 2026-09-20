@@ -1,142 +1,232 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
+using System.Security.Cryptography;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
-class Program {
-    static void Main(string[] args) {
+internal static class Program
+{
+    private static int _failures;
+
+    private static int Main(string[] args)
+    {
         Console.WriteLine("==========================================================");
-        Console.WriteLine("   DeepNorthTesting :: Valheim 1.0 Reflection Inspector   ");
+        Console.WriteLine(" DeepNorthTesting :: Valheim Compatibility Inspector");
         Console.WriteLine("==========================================================");
 
-        string defaultGameDir = @"C:\Program Files (x86)\Steam\steamapps\common\Valheim";
-        string gameDir = args.Length > 0 ? args[0] : defaultGameDir;
+        string gameDir = args.Length > 0
+            ? args[0]
+            : @"C:\Program Files (x86)\Steam\steamapps\common\Valheim";
+        string? expectedVersion = args.Length > 1 ? args[1] : null;
+        string? pluginDirectory = args.Length > 2 ? args[2] : null;
         string managedDir = Path.Combine(gameDir, "valheim_Data", "Managed");
-        string pluginsDir = Path.Combine(gameDir, "BepInEx", "plugins");
+        string valheimDll = Path.Combine(managedDir, "assembly_valheim.dll");
 
-        if (!Directory.Exists(managedDir)) {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"[Error] Game managed directory not found at: {managedDir}");
-            Console.ResetColor();
+        if (!File.Exists(valheimDll))
+        {
+            Fail($"Game assembly not found: {valheimDll}");
+            return 1;
+        }
+
+        using ModuleDefinition module = ModuleDefinition.ReadModule(valheimDll);
+        string detectedVersion = ReadGameVersion(module);
+        string assemblyHash = Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(valheimDll)));
+        Console.WriteLine($"[+] Valheim directory : {gameDir}");
+        Console.WriteLine($"[+] Valheim version   : {detectedVersion}");
+        Console.WriteLine($"[+] Assembly SHA-256  : {assemblyHash}");
+        Console.WriteLine($"EVIDENCE game_version={detectedVersion} assembly_sha256={assemblyHash}");
+
+        if (!string.IsNullOrWhiteSpace(expectedVersion) && detectedVersion != expectedVersion)
+        {
+            Fail($"Expected Valheim {expectedVersion}, found {detectedVersion}");
+        }
+
+        Console.WriteLine("\n[+] Auditing fleet hook and reflection targets");
+
+        CheckField(module, "Game", "isModded", "IsModded");
+        CheckMethod(module, "Achievements", "IsCheatedAtAll", m => m.Parameters.Count == 0 && m.ReturnType.MetadataType == MetadataType.Boolean, "IsModded");
+        CheckMethod(module, "FejdStartup", "SetupGui", _ => true, "IsModded");
+        CheckMethod(module, "InventoryGui", "UpdateAchievementsList", _ => true, "IsModded");
+        CheckMethod(module, "Terminal", "InitTerminal", _ => true, "IsModded/Unswayed");
+        CheckIsModdedReference(module);
+
+        CheckMethod(module, "Hud", "UpdateBlackScreen", _ => true, "Unfaded");
+        CheckMethod(module, "Hud", "GetFadeDuration", _ => true, "Unfaded");
+        CheckMethod(module, "Hud", "Update", _ => true, "Unfaded");
+        CheckMethod(module, "Game", "RequestRespawn", _ => true, "Unfaded");
+        CheckMethod(module, "Player", "OnDeath", _ => true, "Unfaded");
+        CheckMethod(module, "GameCamera", "UpdateCamera", _ => true, "Unfaded");
+        CheckMethod(module, "Terminal", "Awake", _ => true, "Unfaded");
+
+        CheckMethod(module, "GameCamera", "GetCameraBaseOffset", _ => true, "Unswayed");
+        CheckMethod(module, "GameCamera", "GetCameraPosition", _ => true, "Unswayed");
+        CheckMethod(module, "GameCamera", "UpdateFOV", _ => true, "Unswayed");
+        CheckMethod(module, "GameCamera", "UpdateCameraShake", _ => true, "Unswayed");
+
+        CheckMethod(module, "Humanoid", "Pickup", m =>
+            m.Parameters.Count == 3 &&
+            m.Parameters[0].ParameterType.Name == "GameObject" &&
+            m.Parameters[1].ParameterType.MetadataType == MetadataType.Boolean &&
+            m.Parameters[2].ParameterType.MetadataType == MetadataType.Boolean,
+            "TotemSentinel");
+        CheckMethod(module, "Character", "ApplyDamage", _ => true, "TotemSentinel");
+        CheckField(module, "ZDOMan", "m_objectsBySector", "TotemSentinel");
+        CheckField(module, "ZDOMan", "m_width", "TotemSentinel");
+        CheckMethod(module, "ZoneSystem", "SectorToIndex", m =>
+            m.IsStatic && m.Parameters.Count == 2 &&
+            m.Parameters.All(p => p.ParameterType.MetadataType == MetadataType.Int32),
+            "TotemSentinel");
+
+        CheckField(module, "Game", "m_hasStartedOnce", "SelfieStick");
+        CheckMethod(module, "Game", "InIntro", _ => true, "SelfieStick");
+        CheckMethod(module, "Game", "SkipIntro", _ => true, "SelfieStick");
+        CheckMethod(module, "VisEquipment", "SetupCloth", _ => true, "SelfieStick");
+        CheckMethod(module, "Fireplace", "UpdateState", _ => true, "SelfieStick");
+        CheckField(module, "EnvMan", "m_environments", "SelfieStick");
+        CheckField(module, "Hud", "m_userHidden", "SelfieStick");
+
+        CheckMethod(module, "ZDOMan", "FindSectorObjects", m =>
+            m.Parameters.Count >= 2 && m.Parameters[0].ParameterType.Name == "Vector2s",
+            "Valheim 1.0 baseline");
+        CheckMethod(module, "Character", "Message", m =>
+            m.Parameters.Count == 5 && m.Parameters[4].ParameterType.MetadataType == MetadataType.Boolean,
+            "Valheim 1.0 baseline");
+
+        if (!string.IsNullOrWhiteSpace(pluginDirectory))
+        {
+            AuditPluginDirectory(pluginDirectory);
+        }
+
+        Console.WriteLine($"\n[Summary] {_failures} compatibility failure(s).");
+        return _failures == 0 ? 0 : 1;
+    }
+
+    private static string ReadGameVersion(ModuleDefinition module)
+    {
+        TypeDefinition? versionType = module.GetType("Version");
+        MethodDefinition? initializer = versionType?.Methods.FirstOrDefault(m => m.Name == ".cctor" && m.HasBody);
+        if (initializer is null)
+        {
+            Fail("Version static initializer was not found");
+            return "unknown";
+        }
+
+        int[] values = initializer.Body.Instructions
+            .Select(ReadInt32Constant)
+            .Where(v => v.HasValue)
+            .Select(v => v!.Value)
+            .Take(3)
+            .ToArray();
+        if (values.Length != 3)
+        {
+            Fail("Could not decode Valheim semantic version from Version..cctor");
+            return "unknown";
+        }
+        return string.Join('.', values);
+    }
+
+    private static int? ReadInt32Constant(Instruction instruction) => instruction.OpCode.Code switch
+    {
+        Code.Ldc_I4_M1 => -1,
+        Code.Ldc_I4_0 => 0,
+        Code.Ldc_I4_1 => 1,
+        Code.Ldc_I4_2 => 2,
+        Code.Ldc_I4_3 => 3,
+        Code.Ldc_I4_4 => 4,
+        Code.Ldc_I4_5 => 5,
+        Code.Ldc_I4_6 => 6,
+        Code.Ldc_I4_7 => 7,
+        Code.Ldc_I4_8 => 8,
+        Code.Ldc_I4_S => Convert.ToInt32(instruction.Operand),
+        Code.Ldc_I4 => Convert.ToInt32(instruction.Operand),
+        _ => null
+    };
+
+    private static void CheckMethod(
+        ModuleDefinition module,
+        string typeName,
+        string methodName,
+        Func<MethodDefinition, bool> validator,
+        string owner)
+    {
+        TypeDefinition? type = module.GetType(typeName);
+        MethodDefinition? method = type?.Methods.FirstOrDefault(m => m.Name == methodName && validator(m));
+        if (method is null)
+        {
+            Fail($"{typeName}.{methodName} missing or changed (required by {owner})");
             return;
         }
+        Pass($"{typeName}.{methodName} ({owner})");
+    }
 
-        Console.WriteLine($"[+] Target Valheim Directory: {gameDir}");
-        Console.WriteLine($"[+] Scanning Core Game Assemblies in: {managedDir}");
+    private static void CheckField(ModuleDefinition module, string typeName, string fieldName, string owner)
+    {
+        TypeDefinition? type = module.GetType(typeName);
+        if (type?.Fields.Any(f => f.Name == fieldName) != true)
+        {
+            Fail($"{typeName}.{fieldName} missing or changed (required by {owner})");
+            return;
+        }
+        Pass($"{typeName}.{fieldName} ({owner})");
+    }
 
-        // 1. Audit Core Game Signatures
-        string valheimDll = Path.Combine(managedDir, "assembly_valheim.dll");
-        string utilsDll = Path.Combine(managedDir, "assembly_utils.dll");
+    private static void CheckIsModdedReference(ModuleDefinition module)
+    {
+        MethodDefinition? method = module.GetType("Achievements")?.Methods
+            .FirstOrDefault(m => m.Name == "IsCheatedAtAll" && m.HasBody);
+        bool found = method?.Body.Instructions.Any(i =>
+            i.Operand is FieldReference field && field.DeclaringType.Name == "Game" && field.Name == "isModded") == true;
+        if (!found)
+        {
+            Fail("Achievements.IsCheatedAtAll no longer reads Game.isModded; review IsModded behavior and documentation");
+            return;
+        }
+        Pass("Achievements.IsCheatedAtAll -> Game.isModded IL reference (IsModded)");
+    }
 
-        if (File.Exists(valheimDll)) {
-            var valheimModule = ModuleDefinition.ReadModule(valheimDll);
-
-            // Audit ZDOMan.FindSectorObjects
-            var tZDOMan = valheimModule.GetType("ZDOMan");
-            var mFindSector = tZDOMan?.Methods.FirstOrDefault(m => m.Name == "FindSectorObjects");
-            if (mFindSector != null) {
-                var p0 = mFindSector.Parameters[0].ParameterType.Name;
-                var p1 = mFindSector.Parameters[1].ParameterType.Name;
-                Console.WriteLine($"[Game Signature] ZDOMan.FindSectorObjects => ({p0}, {p1}, ...)");
-                if (p0 == "Vector2s") {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("  -> Confirmed Valheim 1.0 16-bit sector partitioning (Vector2s)");
-                    Console.ResetColor();
+    private static void AuditPluginDirectory(string pluginDirectory)
+    {
+        if (!Directory.Exists(pluginDirectory))
+        {
+            Fail($"Plugin audit directory not found: {pluginDirectory}");
+            return;
+        }
+        Console.WriteLine($"\n[+] Auditing candidate assemblies in {pluginDirectory}");
+        foreach (string pluginPath in Directory.GetFiles(pluginDirectory, "*.dll", SearchOption.AllDirectories))
+        {
+            try
+            {
+                using ModuleDefinition plugin = ModuleDefinition.ReadModule(pluginPath);
+                bool obsoleteCharacterMessage = plugin.GetMemberReferences().OfType<MethodReference>().Any(reference =>
+                    reference.DeclaringType.Name == "Character" &&
+                    reference.Name == "Message" &&
+                    reference.Parameters.Count == 4);
+                if (obsoleteCharacterMessage)
+                {
+                    Fail($"{Path.GetFileName(pluginPath)} references obsolete Character.Message(...4 parameters)");
+                }
+                else
+                {
+                    Pass($"{Path.GetFileName(pluginPath)} member references");
                 }
             }
-
-            // Audit SEMan.AddStatusEffect
-            var tSEMan = valheimModule.GetType("SEMan");
-            var mAddStatus = tSEMan?.Methods.FirstOrDefault(m => m.Name == "AddStatusEffect" && m.Parameters.Count >= 5);
-            if (mAddStatus != null) {
-                Console.WriteLine($"[Game Signature] SEMan.AddStatusEffect => {mAddStatus.Parameters.Count} parameters (includes Int16 variant)");
-            }
-
-            // Audit PieceTable.SetCategory
-            var tPieceTable = valheimModule.GetType("PieceTable");
-            var setCategoryCount = tPieceTable?.Methods.Count(m => m.Name == "SetCategory") ?? 0;
-            Console.WriteLine($"[Game Signature] PieceTable.SetCategory => {setCategoryCount} overloads detected (int + PieceCategory)");
-
-            // Audit InventoryGui.Show
-            var tInvGui = valheimModule.GetType("InventoryGui");
-            var mShow = tInvGui?.Methods.FirstOrDefault(m => m.Name == "Show");
-            if (mShow != null) {
-                Console.WriteLine($"[Game Signature] InventoryGui.Show => ({string.Join(", ", mShow.Parameters.Select(p => p.ParameterType.Name + " " + p.Name))})");
-            }
-
-            // Audit Character.Message (5 parameters in Valheim 1.0)
-            var tChar = valheimModule.GetType("Character");
-            var mMsg = tChar?.Methods.FirstOrDefault(m => m.Name == "Message");
-            if (mMsg != null) {
-                Console.WriteLine($"[Game Signature] Character.Message => {mMsg.Parameters.Count} parameters ({string.Join(", ", mMsg.Parameters.Select(p => p.ParameterType.Name + " " + p.Name))})");
-                if (mMsg.Parameters.Count == 5) {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("  -> Confirmed Valheim 1.0 Character.Message signature (added Boolean log)");
-                    Console.ResetColor();
-                }
+            catch (BadImageFormatException)
+            {
+                Console.WriteLine($"  [SKIP] {Path.GetFileName(pluginPath)} is not a managed assembly");
             }
         }
+    }
 
-        // 2. Audit Installed BepInEx Plugins
-        if (Directory.Exists(pluginsDir)) {
-            Console.WriteLine($"\n[+] Auditing Installed Plugins in: {pluginsDir}");
-            var pluginFiles = Directory.GetFiles(pluginsDir, "*.dll");
-            Console.WriteLine($"[+] Found {pluginFiles.Length} plugin assemblies. Running checks...\n");
+    private static void Pass(string message)
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"  [PASS] {message}");
+        Console.ResetColor();
+    }
 
-            int passed = 0;
-            int warnings = 0;
-
-            foreach (var pluginFile in pluginFiles.OrderBy(Path.GetFileName)) {
-                string fileName = Path.GetFileName(pluginFile);
-                try {
-                    var module = ModuleDefinition.ReadModule(pluginFile);
-                    bool hasIssue = false;
-
-                    // Check member references for obsolete Character.Message (4 params)
-                    foreach (var mr in module.GetMemberReferences()) {
-                        if (mr.Name == "Message" && mr.DeclaringType.Name == "Character" && mr is MethodReference mref && mref.Parameters.Count == 4) {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine($"  [FAIL] {fileName}: references obsolete 4-parameter Character.Message signature (causes MissingMethodException in Valheim 1.0)");
-                            Console.ResetColor();
-                            hasIssue = true;
-                            warnings++;
-                        }
-                    }
-
-                    foreach (var type in module.Types) {
-                        // Check for obsolete Vector2i FindSectorObjects patches
-                        foreach (var m in type.Methods) {
-                            if (m.HasCustomAttributes) {
-                                foreach (var attr in m.CustomAttributes) {
-                                    if (attr.AttributeType.Name.Contains("HarmonyPatch")) {
-                                        foreach (var arg in attr.ConstructorArguments) {
-                                            if (arg.Value?.ToString()?.Contains("Vector2i") == true) {
-                                                Console.ForegroundColor = ConsoleColor.Red;
-                                                Console.WriteLine($"  [FAIL] {fileName}: references obsolete Vector2i sector patch in {type.Name}.{m.Name}");
-                                                Console.ResetColor();
-                                                hasIssue = true;
-                                                warnings++;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if (!hasIssue) {
-                        passed++;
-                    }
-                } catch {
-                    // Skip native or non-CLR DLLs
-                }
-            }
-
-            Console.WriteLine($"\n[Summary] {passed} plugins verified clean. {warnings} architectural warnings.");
-        }
-
-        Console.WriteLine("\n[+] Audit completed successfully.");
+    private static void Fail(string message)
+    {
+        _failures++;
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"  [FAIL] {message}");
+        Console.ResetColor();
     }
 }

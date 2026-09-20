@@ -1,0 +1,93 @@
+name: Valheim compatibility matrix
+
+on:
+  workflow_dispatch:
+    inputs:
+      game_version:
+        description: Exact installed Valheim version required on the runner
+        required: true
+        default: 1.0.15
+        type: string
+  schedule:
+    - cron: "17 13 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: valheim-runtime-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  compatibility:
+    runs-on: [self-hosted, Windows, X64, valheim]
+    timeout-minutes: 30
+    env:
+      TARGET_GAME_VERSION: ${{ inputs.game_version || '1.0.15' }}
+    steps:
+      - name: Check out pipeline
+        uses: actions/checkout@v4
+        with:
+          path: repos/deepnorthtesting
+
+      - name: Check out Valheim Profile Manager
+        uses: actions/checkout@v4
+        with:
+          repository: djcdevelopment/valheim-profile-engine
+          path: repos/valheim-profile-engine
+
+      - name: Check out IsModded
+        uses: actions/checkout@v4
+        with:
+          repository: djcdevelopment/ismodded
+          path: repos/ismodded
+
+      - name: Check out SelfieStick
+        uses: actions/checkout@v4
+        with:
+          repository: djcdevelopment/SelfieStick
+          path: repos/SelfieStick
+
+      - name: Check out Unfaded
+        uses: actions/checkout@v4
+        with:
+          repository: djcdevelopment/Unfaded
+          path: repos/Unfaded
+
+      - name: Check out TotemSentinel
+        uses: actions/checkout@v4
+        with:
+          repository: djcdevelopment/TotemSentinel
+          path: repos/totemalert
+
+      - name: Install pinned Thunderstore CLI
+        shell: powershell
+        run: |
+          if (dotnet tool list --global | Select-String '^tcli\s') {
+            dotnet tool update --global tcli --version 0.2.4
+          } else {
+            dotnet tool install --global tcli --version 0.2.4
+          }
+
+      - name: Audit, build, boot, and package
+        shell: powershell
+        run: |
+          $workspaceRoot = Join-Path $env:GITHUB_WORKSPACE "repos"
+          $repositoryRoot = Join-Path $workspaceRoot "deepnorthtesting"
+          $evidenceRoot = Join-Path $env:GITHUB_WORKSPACE "evidence"
+          & "$repositoryRoot\tools\Invoke-PatchPipeline.ps1" `
+            -All `
+            -TargetGameVersion $env:TARGET_GAME_VERSION `
+            -WorkspaceRoot $workspaceRoot `
+            -RepositoryRoot $repositoryRoot `
+            -ProfileManagerRoot (Join-Path $workspaceRoot "valheim-profile-engine") `
+            -EvidenceDirectory $evidenceRoot
+
+      - name: Upload compatibility evidence and candidate packages
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: valheim-${{ env.TARGET_GAME_VERSION }}-compatibility-${{ github.run_id }}
+          path: evidence
+          if-no-files-found: error
+          retention-days: 30

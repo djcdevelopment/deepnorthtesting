@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "djcdevelopment",
+  "game": "Valheim",
+  "target_game_version": "1.0.15",
+  "supported_game_version_range": "1.0.0-1.0.15",
+  "bepinex_version": "5.4.2202",
+  "mods": [
+    {
+      "name": "IsModded",
+      "plugin_name": "IsModded",
+      "repository": "djcdevelopment/ismodded",
+      "source_relative": "ismodded",
+      "project": "IsModded.csproj",
+      "output": "bin/Release/IsModded.dll",
+      "package_config": "thunderstore.toml",
+      "profile": "isolated-ismodded",
+      "version": "1.0.4"
+    },
+    {
+      "name": "SelfieStick",
+      "plugin_name": "Camera Proof",
+      "repository": "djcdevelopment/SelfieStick",
+      "source_relative": "SelfieStick",
+      "project": "CameraProof.csproj",
+      "output": "bin/Release/net472/CameraProof.dll",
+      "package_config": "thunderstore.toml",
+      "profile": "clean-recording",
+      "version": "0.3.2"
+    },
+    {
+      "name": "Unfaded",
+      "plugin_name": "Unfaded",
+      "repository": "djcdevelopment/Unfaded",
+      "source_relative": "Unfaded",
+      "project": "Unfaded.csproj",
+      "output": "bin/Release/Unfaded.dll",
+      "package_config": "thunderstore.toml",
+      "profile": "isolated-unfaded",
+      "version": "1.0.8"
+    },
+    {
+      "name": "TotemSentinel",
+      "plugin_name": "TotemSentinel",
+      "repository": "djcdevelopment/TotemSentinel",
+      "source_relative": "totemalert",
+      "project": "TotemSentinel.csproj",
+      "output": "bin/Release/TotemSentinel.dll",
+      "package_config": "thunderstore.toml",
+      "profile": "isolated-totemsentinel",
+      "version": "1.5.2"
+    },
+    {
+      "name": "Unswayed",
+      "plugin_name": "Unswayed",
+      "repository": "djcdevelopment/deepnorthtesting",
+      "source_relative": "deepnorthtesting/plugins/Unswayed",
+      "project": "Unswayed.csproj",
+      "output": "bin/Release/Unswayed.dll",
+      "package_config": "thunderstore.toml",
+      "profile": "isolated-unswayed",
+      "version": "1.0.2"
+    }
+  ]
+}

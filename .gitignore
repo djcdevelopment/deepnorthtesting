@@ -14,5 +14,6 @@ obj/
 *.zip
 !plugins/*/*.zip
 tools/video_preview/
+artifacts/
 .vs/
 .vscode/

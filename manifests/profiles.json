@@ -194,7 +194,7 @@
                                              "entries":  [
                                                              {
                                                                  "name":  "CameraProof.dll",
-                                                                 "source":  "C:/work/SelfieStick/CameraProof.dll",
+                                                                 "source":  "C:/work/SelfieStick/bin/Release/net472/CameraProof.dll",
                                                                  "link_type":  "hardlink"
                                                              },
                                                              {

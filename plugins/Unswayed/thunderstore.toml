@@ -1,0 +1,29 @@
+﻿[config]
+schemaVersion = '0.0.1'
+
+[package]
+namespace = 'djcdevelopment'
+name = 'Unswayed'
+versionNumber = '1.0.2'
+description = 'Valheim 1.0-1.0.15 camera and locomotion stabilizer for stride bobbing, shake, and close-quarters camera crushing.'
+websiteUrl = 'https://github.com/djcdevelopment/deepnorthtesting'
+containsNsfwContent = false
+
+[package.dependencies]
+denikson-BepInExPack_Valheim = '5.4.2202'
+
+[build]
+icon = './icon.png'
+readme = './README.md'
+outdir = './dist'
+
+[[build.copy]]
+source = './bin/Release/Unswayed.dll'
+target = 'Unswayed.dll'
+
+[publish]
+repository = 'https://thunderstore.io'
+communities = [ 'valheim' ]
+
+[publish.categories]
+valheim = [ 'mods', 'client-side', 'misc' ]

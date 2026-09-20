@@ -23,6 +23,10 @@
   - [Unfaded (Death Spectator & Blackout Suppression)](#unfaded-death-spectator--blackout-suppression)
   - [Unswayed (Ergonomic Camera & Locomotion Bobbing Stabilizer)](#unswayed-ergonomic-camera--locomotion-bobbing-stabilizer)
   - [EarnYourKeep (Modded Achievement Enabler)](#earnyourkeep-modded-achievement-enabler)
+- [⚡ Valheim Patch Release Pipeline](#-valheim-patch-release-pipeline)
+  - [1. Preflight IL Audit](#1-preflight-il-audit)
+  - [2. Zero-Copy Profile Link](#2-zero-copy-profile-link)
+  - [3. Full Release Automation](#3-full-release-automation)
 - [🚀 Quickstart & Autonomous Harness](#-quickstart--autonomous-harness)
   - [1. Preflight Reflection Audit](#1-run-the-preflight-reflection-audit)
   - [2. Fast Boot Loop Launcher](#2-launch-valheim-with-the-fast-boot-loop)
@@ -231,6 +235,34 @@ This repository develops and tests sovereign Valheim 1.0 plugins built for perfo
 
 ---
 
+## ⚡ Valheim Patch Release Pipeline
+
+Whenever Iron Gate deploys a game update, [`tools/Invoke-PatchPipeline.ps1`](./tools/Invoke-PatchPipeline.ps1) runs the compatibility and release-candidate lifecycle across all five published mods (`IsModded`, `SelfieStick`, `Unfaded`, `TotemSentinel`, `Unswayed`). The current gate is Valheim 1.0.15.
+
+1. **Exact-version and hook audit**: Requires Valheim 1.0.15, hashes the game assembly, and checks every fleet Harmony/reflection surface with Mono.Cecil.
+2. **Synchronized release builds**: Rejects version drift across DLL metadata, projects, manifests, TOML, and READMEs before compiling.
+3. **Profile Manager runtime matrix**: Boots each mod in an ephemeral synthetic profile and always restores the exact original junction target.
+4. **Evidence and packaging**: Saves raw logs and hashes, then validates the contents of every `tcli` ZIP.
+5. **Protected deployment**: GitHub Actions publishes the exact tested ZIPs only after approval of the `thunderstore-production` environment.
+
+> 📖 **Evidence and operations**: Read the [Valheim 1.0.15 compatibility evidence](./docs/compatibility/valheim-1.0.15.md) and the [pipeline guide](./docs/PATCH_PIPELINE.md).
+
+### 1. Preflight IL Audit
+```powershell
+powershell -ExecutionPolicy Bypass -File tools\Invoke-PatchPipeline.ps1 -Audit
+```
+
+### 2. Full compatibility run and package staging
+```powershell
+powershell -ExecutionPolicy Bypass -File tools\Invoke-PatchPipeline.ps1 -All -TargetGameVersion 1.0.15
+```
+
+### 3. Protected release
+
+Run the `Thunderstore release` GitHub Actions workflow with `publish: true`. The preparation job produces the evidence and candidate ZIPs; the production environment approval gates the upload job.
+
+---
+
 ## 🚀 Quickstart & Autonomous Harness
 
 ### 1. Run the Preflight Reflection Audit
@@ -281,6 +313,8 @@ Our repository hosts a rigorous technical library documenting Valheim 1.0 intern
 
 | Document | Description | Format |
 | :--- | :--- | :--- |
+| ⚡ [**Valheim Patch Pipeline Guide**](./docs/PATCH_PIPELINE.md) | 5-stage automated release pipeline: Mono.Cecil IL audit, zero-copy profile linking, tcli build/publish. | Markdown |
+| 🔀 [**Valheim Profile Engine Guide**](./docs/VALHEIM_PROFILE_ENGINE.md) | Sub-50ms NTFS directory junction swapping architecture, synthetic links, and fleet conflict radar. | Markdown |
 | 📖 [**Valheim 1.0 Mod Migration Guide**](./docs/VALHEIM_1.0_MIGRATION_GUIDE.md) | Authoritative guide to the 6 core architectural shifts, before/after code snippets, and transpiler rules. | Markdown |
 | 📊 [**ComfyMods Full Audit Matrix**](./docs/COMFYMODS_AUDIT_MATRIX.md) | Complete 51-mod status matrix and automated reflection verification logs. | Markdown Table |
 | ❓ [**Technical FAQ & Knowledgebase**](./docs/FAQ.md) | Engineering answers, IL breakdowns, and operational runbooks (FAQ-001 Backpacks, FAQ-002 Tombstone Timers, FAQ-003 Black Screen on Connect, FAQ-004 Missing Auto-Pickup Notifications, FAQ-005 Run Animation Vertigo & Dungeons). | Markdown + ToC |
