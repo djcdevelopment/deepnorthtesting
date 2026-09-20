@@ -1,7 +1,7 @@
-{
+﻿{
     "$schema":  "http://json-schema.org/draft-07/schema#",
     "version":  "1.0.0",
-    "active_profile":  "sovereign-trio",
+    "active_profile":  "sovereign-suite",
     "default_machine":  "local",
     "machines":  {
                      "local":  {
@@ -200,6 +200,71 @@
                                                              {
                                                                  "name":  "Unfaded.dll",
                                                                  "source":  "C:/work/Unfaded/bin/Release/Unfaded.dll",
+                                                                 "link_type":  "hardlink"
+                                                             },
+                                                             {
+                                                                 "name":  "ComfyNetworkSense.dll",
+                                                                 "source":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/full-comfymods/ComfyNetworkSense.dll",
+                                                                 "link_type":  "hardlink"
+                                                             }
+                                                         ]
+                                         },
+                     "isolated-unswayed":  {
+                                               "alias":  [
+                                                             "unswayed",
+                                                             "stabilizer",
+                                                             "camera"
+                                                         ],
+                                               "description":  "Direct compiler link to Unswayed camera stabilizer \u0026 locomotion damping build",
+                                               "type":  "synthetic",
+                                               "target_dir":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/isolated-unswayed",
+                                               "entries":  [
+                                                               {
+                                                                   "name":  "Unswayed.dll",
+                                                                   "source":  "C:/work/deepnorthtesting/plugins/Unswayed/bin/Release/Unswayed.dll",
+                                                                   "link_type":  "hardlink"
+                                                               },
+                                                               {
+                                                                   "name":  "ComfyNetworkSense.dll",
+                                                                   "source":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/full-comfymods/ComfyNetworkSense.dll",
+                                                                   "link_type":  "hardlink"
+                                                               }
+                                                           ]
+                                           },
+                     "sovereign-suite":  {
+                                             "alias":  [
+                                                           "suite",
+                                                           "all",
+                                                           "sovereign-all",
+                                                           "fleet"
+                                                       ],
+                                             "description":  "Full Sovereign Mod Suite for Valheim 1.0.15: IsModded + Unfaded + TotemSentinel + Unswayed + CameraProof",
+                                             "type":  "synthetic",
+                                             "target_dir":  "C:/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/sovereign-suite",
+                                             "entries":  [
+                                                             {
+                                                                 "name":  "IsModded.dll",
+                                                                 "source":  "C:/work/ismodded/bin/Release/IsModded.dll",
+                                                                 "link_type":  "hardlink"
+                                                             },
+                                                             {
+                                                                 "name":  "Unfaded.dll",
+                                                                 "source":  "C:/work/Unfaded/bin/Release/Unfaded.dll",
+                                                                 "link_type":  "hardlink"
+                                                             },
+                                                             {
+                                                                 "name":  "TotemSentinel.dll",
+                                                                 "source":  "C:/work/totemalert/bin/Release/TotemSentinel.dll",
+                                                                 "link_type":  "hardlink"
+                                                             },
+                                                             {
+                                                                 "name":  "Unswayed.dll",
+                                                                 "source":  "C:/work/deepnorthtesting/plugins/Unswayed/bin/Release/Unswayed.dll",
+                                                                 "link_type":  "hardlink"
+                                                             },
+                                                             {
+                                                                 "name":  "CameraProof.dll",
+                                                                 "source":  "C:/work/SelfieStick/bin/Release/net472/CameraProof.dll",
                                                                  "link_type":  "hardlink"
                                                              },
                                                              {
