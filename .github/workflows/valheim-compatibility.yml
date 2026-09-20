@@ -26,36 +26,36 @@ jobs:
       TARGET_GAME_VERSION: ${{ inputs.game_version || '1.0.15' }}
     steps:
       - name: Check out pipeline
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: repos/deepnorthtesting
 
       - name: Check out Valheim Profile Manager
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: djcdevelopment/valheim-profile-engine
           path: repos/valheim-profile-engine
 
       - name: Check out IsModded
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: djcdevelopment/ismodded
           path: repos/ismodded
 
       - name: Check out SelfieStick
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: djcdevelopment/SelfieStick
           path: repos/SelfieStick
 
       - name: Check out Unfaded
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: djcdevelopment/Unfaded
           path: repos/Unfaded
 
       - name: Check out TotemSentinel
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: djcdevelopment/TotemSentinel
           path: repos/totemalert
@@ -85,7 +85,7 @@ jobs:
 
       - name: Upload compatibility evidence and candidate packages
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: valheim-${{ env.TARGET_GAME_VERSION }}-compatibility-${{ github.run_id }}
           path: evidence

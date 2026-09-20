@@ -29,36 +29,36 @@ jobs:
       TARGET_GAME_VERSION: ${{ inputs.game_version }}
     steps:
       - name: Check out pipeline
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: repos/deepnorthtesting
 
       - name: Check out Valheim Profile Manager
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: djcdevelopment/valheim-profile-engine
           path: repos/valheim-profile-engine
 
       - name: Check out IsModded
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: djcdevelopment/ismodded
           path: repos/ismodded
 
       - name: Check out SelfieStick
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: djcdevelopment/SelfieStick
           path: repos/SelfieStick
 
       - name: Check out Unfaded
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: djcdevelopment/Unfaded
           path: repos/Unfaded
 
       - name: Check out TotemSentinel
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: djcdevelopment/TotemSentinel
           path: repos/totemalert
@@ -87,7 +87,7 @@ jobs:
             -EvidenceDirectory $evidenceRoot
 
       - name: Upload immutable release candidates
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: thunderstore-candidates-${{ github.run_id }}
           path: evidence
@@ -102,10 +102,10 @@ jobs:
     environment: thunderstore-production
     steps:
       - name: Check out publisher
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 8.0.x
 
@@ -114,7 +114,7 @@ jobs:
         run: dotnet tool install --global tcli --version 0.2.4
 
       - name: Download tested candidates
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: thunderstore-candidates-${{ github.run_id }}
           path: evidence
@@ -131,7 +131,7 @@ jobs:
 
       - name: Upload publish receipt
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: thunderstore-publish-receipt-${{ github.run_id }}
           path: evidence/packages/publish-receipt.json
