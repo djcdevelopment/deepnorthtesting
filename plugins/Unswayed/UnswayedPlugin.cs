@@ -17,7 +17,7 @@ public sealed class UnswayedPlugin : BaseUnityPlugin
 {
     public const string PluginGUID = "djc.valheim.unswayed";
     public const string PluginName = "Unswayed";
-    public const string PluginVersion = "1.0.2";
+    public const string PluginVersion = "1.0.3";
 
     public static UnswayedPlugin? Instance { get; private set; }
 

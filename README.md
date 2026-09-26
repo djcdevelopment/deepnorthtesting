@@ -33,6 +33,14 @@
   - [3. Clean Boot Log Assertion](#3-assert-a-clean-boot)
   - [4. Live Telemetry Streaming](#4-query-live-in-game-gpu-telemetry)
 - [📖 Engineering Documentation Suite](#-engineering-documentation-suite)
+- [❓ Technical FAQ & Knowledgebase](#-technical-faq--knowledgebase)
+  - [FAQ-001: Backpack Status Effect Stacking](./docs/faq/FAQ-001-backpack-status-effects.md)
+  - [FAQ-002: Tombstone Despawn Timer Without RPC Spam](./docs/faq/FAQ-002-tombstone-despawn-timer.md)
+  - [FAQ-003: Multiplayer Black Screen on Connect](./docs/faq/FAQ-003-multiplayer-black-screen.md)
+  - [FAQ-004: Missing Auto-Pickup Notifications (MissingMethodException)](./docs/faq/FAQ-004-auto-pickup-missingmethodexception.md)
+  - [FAQ-005: Burial Crypt Camera Bobbing & Vertigo](./docs/faq/FAQ-005-crypt-headache-camera-sway.md)
+  - [FAQ-006: Linux Gale Profile BepInEx Mod Loading](./docs/faq/FAQ-006-linux-gale-bepinex-loading.md)
+  - [FAQ-007: InfinityInventory Pickup & EpicLoot Compatibility](./docs/faq/FAQ-007-infinity-inventory-pickup-epicloot.md)
 - [📓 Operational Testing Workbook](#-operational-testing-workbook)
 - [🔬 Case Study: Auditing 51 ComfyMods](#-case-study-auditing-51-comfymods-for-valheim-10)
 - [💻 Test Hardware & Environment](#-test-hardware--environment)
@@ -107,7 +115,7 @@ Visualizes YAML configuration parsing, literal hash resolution, `ObjectDB` catal
 
 - 🌐 [**Open Interactive HTML Viewer**](./docs/backpack-effects.architecture.html)
 - 📄 [View Typed JSON Specification](./docs/backpack-effects.architecture.json)
-- 📖 [Read FAQ-001 Deep Dive](./docs/FAQ.md#faq-001-can-you-stack-multiple-status-effects-on-backpacks-in-smoothbrains-mod)
+- 📖 [Read FAQ-001 Deep Dive](./docs/faq/FAQ-001-backpack-status-effects.md)
 
 [![Backpack Status Effect Architecture](./docs/backpack-effects.architecture.visual-check.1440x900.dark.png)](./docs/backpack-effects.architecture.html)
 
@@ -237,15 +245,15 @@ This repository develops and tests sovereign Valheim 1.0 plugins built for perfo
 
 ## ⚡ Valheim Patch Release Pipeline
 
-Whenever Iron Gate deploys a game update, [`tools/Invoke-PatchPipeline.ps1`](./tools/Invoke-PatchPipeline.ps1) runs the compatibility and release-candidate lifecycle across all five published mods (`IsModded`, `SelfieStick`, `Unfaded`, `TotemSentinel`, `Unswayed`). The current gate is Valheim 1.0.15.
+Whenever Iron Gate deploys a game update, [`tools/Invoke-PatchPipeline.ps1`](./tools/Invoke-PatchPipeline.ps1) runs the compatibility and release-candidate lifecycle across all five published mods (`IsModded`, `SelfieStick`, `Unfaded`, `TotemSentinel`, `Unswayed`). The current gate is Valheim 1.0.16.
 
-1. **Exact-version and hook audit**: Requires Valheim 1.0.15, hashes the game assembly, and checks every fleet Harmony/reflection surface with Mono.Cecil.
+1. **Exact-version and hook audit**: Requires Valheim 1.0.16, hashes the game assembly, and checks every fleet Harmony/reflection surface with Mono.Cecil.
 2. **Synchronized release builds**: Rejects version drift across DLL metadata, projects, manifests, TOML, and READMEs before compiling.
 3. **Profile Manager runtime matrix**: Boots each mod in an ephemeral synthetic profile and always restores the exact original junction target.
 4. **Evidence and packaging**: Saves raw logs and hashes, then validates the contents of every `tcli` ZIP.
 5. **Protected deployment**: GitHub Actions publishes the exact tested ZIPs only after approval of the `thunderstore-production` environment.
 
-> 📖 **Evidence and operations**: Read the [Valheim 1.0.15 compatibility evidence](./docs/compatibility/valheim-1.0.15.md) and the [pipeline guide](./docs/PATCH_PIPELINE.md).
+> 📖 **Evidence and operations**: Read the [Valheim 1.0.16 compatibility evidence](./docs/compatibility/valheim-1.0.16.md) and the [pipeline guide](./docs/PATCH_PIPELINE.md).
 
 ### 1. Preflight IL Audit
 ```powershell
@@ -254,7 +262,7 @@ powershell -ExecutionPolicy Bypass -File tools\Invoke-PatchPipeline.ps1 -Audit
 
 ### 2. Full compatibility run and package staging
 ```powershell
-powershell -ExecutionPolicy Bypass -File tools\Invoke-PatchPipeline.ps1 -All -TargetGameVersion 1.0.15
+powershell -ExecutionPolicy Bypass -File tools\Invoke-PatchPipeline.ps1 -All -TargetGameVersion 1.0.16
 ```
 
 ### 3. Protected release
@@ -317,12 +325,30 @@ Our repository hosts a rigorous technical library documenting Valheim 1.0 intern
 | 🔀 [**Valheim Profile Engine Guide**](./docs/VALHEIM_PROFILE_ENGINE.md) | Sub-50ms NTFS directory junction swapping architecture, synthetic links, and fleet conflict radar. | Markdown |
 | 📖 [**Valheim 1.0 Mod Migration Guide**](./docs/VALHEIM_1.0_MIGRATION_GUIDE.md) | Authoritative guide to the 6 core architectural shifts, before/after code snippets, and transpiler rules. | Markdown |
 | 📊 [**ComfyMods Full Audit Matrix**](./docs/COMFYMODS_AUDIT_MATRIX.md) | Complete 51-mod status matrix and automated reflection verification logs. | Markdown Table |
-| ❓ [**Technical FAQ & Knowledgebase**](./docs/FAQ.md) | Engineering answers, IL breakdowns, and operational runbooks (FAQ-001 Backpacks, FAQ-002 Tombstone Timers, FAQ-003 Black Screen on Connect, FAQ-004 Missing Auto-Pickup Notifications, FAQ-005 Run Animation Vertigo & Dungeons). | Markdown + ToC |
+| ❓ [**Technical FAQ & Knowledgebase Hub**](./docs/FAQ.md) | Modular engineering knowledgebase (FAQ-001 through FAQ-007) with standalone articles, IL breakdowns, and operational runbooks. | Markdown Hub + 7 Articles |
 | 📓 [**Harness Testing Workbook**](./docs/WORKBOOK.md) | Hands-on labs, sample configs (`Backpacks.yml`, `Unfaded.cfg`), and observable checkpoints. | Markdown Lab Guide |
 | 🔭 [**Unfaded Technical Deep Dive**](./plugins/Unfaded/docs/EXPLANATION.md) | In-depth engineering breakdown of blackout suppression, camera transforms, and bullet-time. | Markdown |
 | 🛠️ [**Unfaded Hands-On Workbook**](./plugins/Unfaded/docs/WORKBOOK.md) | Interactive lab guide for spectator testing, console tuning, and keybindings. | Markdown |
 | 📈 [**Final Verification Stats & Telemetry**](./stats/final_stats.md) | Quantitative benchmarks, latency reductions, and telemetry data ([JSON](./stats/final_stats.json)). | Markdown / JSON |
 | 🎙️ [**2-Hour Podcast Companion Series**](./podcast/README.md) | Exhaustive 6-chapter audio script covering the voyage from silicon to bytecode. | Multi-Part Script |
+
+---
+
+## ❓ Technical FAQ & Knowledgebase
+
+Our engineering knowledgebase provides decompiled C# source analysis, IL disassembly, and verified operational runbooks for complex Valheim 1.0 modding challenges. Each entry is maintained as an independent, standalone deep dive:
+
+| Entry | Topic | Target Mods | Complexity |
+| :--- | :--- | :--- | :---: |
+| 🎒 [**FAQ-001**](./docs/faq/FAQ-001-backpack-status-effects.md) | [Can You Stack Multiple Status Effects on Backpacks?](./docs/faq/FAQ-001-backpack-status-effects.md) | Smoothbrain Backpacks | `Medium` |
+| 🪦 [**FAQ-002**](./docs/faq/FAQ-002-tombstone-despawn-timer.md) | [Tombstone Despawn Timer Without RPC Spam (EWP vs. timeOfDeath)](./docs/faq/FAQ-002-tombstone-despawn-timer.md) | Expand World Prefabs | `Medium` |
+| ⬛ [**FAQ-003**](./docs/faq/FAQ-003-multiplayer-black-screen.md) | [Multiplayer Black Screen on Connect After Password](./docs/faq/FAQ-003-multiplayer-black-screen.md) | Valheim Multiplayer / Steam P2P | `Advanced` |
+| 🧲 [**FAQ-004**](./docs/faq/FAQ-004-auto-pickup-missingmethodexception.md) | [Missing Auto-Pickup Notifications (MissingMethodException)](./docs/faq/FAQ-004-auto-pickup-missingmethodexception.md) | Auto-Pickup Mods / HookGen | `Deep IL` |
+| 🏃 [**FAQ-005**](./docs/faq/FAQ-005-crypt-headache-camera-sway.md) | [Burial Crypt Run Animation Bobbing & Motion Sickness](./docs/faq/FAQ-005-crypt-headache-camera-sway.md) | Unswayed / Camera Engine | `Medium` |
+| 🐧 [**FAQ-006**](./docs/faq/FAQ-006-linux-gale-bepinex-loading.md) | [Linux Gale Profile BepInEx Mod Loading Failure](./docs/faq/FAQ-006-linux-gale-bepinex-loading.md) | Gale Mod Manager / Proton | `Advanced` |
+| 📦 [**FAQ-007**](./docs/faq/FAQ-007-infinity-inventory-pickup-epicloot.md) | [InfinityInventory Pickup Failure, EpicLoot Table & Security Vetting](./docs/faq/FAQ-007-infinity-inventory-pickup-epicloot.md) | InfinityInventory / EpicLoot | `Deep IL` |
+
+> 📖 **Browse Hub**: For full search summaries and contribution standards, visit the [**Technical FAQ & Knowledgebase Hub**](./docs/FAQ.md).
 
 ---
 

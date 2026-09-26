@@ -1,8 +1,8 @@
 {
   "name": "Unswayed",
-  "version_number": "1.0.2",
+  "version_number": "1.0.3",
   "website_url": "https://github.com/djcdevelopment/deepnorthtesting",
-  "description": "Valheim 1.0-1.0.15 camera and locomotion stabilizer for stride bobbing, shake, and close-quarters camera crushing.",
+  "description": "Valheim 1.0-1.0.16 camera and locomotion stabilizer for stride bobbing, shake, and close-quarters camera crushing.",
   "dependencies": [
     "denikson-BepInExPack_Valheim-5.4.2202"
   ]
