@@ -85,6 +85,8 @@ $logsDirectory = Join-Path $EvidenceDirectory "logs"
 $packagesDirectory = Join-Path $EvidenceDirectory "packages"
 $null = New-Item -ItemType Directory -Path $logsDirectory -Force
 $null = New-Item -ItemType Directory -Path $packagesDirectory -Force
+Get-ChildItem -LiteralPath $packagesDirectory -Force -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+Get-ChildItem -LiteralPath $logsDirectory -Force -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
 
 $report = [ordered]@{
     schema_version = 1
