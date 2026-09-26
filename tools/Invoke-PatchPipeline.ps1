@@ -118,6 +118,20 @@ function Add-StageResult {
     $null = $report.stages.Add([ordered]@{ name = $Name; status = $Status; detail = $Detail })
 }
 
+function Get-Sha256 {
+    param([Parameter(Mandatory = $true)][string]$LiteralPath)
+    if (Get-Command Get-FileHash -ErrorAction SilentlyContinue) {
+        return (Get-FileHash -LiteralPath $LiteralPath -Algorithm SHA256).Hash
+    }
+    $stream = [System.IO.File]::OpenRead($LiteralPath)
+    try {
+        $hasher = [System.Security.Cryptography.SHA256]::Create()
+        return ([System.BitConverter]::ToString($hasher.ComputeHash($stream)) -replace '-','').ToUpperInvariant()
+    } finally {
+        $stream.Dispose()
+    }
+}
+
 function Invoke-Checked {
     param(
         [Parameter(Mandatory = $true)][string]$FilePath,
@@ -368,7 +382,7 @@ function Invoke-RuntimeMatrix {
                 $logEvidencePath = Join-Path $logsDirectory "$($mod.name).log"
                 Copy-Item -LiteralPath $logPath -Destination $logEvidencePath -Force
                 $dllPath = Resolve-ModPath $mod $mod.output
-                $dllHash = (Get-FileHash -LiteralPath $dllPath -Algorithm SHA256).Hash
+                $dllHash = Get-Sha256 -LiteralPath $dllPath
                 $duration = [math]::Round(((Get-Date) - $started).TotalSeconds, 2)
                 $null = $report.mods.Add([ordered]@{
                     name = $mod.name
@@ -478,7 +492,7 @@ try {
     $assemblyPath = Join-Path $GamePath "valheim_Data\Managed\assembly_valheim.dll"
     if (-not (Test-Path -LiteralPath $assemblyPath)) { throw "Valheim assembly not found: $assemblyPath" }
     $assemblyItem = Get-Item -LiteralPath $assemblyPath
-    $report.game.assembly_sha256 = (Get-FileHash -LiteralPath $assemblyPath -Algorithm SHA256).Hash
+    $report.game.assembly_sha256 = Get-Sha256 -LiteralPath $assemblyPath
     $report.game.assembly_last_write_utc = $assemblyItem.LastWriteTimeUtc.ToString("o")
     $report.game.steam_build_id = Get-SteamBuildId
 
@@ -526,7 +540,7 @@ try {
                     signature_audit = if ($Audit) { "pass" } else { "not-run" }
                     isolated_boot = "not-run"
                     boot_seconds = $null
-                    dll_sha256 = (Get-FileHash -LiteralPath $dllPath -Algorithm SHA256).Hash
+                    dll_sha256 = (Get-Sha256 -LiteralPath $dllPath)
                     log = $null
                     package = $null
                     package_sha256 = $null
@@ -552,7 +566,7 @@ try {
             $modReport = $report.mods | Where-Object { $_.name -eq $mod.name } | Select-Object -First 1
             if ($null -ne $modReport) {
                 $modReport.package = "packages/$packageName"
-                $modReport.package_sha256 = (Get-FileHash -LiteralPath $candidatePath -Algorithm SHA256).Hash
+                $modReport.package_sha256 = Get-Sha256 -LiteralPath $candidatePath
             }
             Write-Host "[PASS] $packageName validated" -ForegroundColor Green
         }

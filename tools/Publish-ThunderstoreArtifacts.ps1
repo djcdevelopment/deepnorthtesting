@@ -23,6 +23,21 @@ if (-not $ValidateOnly) {
 }
 
 Add-Type -AssemblyName System.IO.Compression.FileSystem
+
+function Get-Sha256 {
+    param([Parameter(Mandatory = $true)][string]$LiteralPath)
+    if (Get-Command Get-FileHash -ErrorAction SilentlyContinue) {
+        return (Get-FileHash -LiteralPath $LiteralPath -Algorithm SHA256).Hash
+    }
+    $stream = [System.IO.File]::OpenRead($LiteralPath)
+    try {
+        $hasher = [System.Security.Cryptography.SHA256]::Create()
+        return ([System.BitConverter]::ToString($hasher.ComputeHash($stream)) -replace '-','').ToUpperInvariant()
+    } finally {
+        $stream.Dispose()
+    }
+}
+
 $packages = @(Get-ChildItem -LiteralPath $ArtifactsDirectory -File -Filter "djcdevelopment-*.zip" | Sort-Object Name)
 if ($packages.Count -eq 0) { throw "No Thunderstore candidate ZIPs found in $ArtifactsDirectory" }
 
@@ -55,7 +70,7 @@ foreach ($package in $packages) {
         version = $manifest.version_number
         previous_version = $current.latest.version_number
         status = "validated"
-        sha256 = (Get-FileHash -LiteralPath $package.FullName -Algorithm SHA256).Hash
+        sha256 = Get-Sha256 -LiteralPath $package.FullName
         recorded_utc = (Get-Date).ToUniversalTime().ToString("o")
         package_url = "https://thunderstore.io/c/valheim/p/djcdevelopment/$($manifest.name)/"
         error = $null
