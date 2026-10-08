@@ -4,8 +4,8 @@ schemaVersion = '0.0.1'
 [package]
 namespace = 'djcdevelopment'
 name = 'Unswayed'
-versionNumber = '1.0.3'
-description = 'Valheim 1.0-1.0.16 camera and locomotion stabilizer for stride bobbing, shake, and close-quarters camera crushing.'
+versionNumber = '1.0.4'
+description = 'Valheim 1.0-1.0.17 camera and locomotion stabilizer for stride bobbing, shake, and close-quarters camera crushing.'
 websiteUrl = 'https://github.com/djcdevelopment/deepnorthtesting'
 containsNsfwContent = false
 

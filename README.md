@@ -245,15 +245,15 @@ This repository develops and tests sovereign Valheim 1.0 plugins built for perfo
 
 ## ⚡ Valheim Patch Release Pipeline
 
-Whenever Iron Gate deploys a game update, [`tools/Invoke-PatchPipeline.ps1`](./tools/Invoke-PatchPipeline.ps1) runs the compatibility and release-candidate lifecycle across all five published mods (`IsModded`, `SelfieStick`, `Unfaded`, `TotemSentinel`, `Unswayed`). The current gate is Valheim 1.0.16.
+Whenever Iron Gate deploys a game update, [`tools/Invoke-PatchPipeline.ps1`](./tools/Invoke-PatchPipeline.ps1) runs the compatibility and release-candidate lifecycle across all five published mods (`IsModded`, `SelfieStick`, `Unfaded`, `TotemSentinel`, `Unswayed`). The current gate is Valheim 1.0.17.
 
-1. **Exact-version and hook audit**: Requires Valheim 1.0.16, hashes the game assembly, and checks every fleet Harmony/reflection surface with Mono.Cecil.
+1. **Exact-version and hook audit**: Requires Valheim 1.0.17, hashes the game assembly, and checks every fleet Harmony/reflection surface with Mono.Cecil.
 2. **Synchronized release builds**: Rejects version drift across DLL metadata, projects, manifests, TOML, and READMEs before compiling.
 3. **Profile Manager runtime matrix**: Boots each mod in an ephemeral synthetic profile and always restores the exact original junction target.
 4. **Evidence and packaging**: Saves raw logs and hashes, then validates the contents of every `tcli` ZIP.
 5. **Protected deployment**: GitHub Actions publishes the exact tested ZIPs only after approval of the `thunderstore-production` environment.
 
-> 📖 **Evidence and operations**: Read the [Valheim 1.0.16 compatibility evidence](./docs/compatibility/valheim-1.0.16.md) and the [pipeline guide](./docs/PATCH_PIPELINE.md).
+> 📖 **Evidence and operations**: Read the [Valheim 1.0.17 compatibility evidence](./docs/compatibility/valheim-1.0.17.md) and the [pipeline guide](./docs/PATCH_PIPELINE.md).
 
 ### 1. Preflight IL Audit
 ```powershell
@@ -262,7 +262,7 @@ powershell -ExecutionPolicy Bypass -File tools\Invoke-PatchPipeline.ps1 -Audit
 
 ### 2. Full compatibility run and package staging
 ```powershell
-powershell -ExecutionPolicy Bypass -File tools\Invoke-PatchPipeline.ps1 -All -TargetGameVersion 1.0.16
+powershell -ExecutionPolicy Bypass -File tools\Invoke-PatchPipeline.ps1 -All -TargetGameVersion 1.0.17
 ```
 
 ### 3. Protected release

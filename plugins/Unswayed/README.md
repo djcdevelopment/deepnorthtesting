@@ -2,9 +2,9 @@
 
 > **Eliminate the rigid 1.0 locomotion stride bobbing, prevent suffocating camera crushing in burial crypts, unlock adaptive shoulder sightlines, and conquer motion sickness in Valheim.**
 
-[![Valheim 1.0.16](https://img.shields.io/badge/Valheim-1.0.16%20verified-blue.svg)](#)
+[![Valheim 1.0.17](https://img.shields.io/badge/Valheim-1.0.17%20verified-blue.svg)](#)
 [![BepInEx 5](https://img.shields.io/badge/BepInEx-5.4.2202-green.svg)](#)
-[![Version](https://img.shields.io/badge/Version-1.0.3-brightgreen.svg)](#)
+[![Version](https://img.shields.io/badge/Version-1.0.4-brightgreen.svg)](#)
 [![Hardware Verified](https://img.shields.io/badge/OMEN%20Verified-0%20Errors-purple.svg)](#)
 [![Archify Diagram](https://img.shields.io/badge/Archify-Showcase%209%2F9-0891b2.svg)](https://github.com/djcdevelopment/deepnorthtesting/blob/main/plugins/Unswayed/docs/unswayed-architecture.html)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/djcdevelopment/deepnorthtesting/blob/main/plugins/Unswayed/LICENSE)
@@ -13,7 +13,7 @@
 
 ---
 
-**Compatibility:** Valheim 1.0.0-1.0.16; latest build, camera Harmony target, and isolated boot verification completed on 1.0.16. See the [fleet compatibility evidence](../../docs/compatibility/valheim-1.0.16.md).
+**Compatibility:** Valheim 1.0.0-1.0.17; latest build, camera Harmony target, and isolated boot verification completed on 1.0.17. See the [fleet compatibility evidence](../../docs/compatibility/valheim-1.0.17.md).
 
 ---
 
