@@ -40,3 +40,16 @@ All declared Harmony hooks, IL references, and reflection surfaces across the fl
 This evidence supports package compatibility and clean initialization on 1.0.20. It does not claim a full gameplay regression pass. Achievement unlock, death/respawn, live sonar, crypt camera, and photographic capture scenarios should be repeated when their feature code changes.
 
 The raw run output is generated locally under `artifacts/compatibility/valheim-1.0.20/20261015T183737Z/`; CI uploads the equivalent directory as a 30-day GitHub Actions artifact.
+
+## Thunderstore release
+
+The fleet update was officially released to Thunderstore via GitHub Actions release workflow run [`38732416183`](https://github.com/djcdevelopment/deepnorthtesting/actions/runs/38732416183) with environment approval on `thunderstore-production`.
+
+| Mod | Released version | Previous version | Status | Live package URL |
+|---|---:|---:|---|---|
+| **IsModded** | `1.0.7` | `1.0.6` | Published | https://thunderstore.io/c/valheim/p/djcdevelopment/IsModded/ |
+| **SelfieStick** | `0.3.5` | `0.3.4` | Published | https://thunderstore.io/c/valheim/p/djcdevelopment/SelfieStick/ |
+| **TotemSentinel** | `1.5.5` | `1.5.4` | Published | https://thunderstore.io/c/valheim/p/djcdevelopment/TotemSentinel/ |
+| **Unfaded** | `1.0.11` | `1.0.10` | Published | https://thunderstore.io/c/valheim/p/djcdevelopment/Unfaded/ |
+| **Unswayed** | `1.0.5` | `1.0.4` | Published | https://thunderstore.io/c/valheim/p/djcdevelopment/Unswayed/ |
+
