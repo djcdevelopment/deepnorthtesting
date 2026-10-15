@@ -2,17 +2,17 @@
 
 The fleet pipeline validates all five `djcdevelopment` Thunderstore mods against one exact Valheim build, produces reviewable evidence, and publishes only the ZIP files produced by that successful run.
 
-The current gate targets **Valheim 1.0.17**, Steam build `25730771`. Iron Gate released the patch on 2026-10-08: <https://www.valheimgame.com/news/patch-1-0-17/>.
+The current gate targets **Valheim 1.0.20**, Steam build `25909357`. Iron Gate released the patch on 2026-10-15: <https://www.valheimgame.com/news/patch-1-0-20/>.
 
 ## Fleet
 
 | Package | Candidate | Source | Runtime profile |
 |---|---:|---|---|
-| IsModded | 1.0.6 | `C:\work\ismodded` | `isolated-ismodded` |
-| SelfieStick | 0.3.4 | `C:\work\SelfieStick` | `clean-recording` |
-| Unfaded | 1.0.10 | `C:\work\Unfaded` | `isolated-unfaded` |
-| TotemSentinel | 1.5.4 | `C:\work\totemalert` | `isolated-totemsentinel` |
-| Unswayed | 1.0.4 | `C:\work\deepnorthtesting\plugins\Unswayed` | `isolated-unswayed` |
+| IsModded | 1.0.7 | `C:\work\ismodded` | `isolated-ismodded` |
+| SelfieStick | 0.3.5 | `C:\work\SelfieStick` | `clean-recording` |
+| Unfaded | 1.0.11 | `C:\work\Unfaded` | `isolated-unfaded` |
+| TotemSentinel | 1.5.5 | `C:\work\totemalert` | `isolated-totemsentinel` |
+| Unswayed | 1.0.5 | `C:\work\deepnorthtesting\plugins\Unswayed` | `isolated-unswayed` |
 
 [`manifests/mod-fleet.json`](../manifests/mod-fleet.json) is the machine-readable source of truth. Package version changes must be made there and in the mod project, BepInEx declaration, `manifest.json`, `thunderstore.toml`, and README. The metadata gate rejects drift before compiling.
 
@@ -23,7 +23,7 @@ Run the full non-publishing pipeline from `deepnorthtesting`:
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File tools\Invoke-PatchPipeline.ps1 `
   -All `
-  -TargetGameVersion 1.0.17
+  -TargetGameVersion 1.0.20
 ```
 
 `-All` means audit, build, isolated runtime test, and package. It never publishes. A subset can be selected with `-Mods IsModded,Unfaded`.
@@ -40,7 +40,7 @@ The run performs these gates in order:
 
 Evidence is written under `artifacts/compatibility/valheim-<version>/<UTC-run-id>/`. The folder contains `compatibility.json`, `compatibility.md`, raw BepInEx logs, the generated runtime profile manifest, the exact candidate ZIPs, and their matching `tcli` configuration sidecars.
 
-The committed 1.0.16 result is in [`docs/compatibility/valheim-1.0.16.md`](compatibility/valheim-1.0.16.md) (with 1.0.15 in [`docs/compatibility/valheim-1.0.15.md`](compatibility/valheim-1.0.15.md)).
+The committed 1.0.17 result is in [`docs/compatibility/valheim-1.0.17.md`](compatibility/valheim-1.0.17.md) (with 1.0.16 in [`docs/compatibility/valheim-1.0.16.md`](compatibility/valheim-1.0.16.md) and 1.0.15 in [`docs/compatibility/valheim-1.0.15.md`](compatibility/valheim-1.0.15.md)).
 
 ## Valheim Profile Manager contract
 
@@ -68,7 +68,7 @@ For a local release after reviewing the evidence:
 ```powershell
 $env:THUNDERSTORE_TOKEN = '<token>'
 powershell -NoProfile -ExecutionPolicy Bypass -File tools\Publish-ThunderstoreArtifacts.ps1 `
-  -ArtifactsDirectory artifacts\compatibility\valheim-1.0.17\<run-id>\packages `
+  -ArtifactsDirectory artifacts\compatibility\valheim-1.0.20\<run-id>\packages `
   -Token $env:THUNDERSTORE_TOKEN `
   -Confirm PUBLISH
 ```
