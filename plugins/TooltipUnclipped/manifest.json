@@ -1,0 +1,9 @@
+{
+  "name": "TooltipUnclipped",
+  "version_number": "1.0.0",
+  "website_url": "https://github.com/djcdevelopment/deepnorthtesting",
+  "description": "Hi there, lurker here. does anybody know what my tooltip gets cut out like this? (im using norsgods + pathofvalheiman + btrvalheim) [Screenshot shows UITooltip sliced off along the exact bottom and right gold border of the EQUIPMENT panel]",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2202"
+  ]
+}

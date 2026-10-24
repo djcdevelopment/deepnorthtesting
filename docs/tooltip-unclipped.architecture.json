@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Valheim 1.0.20 UITooltip Mask Clipping & RootCanvas Escape Architecture (FAQ-009)",
+    "output": "docs/tooltip-unclipped.architecture.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "clipping-bug",
+        "label": "Masked EQUIPMENT panel clipping",
+        "focus": ["equip_slot", "masked_panel", "anchor_tooltip", "clipped_rect"],
+        "note": "UITooltip.AnchorTooltip parents m_tooltip inside the masked EQUIPMENT panel, slicing bottom and right edges."
+      },
+      {
+        "id": "unclipped-fix",
+        "label": "TooltipUnclipped rootCanvas fix",
+        "focus": ["equip_slot", "anchor_tooltip", "unclip_patch", "root_canvas", "screen_clamp"],
+        "note": "TooltipUnclipped re-parents m_tooltip to rootCanvas, disables maskable, and clamps to Screen bounds."
+      }
+    ]
+  },
+  "layout": {
+    "mode": "grid",
+    "origin": [50, 140],
+    "cols": 4,
+    "cellW": 160,
+    "cellH": 64,
+    "gapX": 120,
+    "gapY": 130
+  },
+  "components": [
+    { "id": "masked_panel", "type": "frontend", "label": "EQUIPMENT Panel", "sublabel": "RectMask2D / Border", "row": 0, "col": 0, "size": [160, 64], "tag": "Clip Mask" },
+    { "id": "clipped_rect", "type": "database", "label": "Sliced Tooltip", "sublabel": "Cut at panel border", "row": 0, "col": 1, "size": [160, 64], "tag": "Visual Bug" },
+    { "id": "root_canvas", "type": "cloud", "label": "Root GuiCanvas", "sublabel": "SetParent(rootCanvas)", "row": 0, "col": 2, "size": [160, 64], "tag": "maskable = false" },
+    { "id": "equip_slot", "type": "external", "label": "Equipment Slot", "sublabel": "PathOfValheim / BTR", "row": 1, "col": 0, "size": [160, 64], "tag": "Hover Input" },
+    { "id": "anchor_tooltip", "type": "backend", "label": "AnchorTooltip()", "sublabel": "SetParent(m_anchor)", "row": 1, "col": 1, "size": [160, 64], "tag": "assembly_guiutils" },
+    { "id": "unclip_patch", "type": "security", "label": "TooltipUnclipped", "sublabel": "LateUpdate Postfix", "row": 1, "col": 2, "size": [160, 64], "tag": "Harmony Postfix" },
+    { "id": "screen_clamp", "type": "backend", "label": "Viewport Clamp", "sublabel": "ClampUIToScreen(rt)", "row": 1, "col": 3, "size": [160, 64], "tag": "assembly_utils" }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Modded Equipment UI Hierarchy", "wraps": ["masked_panel", "equip_slot"] },
+    { "kind": "region", "label": "Valheim UITooltip & RootCanvas Escape", "wraps": ["clipped_rect", "anchor_tooltip", "unclip_patch", "root_canvas", "screen_clamp"] }
+  ],
+  "connections": [
+    { "id": "slot_to_panel", "from": "equip_slot", "to": "masked_panel", "label": "m_anchor", "variant": "dashed", "labelDy": -32 },
+    { "id": "panel_to_clipped", "from": "masked_panel", "to": "clipped_rect", "label": "clips child", "variant": "dashed" },
+    { "id": "slot_to_anchor", "from": "equip_slot", "to": "anchor_tooltip", "label": "OnHoverStart", "variant": "emphasis" },
+    { "id": "anchor_to_clipped", "from": "anchor_tooltip", "to": "clipped_rect", "label": "in mask", "variant": "default", "labelDy": -32 },
+    { "id": "anchor_to_patch", "from": "anchor_tooltip", "to": "unclip_patch", "label": "___m_tooltip", "variant": "security" },
+    { "id": "patch_to_root", "from": "unclip_patch", "to": "root_canvas", "label": "escape", "variant": "emphasis", "labelDy": -32 },
+    { "id": "patch_to_clamp", "from": "unclip_patch", "to": "screen_clamp", "label": "clamp", "variant": "emphasis" }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Why the Gold Border Slices Tooltips",
+      "items": [
+        "UITooltip.AnchorTooltip() executes m_tooltip.transform.SetParent(m_anchor)",
+        "PathOfValheim / BTRValheim places m_anchor inside a RectMask2D EQUIPMENT box",
+        "Unity clips all child MaskableGraphics at the EQUIPMENT panel boundary"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Root Canvas Escape Pattern",
+      "items": [
+        "Hooks UITooltip.LateUpdate in assembly_guiutils.dll with ___m_tooltip",
+        "Re-parents ___m_tooltip to canvas.rootCanvas.transform (worldPositionStays: true)",
+        "Sets MaskableGraphic.maskable = false across all tooltip children"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Screen-Edge Viewport Safety",
+      "items": [
+        "Calls Utils.ClampUIToScreen(RectTransform) in assembly_utils.dll",
+        "Keeps tall Norsgods / RPG stat blocks fully inside the screen viewport",
+        "10 KB pure client-side DLL with live .cfg hot-reload"
+      ]
+    }
+  ]
+}

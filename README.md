@@ -1,11 +1,14 @@
 # Deep North Testing (Valheim 1.0)
 > **Autonomous GPU-Enabled Test Harness, Preflight Reflection Audits, Sub-8-Second Boot Loops, & Live Telemetry for Valheim Modding.**
 
-[![Valheim 1.0](https://img.shields.io/badge/Valheim-1.0%20(Deep%20North)-blue.svg)](#)
+[![Valheim 1.0](https://img.shields.io/badge/Valheim-1.0.20%20(Deep%20North)-blue.svg)](#)
 [![BepInEx 5](https://img.shields.io/badge/BepInEx-5.4.2202-green.svg)](#)
 [![Hardware Verified](https://img.shields.io/badge/OMEN%20Silicon-Dual%20Arc%20Pro%20B70-purple.svg)](#)
 [![Zero Errors](https://img.shields.io/badge/Status-100%25%20Clean%20Boot%20(0%20Errors)-success.svg)](#)
 [![Archify Verified](https://img.shields.io/badge/System%20Maps-Archify%20Rendered-7C3AED.svg)](#-interactive-archify-system-maps)
+[![Modding 101 Workbench](https://img.shields.io/badge/Valheim%201.0%20Modding%20101-Live%20Workbench-F59E0B.svg)](https://delightful-sand-0451e171e.1.azurestaticapps.net/)
+
+> 🎓 **New to Valheim 1.0 Modding?** Launch the interactive [**Valheim 1.0 Modding 101 Workbench**](https://delightful-sand-0451e171e.1.azurestaticapps.net/) ([GitHub Repo](https://github.com/djcdevelopment/valheim-modding-101)) for step-by-step HarmonyX patterns, `1.0.20` API migration tables, and sub-second `Mono.Cecil` verification workflows.
 
 ---
 
@@ -41,6 +44,9 @@
   - [FAQ-005: Burial Crypt Camera Bobbing & Vertigo](./docs/faq/FAQ-005-crypt-headache-camera-sway.md)
   - [FAQ-006: Linux Gale Profile BepInEx Mod Loading](./docs/faq/FAQ-006-linux-gale-bepinex-loading.md)
   - [FAQ-007: InfinityInventory Pickup & EpicLoot Compatibility](./docs/faq/FAQ-007-infinity-inventory-pickup-epicloot.md)
+  - [FAQ-008: CartFlipper 1.0.20 Alternative for Vanilla & Modded Carts (`CartRighter`)](./docs/faq/FAQ-008-cartflipper-1-0-modded-carts-vagon.md)
+  - [FAQ-009: Tooltip Cutout & `RectMask2D` Clipping Fix (`TooltipUnclipped`)](./docs/faq/FAQ-009-tooltip-cutout-overflow-uitooltip-fix.md)
+  - [FAQ-010: ValheimRAFT Boat FPS Lag & `WearNTear` Support Cache Fix (`RaftCalm`)](./docs/faq/FAQ-010-valheimraft-boat-fps-lag-wearntear-support.md)
 - [📓 Operational Testing Workbook](#-operational-testing-workbook)
 - [🔬 Case Study: Auditing 51 ComfyMods](#-case-study-auditing-51-comfymods-for-valheim-10)
 - [💻 Test Hardware & Environment](#-test-hardware--environment)
@@ -158,6 +164,45 @@ Maps the full lifecycle of tamed seals in Valheim 1.0 (Deep North), including fi
 
 ---
 
+### 6. CartRighter Universal `Vagon` Recovery Architecture (FAQ-008)
+
+Visualizes why prefab-name cart flippers miss modded carts in Valheim `1.0.20`, and how hooking `[HarmonyPatch(typeof(Vagon), "Update")]` with `ZNetView.ClaimOwnership()` and a `+0.35m` wheel-clearance lift rights both vanilla and modded carts without multiplayer rubber-banding.
+
+- 🌐 [**Open Interactive HTML Viewer**](./docs/cartrighter-vagon.architecture.html)
+- 📄 [View Typed JSON Specification](./docs/cartrighter-vagon.architecture.json)
+- 📦 [Explore CartRighter Source & Binary](./plugins/CartRighter)
+- 📖 [Read FAQ-008 Deep Dive](./docs/faq/FAQ-008-cartflipper-1-0-modded-carts-vagon.md)
+
+[![CartRighter Vagon Architecture](./docs/cartrighter-vagon.architecture.visual-check.1440x900.dark.png)](./docs/cartrighter-vagon.architecture.html)
+
+---
+
+### 7. TooltipUnclipped UI Mask Escape Architecture (FAQ-009)
+
+Maps how `UITooltip.AnchorTooltip()` (`assembly_guiutils.dll`) parents `m_tooltip` directly inside hovered slot `RectTransform` anchors, why custom RPG panels (`PathOfValheim`, `BTRValheim`, `Norsgods`) with `RectMask2D` slice off overflowing tooltips, and how `TooltipUnclipped` lifts active tooltips to `canvas.rootCanvas`.
+
+- 🌐 [**Open Interactive HTML Viewer**](./docs/tooltip-unclipped.architecture.html)
+- 📄 [View Typed JSON Specification](./docs/tooltip-unclipped.architecture.json)
+- 📦 [Explore TooltipUnclipped Source & Binary](./plugins/TooltipUnclipped)
+- 📖 [Read FAQ-009 Deep Dive](./docs/faq/FAQ-009-tooltip-cutout-overflow-uitooltip-fix.md)
+
+[![TooltipUnclipped Architecture](./docs/tooltip-unclipped.architecture.visual-check.1440x900.dark.png)](./docs/tooltip-unclipped.architecture.html)
+
+---
+
+### 8. RaftCalm `WearNTear` Support Cache Guard Architecture (FAQ-010)
+
+Maps why `WearNTear.UpdateSupport()` thrash-invalidates world-space `m_supportPositions` across 100–600+ moving pieces on a `ValheimRAFT` ship when `Ship.GetLocalShip() != null`, and how `RaftCalm` short-circuits the per-piece collider cascade.
+
+- 🌐 [**Open Interactive HTML Viewer**](./docs/raftcalm-support.architecture.html)
+- 📄 [View Typed JSON Specification](./docs/raftcalm-support.architecture.json)
+- 📦 [Explore RaftCalm Source & Binary](./plugins/RaftCalm)
+- 📖 [Read FAQ-010 Deep Dive](./docs/faq/FAQ-010-valheimraft-boat-fps-lag-wearntear-support.md)
+
+[![RaftCalm Support Architecture](./docs/raftcalm-support.architecture.visual-check.1440x900.dark.png)](./docs/raftcalm-support.architecture.html)
+
+---
+
 ## ⚡ Zero-Copy Profile Engine & Fleet Switcher
 
 Swapping between a 65-mod multiplayer server pack, clean cinematic recording, and isolated mod development previously required slow, destructive file copying (~12.4s, 85MB copied per switch). 
@@ -240,6 +285,20 @@ This repository develops and tests sovereign Valheim 1.0 plugins built for perfo
 - **Dungeon Ergonomics & Anti-Crush**: Minimum distance clamp and adaptive shoulder lift in low-clearance burial crypts.
 - **Motion Sickness Toolkit**: Configurable camera shake multiplier, ship tilt suppression, and continuous damping.
 - **In-Game CLI**: Type `unswayed status` or toggle live via `[F7]`.
+
+### [CartRighter](./plugins/CartRighter) (Universal `1.0.20` Vanilla & Modded Cart Recovery — [FAQ-008](./docs/faq/FAQ-008-cartflipper-1-0-modded-carts-vagon.md))
+- **Component-Level `Vagon.Update` Hook**: Automatically supports all vanilla and modded carts (*Better Carts*, *OdinHorse*, custom wagons) without fragile prefab-name checks.
+- **Multiplayer ZDO Safe**: Claims `ZNetView` ownership (`ClaimOwnership()`), lifts `+0.35m` to clear wheel colliders, zeroes velocity, and rights the cart automatically (`>45°` tilt) or on **`[F]`** keypress.
+- 📥 **Pre-Compiled Binary**: [`CartRighter.dll`](./plugins/CartRighter/bin/Release/CartRighter.dll)
+
+### [TooltipUnclipped](./plugins/TooltipUnclipped) (Inventory & Equipment Panel Tooltip Clipping Fix — [FAQ-009](./docs/faq/FAQ-009-tooltip-cutout-overflow-uitooltip-fix.md))
+- **Escapes `RectMask2D` Stencil Clipping**: Re-parents `UITooltip.m_tooltip` from masked equipment/RPG slot anchors (`PathOfValheim`, `BTRValheim`, `Norsgods`) to `canvas.rootCanvas.transform` in `UITooltip.LateUpdate`.
+- **Full Screen Clamping**: Disables `MaskableGraphic.maskable` on tooltip children and clamps to screen bounds via `Utils.ClampUIToScreen`.
+- 📥 **Pre-Compiled Binary**: [`TooltipUnclipped.dll`](./plugins/TooltipUnclipped/bin/Release/TooltipUnclipped.dll)
+
+### [RaftCalm](./plugins/RaftCalm) (`ValheimRAFT` Moving Ship `WearNTear.UpdateSupport` Stabilizer — [FAQ-010](./docs/faq/FAQ-010-valheimraft-boat-fps-lag-wearntear-support.md))
+- **Eliminates World-Space Support Thrashing**: Short-circuits `WearNTear.UpdateSupport()` for ship pieces within `ProtectRadius` (`25m` default) while `Ship.GetLocalShip() != null`, stopping 100–600+ piece `Physics.OverlapSphere` cascades on moving rafts.
+- 📥 **Pre-Compiled Binary**: [`RaftCalm.dll`](./plugins/RaftCalm/bin/Release/RaftCalm.dll)
 
 ---
 
@@ -347,6 +406,9 @@ Our engineering knowledgebase provides decompiled C# source analysis, IL disasse
 | 🏃 [**FAQ-005**](./docs/faq/FAQ-005-crypt-headache-camera-sway.md) | [Burial Crypt Run Animation Bobbing & Motion Sickness](./docs/faq/FAQ-005-crypt-headache-camera-sway.md) | Unswayed / Camera Engine | `Medium` |
 | 🐧 [**FAQ-006**](./docs/faq/FAQ-006-linux-gale-bepinex-loading.md) | [Linux Gale Profile BepInEx Mod Loading Failure](./docs/faq/FAQ-006-linux-gale-bepinex-loading.md) | Gale Mod Manager / Proton | `Advanced` |
 | 📦 [**FAQ-007**](./docs/faq/FAQ-007-infinity-inventory-pickup-epicloot.md) | [InfinityInventory Pickup Failure, EpicLoot Table & Security Vetting](./docs/faq/FAQ-007-infinity-inventory-pickup-epicloot.md) | InfinityInventory / EpicLoot | `Deep IL` |
+| 🛒 [**FAQ-008**](./docs/faq/FAQ-008-cartflipper-1-0-modded-carts-vagon.md) | [Working Valheim 1.0.20 Alternative to CartFlipper for Vanilla & Modded Carts](./docs/faq/FAQ-008-cartflipper-1-0-modded-carts-vagon.md) | `CartRighter` / `Vagon` / Modded Carts | `Medium` |
+| 🖼️ [**FAQ-009**](./docs/faq/FAQ-009-tooltip-cutout-overflow-uitooltip-fix.md) | [Why Inventory Tooltips Get Sliced Off Along the Equipment Panel Border](./docs/faq/FAQ-009-tooltip-cutout-overflow-uitooltip-fix.md) | `TooltipUnclipped` / `PathOfValheim` / `UITooltip` | `Deep IL` |
+| ⛵ [**FAQ-010**](./docs/faq/FAQ-010-valheimraft-boat-fps-lag-wearntear-support.md) | [Why ValheimRAFT Causes Severe FPS Drops When Boarding a Boat in 1.0.20](./docs/faq/FAQ-010-valheimraft-boat-fps-lag-wearntear-support.md) | `RaftCalm` / `ValheimRAFT` / `WearNTear` | `Advanced` |
 
 > 📖 **Browse Hub**: For full search summaries and contribution standards, visit the [**Technical FAQ & Knowledgebase Hub**](./docs/FAQ.md).
 

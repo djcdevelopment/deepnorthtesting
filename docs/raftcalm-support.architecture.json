@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Valheim 1.0.20 ValheimRAFT Support-Cache Storm & RaftCalm Architecture (FAQ-010)",
+    "output": "docs/raftcalm-support.architecture.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "cache-storm",
+        "label": "Moving ship support-cache storm",
+        "focus": ["board_ship", "wave_motion", "update_support", "cache_invalidate", "point_lights"],
+        "note": "Boarding a ValheimRAFT vessel makes the client ZDO owner while wave motion invalidates world-space m_supportPositions every tick."
+      },
+      {
+        "id": "raftcalm-bypass",
+        "label": "RaftCalm Prefix & FPS recovery",
+        "focus": ["board_ship", "raft_calm", "update_support", "steady_fps"],
+        "note": "RaftCalm intercepts WearNTear.UpdateSupport when Ship.GetLocalShip() != null, locking m_noSupportWear and skipping raycast storms."
+      }
+    ]
+  },
+  "layout": {
+    "mode": "grid",
+    "origin": [50, 140],
+    "cols": 4,
+    "cellW": 160,
+    "cellH": 64,
+    "gapX": 120,
+    "gapY": 130
+  },
+  "components": [
+    { "id": "wave_motion", "type": "frontend", "label": "Wave Motion", "sublabel": "MoveableBase Pieces", "row": 0, "col": 0, "size": [160, 64], "tag": "FixedUpdate" },
+    { "id": "update_support", "type": "backend", "label": "UpdateSupport()", "sublabel": "m_supportPositions", "row": 0, "col": 1, "size": [160, 64], "tag": "assembly_valheim" },
+    { "id": "cache_invalidate", "type": "database", "label": "Raycast Storm", "sublabel": "ClearCachedSupport()", "row": 0, "col": 2, "size": [160, 64], "tag": "10 FPS Lag" },
+    { "id": "point_lights", "type": "frontend", "label": "Boat Torches", "sublabel": "Fireplace Shadows", "row": 0, "col": 3, "size": [160, 64], "tag": "Shadow Hitch" },
+    { "id": "board_ship", "type": "external", "label": "Player Boards", "sublabel": "Ship.OnTriggerEnter", "row": 1, "col": 0, "size": [160, 64], "tag": "GetLocalShip()" },
+    { "id": "raft_calm", "type": "security", "label": "RaftCalm Prefix", "sublabel": "WearNTear Hook", "row": 1, "col": 1, "size": [160, 64], "tag": "Harmony Prefix" },
+    { "id": "steady_fps", "type": "cloud", "label": "60 FPS Ship Tick", "sublabel": "m_noSupportWear = true", "row": 1, "col": 2, "size": [160, 64], "tag": "Restored" }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Onboard Trigger & Moving Pieces", "wraps": ["wave_motion", "board_ship"] },
+    { "kind": "region", "label": "WearNTear Evaluator & RaftCalm Gate", "wraps": ["update_support", "raft_calm", "cache_invalidate", "steady_fps", "point_lights"] }
+  ],
+  "connections": [
+    { "id": "board_to_wave", "from": "board_ship", "to": "wave_motion", "label": "ZDO owner", "variant": "emphasis", "labelDy": -32 },
+    { "id": "wave_to_support", "from": "wave_motion", "to": "update_support", "label": "world moves", "variant": "dashed" },
+    { "id": "support_to_storm", "from": "update_support", "to": "cache_invalidate", "label": "cache miss", "variant": "dashed" },
+    { "id": "storm_to_lights", "from": "cache_invalidate", "to": "point_lights", "label": "shadows", "variant": "dashed" },
+    { "id": "board_to_calm", "from": "board_ship", "to": "raft_calm", "label": "GetLocalShip", "variant": "security" },
+    { "id": "calm_to_support", "from": "raft_calm", "to": "update_support", "label": "skip", "variant": "security", "labelDy": -32 },
+    { "id": "calm_to_fps", "from": "raft_calm", "to": "steady_fps", "label": "bypass", "variant": "emphasis" }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Why FPS Only Drops When Boarding",
+      "items": [
+        "Stepping on the raft triggers Ship.OnTriggerEnter and ZDO ownership transfer",
+        "WearNTear.UpdateSupport compares cached world-space m_supportPositions",
+        "Wave motion changes every piece's world position, invalidating cache every tick"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Zero-Code Player Checklist",
+      "items": [
+        "Check BepInEx/LogOutput.log for 50 Hz FixedUpdate MissingMethodException spam",
+        "Remove shadow-casting torches and braziers attached to the moving raft",
+        "Use Dvergr lanterns or non-shadow light sources on multi-piece vessels"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "RaftCalm Harmony Prefix (9.7 KB)",
+      "items": [
+        "Intercepts WearNTear.UpdateSupport while Ship.GetLocalShip() != null",
+        "Sets m_noSupportWear = true within ProtectRadius (25m) and skips raycasts",
+        "Eliminates ClearCachedSupport() and SetupColliders() CPU spikes"
+      ]
+    }
+  ]
+}

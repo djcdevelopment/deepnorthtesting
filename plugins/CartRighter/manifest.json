@@ -1,0 +1,9 @@
+{
+  "name": "CartRighter",
+  "version_number": "1.0.0",
+  "website_url": "https://github.com/djcdevelopment/deepnorthtesting",
+  "description": "anyone know of an alternative to this https://thunderstore.io/c/valheim/p/Wylker/CartFlipper/ that functiona in 1.0 and with modded carts? please ping me if you do",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2202"
+  ]
+}

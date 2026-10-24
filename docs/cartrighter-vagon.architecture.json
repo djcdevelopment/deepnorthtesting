@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Valheim 1.0.20 CartRighter Universal Vagon Physics Architecture (FAQ-008)",
+    "output": "docs/cartrighter-vagon.architecture.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "legacy-failure",
+        "label": "Legacy prefab-name failure",
+        "focus": ["vanilla_cart", "modded_cart", "legacy_flipper", "vagon_base"],
+        "note": "Legacy flippers check hardcoded 'Cart' prefab names and miss modded wagon prefabs."
+      },
+      {
+        "id": "universal-vagon-hook",
+        "label": "Universal Vagon.Update hook",
+        "focus": ["vanilla_cart", "modded_cart", "vagon_base", "cart_righter", "znet_owner", "rigid_body"],
+        "note": "CartRighter hooks Vagon.Update so both vanilla and modded carts inherit automatic recovery."
+      }
+    ]
+  },
+  "layout": {
+    "mode": "grid",
+    "origin": [50, 140],
+    "cols": 4,
+    "cellW": 160,
+    "cellH": 64,
+    "gapX": 120,
+    "gapY": 130
+  },
+  "components": [
+    { "id": "vanilla_cart", "type": "external", "label": "Vanilla Cart", "sublabel": "Cart.prefab", "row": 0, "col": 0, "size": [160, 64], "tag": "Vanilla" },
+    { "id": "legacy_flipper", "type": "frontend", "label": "Legacy Flipper", "sublabel": "Name == 'Cart' Check", "row": 0, "col": 1, "size": [160, 64], "tag": "Broken on 1.0" },
+    { "id": "znet_owner", "type": "cloud", "label": "ZNetView Owner", "sublabel": "ClaimOwnership()", "row": 0, "col": 2, "size": [160, 64], "tag": "ZDO Sync" },
+    { "id": "modded_cart", "type": "external", "label": "Modded Carts", "sublabel": "OdinHorse / Custom", "row": 1, "col": 0, "size": [160, 64], "tag": "Modded" },
+    { "id": "vagon_base", "type": "backend", "label": "Vagon.Update", "sublabel": "assembly_valheim 1.0.20", "row": 1, "col": 1, "size": [160, 64], "tag": "Base Class" },
+    { "id": "cart_righter", "type": "security", "label": "CartRighter", "sublabel": "Tilt > 45 deg or [F]", "row": 1, "col": 2, "size": [160, 64], "tag": "Harmony Postfix" },
+    { "id": "rigid_body", "type": "database", "label": "Rigidbody Fix", "sublabel": "MoveRotation +0.35m", "row": 1, "col": 3, "size": [160, 64], "tag": "Physics" }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Cart Prefab Layer", "wraps": ["vanilla_cart", "modded_cart"] },
+    { "kind": "region", "label": "Valheim 1.0.20 Engine & Harmony Hook", "wraps": ["legacy_flipper", "vagon_base", "cart_righter", "znet_owner", "rigid_body"] }
+  ],
+  "connections": [
+    { "id": "vanilla_to_legacy", "from": "vanilla_cart", "to": "legacy_flipper", "label": "hardcoded", "variant": "dashed" },
+    { "id": "vanilla_to_vagon", "from": "vanilla_cart", "to": "modded_cart", "label": "Vagon", "variant": "default", "labelDy": 32 },
+    { "id": "modded_to_vagon", "from": "modded_cart", "to": "vagon_base", "label": "attaches", "variant": "emphasis" },
+    { "id": "vagon_to_righter", "from": "vagon_base", "to": "cart_righter", "label": "___m_body", "variant": "security" },
+    { "id": "righter_to_znet", "from": "cart_righter", "to": "znet_owner", "label": "claim ZDO", "variant": "emphasis", "labelDy": -32 },
+    { "id": "righter_to_body", "from": "cart_righter", "to": "rigid_body", "label": "upright", "variant": "emphasis" }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Why Wylker/CartFlipper Breaks",
+      "items": [
+        "Hardcoded vanilla prefab checks ignore modded carts with custom prefab names",
+        "Mutating Rigidbody rotation without ZNetView ownership rubber-bands on servers",
+        "Terrain collider snags re-tip carts unless lifted +0.35m on recovery"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Universal Vagon Component Hook",
+      "items": [
+        "All vanilla and modded carts attach Vagon in assembly_valheim.dll",
+        "Harmony Postfix on Vagon.Update injects private ___m_body and ___m_nview",
+        "Works out-of-the-box with OdinHorse, CustomCarts, and vanilla carts"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Multiplayer Safe Physics Recovery",
+      "items": [
+        "Calls ___m_nview.ClaimOwnership() before touching Rigidbody state",
+        "Zeroes velocity and angularVelocity, then applies Euler(0, yaw, 0)",
+        "Supports both automatic tilt recovery (>45 deg) and manual [F] hotkey"
+      ]
+    }
+  ]
+}

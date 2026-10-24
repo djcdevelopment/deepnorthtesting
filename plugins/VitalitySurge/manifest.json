@@ -1,0 +1,9 @@
+{
+  "name": "VitalitySurge",
+  "version_number": "1.0.0",
+  "website_url": "https://github.com/djcdevelopment/deepnorthtesting",
+  "description": "I'm updating my custom buff mod from Valheim 0.217 to 1.0.20 (Deep North). My `[HarmonyPatch(typeof(SEMan), nameof(SEMan.AddStatusEffect), new Type[] { typeof(int), typeof(bool), typeof(int), typeof(float) })]` crashes on boot with `Harmony",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2202"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "RaftCalm",
+  "version_number": "1.0.0",
+  "website_url": "https://github.com/djcdevelopment/deepnorthtesting",
+  "description": "im having some trouble with the valheimraft mod, whenever i am on my boat it is extremely laggy and my fps is very low",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2202"
+  ]
+}
