@@ -23,6 +23,15 @@ internal static class Program
 
     private static string ResolveDefaultGameDir()
     {
+        string? envDir = Environment.GetEnvironmentVariable("VALHEIM_DIR");
+        if (!string.IsNullOrWhiteSpace(envDir) && Directory.Exists(envDir))
+        {
+            return envDir;
+        }
+        if (Directory.Exists("/mnt/valheim/valheim_Data/Managed"))
+        {
+            return "/mnt/valheim";
+        }
         string linuxDefault = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
             ".local", "share", "Steam", "steamapps", "common", "Valheim");
@@ -170,7 +179,7 @@ internal static class Program
                 string rendered = RenderSymbolStub(modules, query);
                 if (string.IsNullOrEmpty(rendered))
                 {
-                    Fail($"Symbol not found in Valheim 1.0.20 assemblies: {query}");
+                    Fail($"Symbol not found in Valheim 1.0.21 assemblies: {query}");
                     return 1;
                 }
                 if (!string.IsNullOrEmpty(outCs))
@@ -189,7 +198,7 @@ internal static class Program
             {
                 string outDir = args.Length > 1 && !args[1].StartsWith("--")
                     ? args[1]
-                    : "/dev/shm/valheim-1.0.20-index";
+                    : "/dev/shm/valheim-index";
                 return DumpShmIndex(modules, managedDir, outDir);
             }
 
@@ -330,7 +339,7 @@ internal static class Program
     private static string RenderTypeToCSharp(TypeDefinition type, string? memberFilter = null)
     {
         StringBuilder sb = new();
-        sb.AppendLine($"// Valheim 1.0.20 Ground-Truth Bytecode Stub ({type.Module.Name})");
+        sb.AppendLine($"// Valheim 1.0.21 Ground-Truth Bytecode Stub ({type.Module.Name})");
         sb.AppendLine($"// Type: {type.FullName} (Base: {type.BaseType?.Name ?? "none"})");
         sb.AppendLine("using System;");
         sb.AppendLine("using System.Collections.Generic;");
@@ -491,7 +500,7 @@ internal static class Program
 
         var catalog = new
         {
-            schema = "valheim-1.0.20-bytecode-index.v1",
+            schema = "valheim-1.0.21-bytecode-index.v1",
             game_version = version,
             assembly_valheim_sha256 = sha256,
             classes_dumped = dumpedFiles,
@@ -651,13 +660,13 @@ internal static class Program
             TypeDefinition? gameType = FindGameType(gameModules, classLevelTarget.Name);
             if (gameType is null)
             {
-                Fail($"[HarmonyPatch] on {ownerLabel}: target type '{classLevelTarget.FullName}' not found in Valheim 1.0.20");
+                Fail($"[HarmonyPatch] on {ownerLabel}: target type '{classLevelTarget.FullName}' not found in Valheim 1.0.21");
                 return;
             }
             var candidates = gameType.Methods.Where(m => m.Name == classLevelMethod).ToList();
             if (candidates.Count == 0)
             {
-                Fail($"[HarmonyPatch] on {ownerLabel}: target method '{gameType.Name}.{classLevelMethod}' not found in Valheim 1.0.20");
+                Fail($"[HarmonyPatch] on {ownerLabel}: target method '{gameType.Name}.{classLevelMethod}' not found in Valheim 1.0.21");
                 return;
             }
             if (classLevelArgTypes is not null)
@@ -668,7 +677,7 @@ internal static class Program
                 if (!exactOverload)
                 {
                     string actualSigs = string.Join(" | ", candidates.Select(c => $"({string.Join(", ", c.Parameters.Select(p => FormatTypeName(p.ParameterType)))})"));
-                    Fail($"[HarmonyPatch] on {ownerLabel}: overload '{gameType.Name}.{classLevelMethod}({string.Join(", ", classLevelArgTypes.Select(t => t.Name))})' does not match Valheim 1.0.20 signatures: {actualSigs}");
+                    Fail($"[HarmonyPatch] on {ownerLabel}: overload '{gameType.Name}.{classLevelMethod}({string.Join(", ", classLevelArgTypes.Select(t => t.Name))})' does not match Valheim 1.0.21 signatures: {actualSigs}");
                     return;
                 }
             }
@@ -676,7 +685,7 @@ internal static class Program
             {
                 // Warn/Fail on ambiguous overloads unless all candidates have identical parameter counts or are disambiguated on methods
                 string actualSigs = string.Join(" | ", candidates.Select(c => $"({string.Join(", ", c.Parameters.Select(p => FormatTypeName(p.ParameterType)))})"));
-                Fail($"[HarmonyPatch] on {ownerLabel}: '{gameType.Name}.{classLevelMethod}' has {candidates.Count} overloads in Valheim 1.0.20 ({actualSigs}) — disambiguate with typeof(...) parameter array to avoid AmbiguousMatchException!");
+                Fail($"[HarmonyPatch] on {ownerLabel}: '{gameType.Name}.{classLevelMethod}' has {candidates.Count} overloads in Valheim 1.0.21 ({actualSigs}) — disambiguate with typeof(...) parameter array to avoid AmbiguousMatchException!");
                 return;
             }
             Pass($"[HarmonyPatch] {ownerLabel} -> {gameType.Name}.{classLevelMethod}");
