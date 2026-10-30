@@ -1,0 +1,99 @@
+{
+  "version": "1.0.0",
+  "active_profile": "restore-original",
+  "last_tested_profile": "isolated-compat-unswayed",
+  "default_machine": "compatibility",
+  "machines": {
+    "compatibility": {
+      "game_dir": "/home/derek/.local/share/Steam/steamapps/common/Valheim",
+      "bepinex_dir": "/home/derek/.local/share/Steam/steamapps/common/Valheim/BepInEx"
+    }
+  },
+  "profiles": {
+    "isolated-compat-ismodded": {
+      "alias": [
+        "compat-ismodded"
+      ],
+      "description": "Ephemeral 1.0.21 compatibility profile for IsModded",
+      "type": "synthetic",
+      "target_dir": "/home/derek/.local/share/Steam/steamapps/common/Valheim/BepInEx/profiles/isolated-compat-ismodded",
+      "entries": [
+        {
+          "name": "IsModded.dll",
+          "source": "/home/derek/work/ismodded/bin/Release/IsModded.dll",
+          "link_type": "symlink"
+        }
+      ]
+    },
+    "isolated-compat-selfiestick": {
+      "alias": [
+        "compat-selfiestick"
+      ],
+      "description": "Ephemeral 1.0.21 compatibility profile for SelfieStick",
+      "type": "synthetic",
+      "target_dir": "/home/derek/.local/share/Steam/steamapps/common/Valheim/BepInEx/profiles/isolated-compat-selfiestick",
+      "entries": [
+        {
+          "name": "CameraProof.dll",
+          "source": "/home/derek/work/SelfieStick/bin/Release/net472/CameraProof.dll",
+          "link_type": "symlink"
+        }
+      ]
+    },
+    "isolated-compat-unfaded": {
+      "alias": [
+        "compat-unfaded"
+      ],
+      "description": "Ephemeral 1.0.21 compatibility profile for Unfaded",
+      "type": "synthetic",
+      "target_dir": "/home/derek/.local/share/Steam/steamapps/common/Valheim/BepInEx/profiles/isolated-compat-unfaded",
+      "entries": [
+        {
+          "name": "Unfaded.dll",
+          "source": "/home/derek/work/Unfaded/bin/Release/Unfaded.dll",
+          "link_type": "symlink"
+        }
+      ]
+    },
+    "isolated-compat-totemsentinel": {
+      "alias": [
+        "compat-totemsentinel"
+      ],
+      "description": "Ephemeral 1.0.21 compatibility profile for TotemSentinel",
+      "type": "synthetic",
+      "target_dir": "/home/derek/.local/share/Steam/steamapps/common/Valheim/BepInEx/profiles/isolated-compat-totemsentinel",
+      "entries": [
+        {
+          "name": "TotemSentinel.dll",
+          "source": "/home/derek/work/totemalert/bin/Release/TotemSentinel.dll",
+          "link_type": "symlink"
+        }
+      ]
+    },
+    "isolated-compat-unswayed": {
+      "alias": [
+        "compat-unswayed"
+      ],
+      "description": "Ephemeral 1.0.21 compatibility profile for Unswayed",
+      "type": "synthetic",
+      "target_dir": "/home/derek/.local/share/Steam/steamapps/common/Valheim/BepInEx/profiles/isolated-compat-unswayed",
+      "entries": [
+        {
+          "name": "Unswayed.dll",
+          "source": "/home/derek/work/deepnorthtesting/plugins/Unswayed/bin/Release/Unswayed.dll",
+          "link_type": "symlink"
+        }
+      ]
+    },
+    "restore-original": {
+      "alias": [
+        "restore"
+      ],
+      "description": "Exact plugins symlink target captured before compatibility tests",
+      "type": "directory",
+      "path": "/home/derek/.local/share/Steam/steamapps/common/Valheim/BepInEx/plugins_local"
+    }
+  },
+  "restored": true,
+  "temporary_profiles_removed": true
+}

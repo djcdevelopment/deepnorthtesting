@@ -1,0 +1,12 @@
+
+[+] Auditing plugin assembly: /home/derek/work/Unfaded/bin/Release/Unfaded.dll
+  [PASS] [HarmonyPatch] GameCameraDeathPatch.UpdateCameraPostfix -> GameCamera.UpdateCamera
+  [PASS] [HarmonyPatch] Unfaded.Patches.GameRespawnPatch/RequestRespawnPatch -> Game.RequestRespawn
+  [PASS] [HarmonyPatch] Unfaded.Patches.GameRespawnPatch/HudUpdateInputPatch -> Hud.Update
+  [PASS] [HarmonyPatch] Unfaded.Patches.GameRespawnPatch/PlayerOnDeathPatch -> Player.OnDeath
+  [PASS] [HarmonyPatch] HudBlackScreenPatch.UpdateBlackScreenPrefix -> Hud.UpdateBlackScreen
+  [PASS] [HarmonyPatch] HudBlackScreenPatch.GetFadeDurationPrefix -> Hud.GetFadeDuration
+  [PASS] [HarmonyPatch] Unfaded.Commands.UnfadedCommand -> Terminal.Awake
+  [PASS] Unfaded.dll: verified 7 [HarmonyPatch] target(s) and 57 game member reference(s) against Valheim 1.0.21
+
+[Summary] 0 compatibility failure(s).

@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "run_id": "20261030T115435Z",
+  "started_utc": "2026-10-30T11:55:02.371936+00:00",
+  "finished_utc": "2026-10-30T12:03:24.224981+00:00",
+  "status": "pass",
+  "error": null,
+  "game": {
+    "name": "Valheim",
+    "expected_version": "1.0.21",
+    "detected_version": "1.0.21",
+    "assembly_sha256": "C39A1F03D7918B725366E711CDCB08F72F637FC675877856D4B48C0B5092D882",
+    "assembly_last_write_utc": "2026-10-28T13:17:50.259462+00:00",
+    "steam_build_id": "26249040"
+  },
+  "environment": {
+    "machine": "omen-linux",
+    "game_path": "/home/derek/.local/share/Steam/steamapps/common/Valheim",
+    "profile_manager_root": "/home/derek/work/valheim-profile-engine",
+    "workspace_root": "/home/derek/work",
+    "original_profile_target": "/home/derek/.local/share/Steam/steamapps/common/Valheim/BepInEx/plugins_local",
+    "original_profile_name": "plugins_local",
+    "display": ":0",
+    "profile_restored": true,
+    "runtime_bepinex": "5.4.23.3 / BepInExPack 5.4.2333",
+    "declared_bepinex_dependency": "denikson-BepInExPack_Valheim-5.4.2202",
+    "original_suite_target": "/mnt/omen-c-read/Program Files (x86)/Steam/steamapps/common/Valheim/BepInEx/profiles/sovereign-suite",
+    "local_suite_target": "/home/derek/.local/share/Steam/steamapps/common/Valheim/BepInEx/profiles/sovereign-suite-linux-1.0.21"
+  },
+  "stages": [
+    {
+      "name": "metadata",
+      "status": "pass",
+      "detail": "5 synchronized candidate versions"
+    },
+    {
+      "name": "game-signatures",
+      "status": "pass",
+      "detail": "Valheim 1.0.21; C39A1F03D7918B725366E711CDCB08F72F637FC675877856D4B48C0B5092D882"
+    },
+    {
+      "name": "build",
+      "status": "pass",
+      "detail": "5 Release builds; logs retained"
+    },
+    {
+      "name": "isolated-runtime",
+      "status": "pass",
+      "detail": "5 isolated main-menu scene boots, Steam initialized, zero matched BepInEx/Unity exceptions; original symlink restored"
+    },
+    {
+      "name": "package",
+      "status": "pass",
+      "detail": "5 tcli ZIPs with matching DLL bytes and configuration sidecars"
+    },
+    {
+      "name": "thunderstore-version",
+      "status": "pass",
+      "detail": "Every candidate is strictly newer than its live package"
+    }
+  ],
+  "mods": [
+    {
+      "name": "IsModded",
+      "package_version": "1.0.8",
+      "supported_game_versions": "1.0.0-1.0.21",
+      "build": "pass",
+      "signature_audit": "pass",
+      "isolated_boot": "pass",
+      "boot_seconds": 12.06,
+      "dll_sha256": "BDC9526CF53498D06DCB3D57923C6961FFC17C6C3AFCB493087DF206F6314DC8",
+      "log": "logs/IsModded.log",
+      "package": "packages/djcdevelopment-IsModded-1.0.8.zip",
+      "package_sha256": "8631E4AF4FA8BA01E44DAC54DCEA600A6BB3375C883639F1F8721AD7DF81310A",
+      "plugin_name": "IsModded",
+      "main_menu_evidence": true,
+      "steam_initialized": true,
+      "runtime_error_matches": 0,
+      "unity_log": "logs/IsModded.unity.log"
+    },
+    {
+      "name": "SelfieStick",
+      "package_version": "0.3.6",
+      "supported_game_versions": "1.0.0-1.0.21",
+      "build": "pass",
+      "signature_audit": "pass",
+      "isolated_boot": "pass",
+      "boot_seconds": 12.049,
+      "dll_sha256": "01DD4912192C98C371D1FACB2D449B10D61A6D4D23D79A5A4BD335C6008D42BF",
+      "log": "logs/SelfieStick.log",
+      "package": "packages/djcdevelopment-SelfieStick-0.3.6.zip",
+      "package_sha256": "26FA6778E0D9FAED56888D05FA41CE0EEB6C257AD0A0D47EA5FE49692A4133C6",
+      "plugin_name": "Camera Proof",
+      "main_menu_evidence": true,
+      "steam_initialized": true,
+      "runtime_error_matches": 0,
+      "unity_log": "logs/SelfieStick.unity.log"
+    },
+    {
+      "name": "Unfaded",
+      "package_version": "1.0.12",
+      "supported_game_versions": "1.0.0-1.0.21",
+      "build": "pass",
+      "signature_audit": "pass",
+      "isolated_boot": "pass",
+      "boot_seconds": 12.041,
+      "dll_sha256": "9A4BEA9B524203370F4B4618FCE81EB0231FB805FC7BE97A0CF94E56D1B5D12C",
+      "log": "logs/Unfaded.log",
+      "package": "packages/djcdevelopment-Unfaded-1.0.12.zip",
+      "package_sha256": "2E2F265B80B71553CCEE710019D801076DF1BA0D0B75D16F14525ADED6B4BF5C",
+      "plugin_name": "Unfaded",
+      "main_menu_evidence": true,
+      "steam_initialized": true,
+      "runtime_error_matches": 0,
+      "unity_log": "logs/Unfaded.unity.log"
+    },
+    {
+      "name": "TotemSentinel",
+      "package_version": "1.5.6",
+      "supported_game_versions": "1.0.0-1.0.21",
+      "build": "pass",
+      "signature_audit": "pass",
+      "isolated_boot": "pass",
+      "boot_seconds": 12.06,
+      "dll_sha256": "BF355A26821D97B8CE34B38069C46D98E590BAB9BD98702154D4CD0C00CD4838",
+      "log": "logs/TotemSentinel.log",
+      "package": "packages/djcdevelopment-TotemSentinel-1.5.6.zip",
+      "package_sha256": "EF7B5E637DD308CCEC35703AA9DEAEEED50B3BC085D3D6FD1E064CC2173326B5",
+      "plugin_name": "TotemSentinel",
+      "main_menu_evidence": true,
+      "steam_initialized": true,
+      "runtime_error_matches": 0,
+      "unity_log": "logs/TotemSentinel.unity.log"
+    },
+    {
+      "name": "Unswayed",
+      "package_version": "1.0.6",
+      "supported_game_versions": "1.0.0-1.0.21",
+      "build": "pass",
+      "signature_audit": "pass",
+      "isolated_boot": "pass",
+      "boot_seconds": 12.042,
+      "dll_sha256": "C11411D1E8346C36B0DB99F091A7F94717754AE822B6E1588EED91B5C7A79750",
+      "log": "logs/Unswayed.log",
+      "package": "packages/djcdevelopment-Unswayed-1.0.6.zip",
+      "package_sha256": "6C2B994050DB4C2910E3E107383EBE9C0D9FA9B67EF308FA43032A475F5E7FF3",
+      "plugin_name": "Unswayed",
+      "main_menu_evidence": true,
+      "steam_initialized": true,
+      "runtime_error_matches": 0,
+      "unity_log": "logs/Unswayed.unity.log"
+    }
+  ],
+  "setup_attempts": [
+    {
+      "path": "setup-attempt-1",
+      "status": "SETUP",
+      "reason": "Steam/display initialization"
+    },
+    {
+      "path": "setup-attempt-2",
+      "status": "SETUP",
+      "reason": "Steam client not ready; original profile restored"
+    },
+    {
+      "path": "setup-attempt-3",
+      "status": "SETUP",
+      "reason": "Steam and main-menu scene reached; collection sentinel corrected to recognize Amb_MainMenu before full matrix rerun"
+    }
+  ],
+  "limitations": [
+    "Main-menu initialization only; no gameplay regression coverage.",
+    "The Windows-hosted evidence-reuse workflow was syntax/contract checked locally but not dispatched."
+  ]
+}

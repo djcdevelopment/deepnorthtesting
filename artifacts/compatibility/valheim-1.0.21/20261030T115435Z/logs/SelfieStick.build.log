@@ -1,0 +1,14 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+/home/derek/work/SelfieStick/Plugin.cs(301,21): warning CS0618: 'Rigidbody.velocity' is obsolete: 'Please use Rigidbody.linearVelocity instead. (UnityUpgradable) -> linearVelocity' [/home/derek/work/SelfieStick/CameraProof.csproj]
+/home/derek/work/SelfieStick/Plugin.cs(3413,17): warning CS0618: 'Rigidbody.velocity' is obsolete: 'Please use Rigidbody.linearVelocity instead. (UnityUpgradable) -> linearVelocity' [/home/derek/work/SelfieStick/CameraProof.csproj]
+  CameraProof -> /home/derek/work/SelfieStick/bin/Release/net472/CameraProof.dll
+
+Build succeeded.
+
+/home/derek/work/SelfieStick/Plugin.cs(301,21): warning CS0618: 'Rigidbody.velocity' is obsolete: 'Please use Rigidbody.linearVelocity instead. (UnityUpgradable) -> linearVelocity' [/home/derek/work/SelfieStick/CameraProof.csproj]
+/home/derek/work/SelfieStick/Plugin.cs(3413,17): warning CS0618: 'Rigidbody.velocity' is obsolete: 'Please use Rigidbody.linearVelocity instead. (UnityUpgradable) -> linearVelocity' [/home/derek/work/SelfieStick/CameraProof.csproj]
+    2 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.80

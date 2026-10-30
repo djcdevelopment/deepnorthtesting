@@ -1,0 +1,10 @@
+
+[+] Auditing plugin assembly: /home/derek/work/deepnorthtesting/plugins/Unswayed/bin/Release/Unswayed.dll
+  [PASS] [HarmonyPatch] CameraStabilizerPatches.GetCameraBaseOffsetPostfix -> GameCamera.GetCameraBaseOffset
+  [PASS] [HarmonyPatch] CameraStabilizerPatches.GetCameraPositionPostfix -> GameCamera.GetCameraPosition
+  [PASS] [HarmonyPatch] CameraStabilizerPatches.UpdateFOVPostfix -> GameCamera.UpdateFOV
+  [PASS] [HarmonyPatch] CameraStabilizerPatches.UpdateCameraShakePrefix -> GameCamera.UpdateCameraShake
+  [PASS] [HarmonyPatch] Unswayed.Commands.UnswayedCommand -> Terminal.InitTerminal
+  [PASS] Unswayed.dll: verified 5 [HarmonyPatch] target(s) and 18 game member reference(s) against Valheim 1.0.21
+
+[Summary] 0 compatibility failure(s).

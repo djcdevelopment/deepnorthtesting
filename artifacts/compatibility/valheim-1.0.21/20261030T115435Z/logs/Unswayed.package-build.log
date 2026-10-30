@@ -1,0 +1,21 @@
+Building djcdevelopment-Unswayed-1.0.6
+
+Output path /home/derek/work/deepnorthtesting/plugins/Unswayed/dist/djcdevelopment-Unswayed-1.0.6.zip
+
+Planning for files to include in build
+--------------------------------------
+Planned for /icon.png
+Planned for /README.md
+Planned for /manifest.json
+
+Mapping ./bin/Release/Unswayed.dll to /Unswayed.dll
+Planned for /Unswayed.dll
+
+Writing configured files
+------------------------
+Writing /icon.png
+Writing /README.md
+Writing /manifest.json
+Writing /Unswayed.dll
+
+Successfully built djcdevelopment-Unswayed-1.0.6

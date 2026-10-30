@@ -1,0 +1,9 @@
+
+[+] Auditing plugin assembly: /home/derek/work/ismodded/bin/Release/IsModded.dll
+  [PASS] [HarmonyPatch] IsModded.Patches.Achievements_IsCheatedAtAll_Patch -> Achievements.IsCheatedAtAll
+  [PASS] [HarmonyPatch] IsModded.Patches.FejdStartup_SetupGui_Patch -> FejdStartup.SetupGui
+  [PASS] [HarmonyPatch] IsModded.Patches.InventoryGui_UpdateAchievementsList_Patch -> InventoryGui.UpdateAchievementsList
+  [PASS] [HarmonyPatch] IsModded.Patches.Terminal_InitTerminal_Patch -> Terminal.InitTerminal
+  [PASS] IsModded.dll: verified 4 [HarmonyPatch] target(s) and 15 game member reference(s) against Valheim 1.0.21
+
+[Summary] 0 compatibility failure(s).

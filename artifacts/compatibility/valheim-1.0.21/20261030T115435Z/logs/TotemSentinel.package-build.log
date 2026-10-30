@@ -1,0 +1,21 @@
+Building djcdevelopment-TotemSentinel-1.5.6
+
+Output path /home/derek/work/totemalert/dist/djcdevelopment-TotemSentinel-1.5.6.zip
+
+Planning for files to include in build
+--------------------------------------
+Planned for /icon.png
+Planned for /README.md
+Planned for /manifest.json
+
+Mapping ./bin/Release/TotemSentinel.dll to /TotemSentinel.dll
+Planned for /TotemSentinel.dll
+
+Writing configured files
+------------------------
+Writing /icon.png
+Writing /README.md
+Writing /manifest.json
+Writing /TotemSentinel.dll
+
+Successfully built djcdevelopment-TotemSentinel-1.5.6

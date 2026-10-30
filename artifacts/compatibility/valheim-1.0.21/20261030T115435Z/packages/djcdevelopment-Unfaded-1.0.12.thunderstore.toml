@@ -1,0 +1,29 @@
+[config]
+schemaVersion = '0.0.1'
+
+[package]
+namespace = 'djcdevelopment'
+name = 'Unfaded'
+versionNumber = '1.0.12'
+description = 'Valheim 1.0-1.0.21 death camera: remove the 9.5s blackout, track killers, free-fly, and respawn on demand.'
+websiteUrl = 'https://github.com/djcdevelopment/Unfaded'
+containsNsfwContent = false
+
+[package.dependencies]
+denikson-BepInExPack_Valheim = '5.4.2202'
+
+[build]
+icon = './icon.png'
+readme = './README.md'
+outdir = './dist'
+
+[[build.copy]]
+source = './bin/Release/Unfaded.dll'
+target = 'Unfaded.dll'
+
+[publish]
+repository = 'https://thunderstore.io'
+communities = [ 'valheim' ]
+
+[publish.categories]
+valheim = [ 'mods', 'client-side', 'misc' ]

@@ -6,7 +6,12 @@ on:
       game_version:
         description: Exact installed Valheim version required on the test runner
         required: true
-        default: 1.0.15
+        default: 1.0.21
+        type: string
+      evidence_run_id:
+        description: Committed Linux-verified evidence run ID (empty runs the Windows boot pipeline)
+        required: false
+        default: ''
         type: string
       publish:
         description: Publish the tested ZIPs after environment approval
@@ -23,10 +28,11 @@ concurrency:
 
 jobs:
   prepare:
-    runs-on: [self-hosted, Windows, X64, valheim]
+    runs-on: ${{ inputs.evidence_run_id != '' && 'windows-latest' || fromJSON('["self-hosted", "Windows", "X64", "valheim"]') }}
     timeout-minutes: 30
     env:
       TARGET_GAME_VERSION: ${{ inputs.game_version }}
+      EVIDENCE_RUN_ID: ${{ inputs.evidence_run_id }}
     steps:
       - name: Check out pipeline
         uses: actions/checkout@v7
@@ -34,34 +40,45 @@ jobs:
           path: repos/deepnorthtesting
 
       - name: Check out Valheim Profile Manager
+        if: ${{ inputs.evidence_run_id == '' }}
         uses: actions/checkout@v7
         with:
           repository: djcdevelopment/valheim-profile-engine
           path: repos/valheim-profile-engine
 
       - name: Check out IsModded
+        if: ${{ inputs.evidence_run_id == '' }}
         uses: actions/checkout@v7
         with:
           repository: djcdevelopment/ismodded
           path: repos/ismodded
 
       - name: Check out SelfieStick
+        if: ${{ inputs.evidence_run_id == '' }}
         uses: actions/checkout@v7
         with:
           repository: djcdevelopment/SelfieStick
           path: repos/SelfieStick
 
       - name: Check out Unfaded
+        if: ${{ inputs.evidence_run_id == '' }}
         uses: actions/checkout@v7
         with:
           repository: djcdevelopment/Unfaded
           path: repos/Unfaded
 
       - name: Check out TotemSentinel
+        if: ${{ inputs.evidence_run_id == '' }}
         uses: actions/checkout@v7
         with:
           repository: djcdevelopment/TotemSentinel
           path: repos/totemalert
+
+      - name: Set up .NET for committed evidence validation
+        if: ${{ inputs.evidence_run_id != '' }}
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 8.0.x
 
       - name: Install pinned Thunderstore CLI
         shell: powershell
@@ -73,6 +90,7 @@ jobs:
           }
 
       - name: Build release candidates and evidence
+        if: ${{ inputs.evidence_run_id == '' }}
         shell: powershell
         run: |
           $workspaceRoot = Join-Path $env:GITHUB_WORKSPACE "repos"
@@ -85,6 +103,28 @@ jobs:
             -RepositoryRoot $repositoryRoot `
             -ProfileManagerRoot (Join-Path $workspaceRoot "valheim-profile-engine") `
             -EvidenceDirectory $evidenceRoot
+
+      - name: Validate committed Linux runtime evidence
+        if: ${{ inputs.evidence_run_id != '' }}
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if ($env:EVIDENCE_RUN_ID -notmatch '^\d{8}T\d{6}Z$') { throw 'Invalid evidence run ID' }
+          if ($env:TARGET_GAME_VERSION -notmatch '^\d+\.\d+\.\d+$') { throw 'Invalid game version' }
+          $repositoryRoot = Join-Path $env:GITHUB_WORKSPACE 'repos/deepnorthtesting'
+          $source = Join-Path $repositoryRoot "artifacts/compatibility/valheim-$env:TARGET_GAME_VERSION/$env:EVIDENCE_RUN_ID"
+          $receipt = Get-Content (Join-Path $source 'compatibility.json') -Raw | ConvertFrom-Json
+          if ($receipt.status -ne 'pass' -or $receipt.run_id -ne $env:EVIDENCE_RUN_ID -or $receipt.game.detected_version -ne $env:TARGET_GAME_VERSION) { throw 'Evidence baseline/status mismatch' }
+          if (@($receipt.mods).Count -ne 5) { throw 'Expected five verified fleet mods' }
+          foreach ($mod in $receipt.mods) {
+            if ($mod.isolated_boot -ne 'pass' -or $mod.signature_audit -ne 'pass' -or $mod.build -ne 'pass') { throw "Unverified mod: $($mod.name)" }
+            $zip = Join-Path $source $mod.package
+            if ((Get-FileHash -LiteralPath $zip -Algorithm SHA256).Hash -ne $mod.package_sha256) { throw "Package hash mismatch: $($mod.name)" }
+          }
+          $evidenceRoot = Join-Path $env:GITHUB_WORKSPACE 'evidence'
+          New-Item -ItemType Directory -Path $evidenceRoot -Force | Out-Null
+          Copy-Item -Path (Join-Path $source '*') -Destination $evidenceRoot -Recurse -Force
+          & "$repositoryRoot\tools\Publish-ThunderstoreArtifacts.ps1" -ArtifactsDirectory (Join-Path $evidenceRoot 'packages') -ValidateOnly
 
       - name: Upload immutable release candidates
         uses: actions/upload-artifact@v7
