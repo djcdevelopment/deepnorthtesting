@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# fast-verify-mod.sh — 2-Second Build + Mono.Cecil 1.0.20 Audit + Zero-Copy Stage
+# fast-verify-mod.sh — 2-Second Build + Mono.Cecil 1.0.21 Audit + Zero-Copy Stage
 # ==============================================================================
 # Compiles a Valheim C# mod (.csproj), verifies zero Unity/Harmony DLL leaks and
 # < 100 KB pure-plugin size, runs DeepNorthTesting Inspector --audit-plugin
-# against Valheim 1.0.20 assembly_valheim.dll, and writes a JSON receipt.
+# against Valheim 1.0.21 assembly_valheim.dll, and writes a JSON receipt.
 #
 # Usage:
 #   bash harness/fast-verify-mod.sh <path/to/Mod.csproj> [--receipt <out.json>] [--stage-isolated <name>]
@@ -78,7 +78,7 @@ dll_sha256="$(sha256sum "$dll_path" | awk '{print $1}')"
 
 t2="$(date +%s%N)"
 audit_out="$("$INSPECTOR_BIN" --audit-plugin "$dll_path" 2>&1)" || {
-  echo "[FAIL] Inspector Mono.Cecil 1.0.20 bytecode audit failed:" >&2
+  echo "[FAIL] Inspector Mono.Cecil 1.0.21 bytecode audit failed:" >&2
   echo "$audit_out" >&2
   exit 1
 }
@@ -89,7 +89,7 @@ if [[ -n "$STAGE_ISO" ]]; then
   bash "$REPO_DIR/tools/switch-profile.sh" --create-isolated "$STAGE_ISO" "$dll_path"
 fi
 
-echo "[PASS] Built $(basename "$dll_path") (${dll_size} B, ${build_ms} ms) & verified 1.0.20 bytecode (${audit_ms} ms)"
+echo "[PASS] Built $(basename "$dll_path") (${dll_size} B, ${build_ms} ms) & verified 1.0.21 bytecode (${audit_ms} ms)"
 
 if [[ -n "$RECEIPT_OUT" ]]; then
   mkdir -p "$(dirname "$RECEIPT_OUT")"

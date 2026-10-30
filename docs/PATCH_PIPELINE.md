@@ -2,17 +2,17 @@
 
 The fleet pipeline validates all five `djcdevelopment` Thunderstore mods against one exact Valheim build, produces reviewable evidence, and publishes only the ZIP files produced by that successful run.
 
-The current gate targets **Valheim 1.0.20**, Steam build `25909357`. Iron Gate released the patch on 2026-10-15: <https://www.valheimgame.com/news/patch-1-0-20/>.
+The current gate targets **Valheim 1.0.21**, Steam build `26249040`. The [1.0.21 compatibility evidence](compatibility/valheim-1.0.21.md) records the isolated Linux runtime matrix and exact candidate hashes.
 
 ## Fleet
 
 | Package | Candidate | Source | Runtime profile |
 |---|---:|---|---|
-| IsModded | 1.0.7 | `C:\work\ismodded` | `isolated-ismodded` |
-| SelfieStick | 0.3.5 | `C:\work\SelfieStick` | `clean-recording` |
-| Unfaded | 1.0.11 | `C:\work\Unfaded` | `isolated-unfaded` |
-| TotemSentinel | 1.5.5 | `C:\work\totemalert` | `isolated-totemsentinel` |
-| Unswayed | 1.0.5 | `C:\work\deepnorthtesting\plugins\Unswayed` | `isolated-unswayed` |
+| IsModded | 1.0.8 | `C:\work\ismodded` | `isolated-ismodded` |
+| SelfieStick | 0.3.6 | `C:\work\SelfieStick` | `clean-recording` |
+| Unfaded | 1.0.12 | `C:\work\Unfaded` | `isolated-unfaded` |
+| TotemSentinel | 1.5.6 | `C:\work\totemalert` | `isolated-totemsentinel` |
+| Unswayed | 1.0.6 | `C:\work\deepnorthtesting\plugins\Unswayed` | `isolated-unswayed` |
 
 [`manifests/mod-fleet.json`](../manifests/mod-fleet.json) is the machine-readable source of truth. Package version changes must be made there and in the mod project, BepInEx declaration, `manifest.json`, `thunderstore.toml`, and README. The metadata gate rejects drift before compiling.
 
@@ -23,7 +23,7 @@ Run the full non-publishing pipeline from `deepnorthtesting`:
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File tools\Invoke-PatchPipeline.ps1 `
   -All `
-  -TargetGameVersion 1.0.20
+  -TargetGameVersion 1.0.21
 ```
 
 `-All` means audit, build, isolated runtime test, and package. It never publishes. A subset can be selected with `-Mods IsModded,Unfaded`.
@@ -40,7 +40,7 @@ The run performs these gates in order:
 
 Evidence is written under `artifacts/compatibility/valheim-<version>/<UTC-run-id>/`. The folder contains `compatibility.json`, `compatibility.md`, raw BepInEx logs, the generated runtime profile manifest, the exact candidate ZIPs, and their matching `tcli` configuration sidecars.
 
-The committed 1.0.17 result is in [`docs/compatibility/valheim-1.0.17.md`](compatibility/valheim-1.0.17.md) (with 1.0.16 in [`docs/compatibility/valheim-1.0.16.md`](compatibility/valheim-1.0.16.md) and 1.0.15 in [`docs/compatibility/valheim-1.0.15.md`](compatibility/valheim-1.0.15.md)).
+Previous evidence: [Valheim 1.0.20](compatibility/valheim-1.0.20.md). The committed 1.0.17 result is in [`docs/compatibility/valheim-1.0.17.md`](compatibility/valheim-1.0.17.md) (with 1.0.16 in [`docs/compatibility/valheim-1.0.16.md`](compatibility/valheim-1.0.16.md) and 1.0.15 in [`docs/compatibility/valheim-1.0.15.md`](compatibility/valheim-1.0.15.md)).
 
 ## Valheim Profile Manager contract
 
@@ -68,7 +68,7 @@ For a local release after reviewing the evidence:
 ```powershell
 $env:THUNDERSTORE_TOKEN = '<token>'
 powershell -NoProfile -ExecutionPolicy Bypass -File tools\Publish-ThunderstoreArtifacts.ps1 `
-  -ArtifactsDirectory artifacts\compatibility\valheim-1.0.20\<run-id>\packages `
+  -ArtifactsDirectory artifacts\compatibility\valheim-1.0.21\<run-id>\packages `
   -Token $env:THUNDERSTORE_TOKEN `
   -Confirm PUBLISH
 ```
@@ -78,3 +78,9 @@ The publisher opens every ZIP and compares the full set with Thunderstore's live
 ## Evidence limits
 
 The automated runtime gate proves that each exact DLL initializes on the target game build without loader, Harmony, or immediate runtime errors. It does not substitute for gameplay scenarios such as earning a Steam achievement, completing an Unfaded death cycle, firing a TotemSentinel scan, walking a crypt with Unswayed, or completing a SelfieStick capture. Those scenarios remain release-review checks when behavior changed; a game-only patch with unchanged audited surfaces can use the automated evidence as the compatibility gate.
+
+## Publishing Linux-verified candidates
+
+The Valheim 1.0.21 candidates were runtime-verified on `omen-linux`. Their exact ZIPs, configuration sidecars and validation receipt remain local in `artifacts/compatibility/valheim-1.0.21/20261030T115435Z/packages/`, excluded from Git. The committed compatibility document records their hashes and boot results.
+
+On a PowerShell-capable host, publish those exact ZIPs with `tools/Publish-ThunderstoreArtifacts.ps1 -ArtifactsDirectory artifacts/compatibility/valheim-1.0.21/20261030T115435Z/packages -Token $env:THUNDERSTORE_TOKEN -Confirm PUBLISH` after supplying `THUNDERSTORE_TOKEN` securely. The existing `thunderstore-release.yml` remains unchanged: preparation requires the `OMEN-valheim` Windows runner, and publishing requires `publish: true` plus `thunderstore-production` approval. It does not accept an `evidence_run_id`; adding a Linux-evidence reuse branch requires a `workflow`-scoped GitHub credential.

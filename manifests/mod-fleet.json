@@ -2,8 +2,8 @@
     "schema_version":  1,
     "namespace":  "djcdevelopment",
     "game":  "Valheim",
-    "target_game_version":  "1.0.20",
-    "supported_game_version_range":  "1.0.0-1.0.20",
+    "target_game_version":  "1.0.21",
+    "supported_game_version_range":  "1.0.0-1.0.21",
     "bepinex_version":  "5.4.2202",
     "mods":  [
                  {
@@ -15,7 +15,7 @@
                      "output":  "bin/Release/IsModded.dll",
                      "package_config":  "thunderstore.toml",
                      "profile":  "isolated-ismodded",
-                     "version":  "1.0.7"
+                     "version":  "1.0.8"
                  },
                  {
                      "name":  "SelfieStick",
@@ -26,7 +26,7 @@
                      "output":  "bin/Release/net472/CameraProof.dll",
                      "package_config":  "thunderstore.toml",
                      "profile":  "clean-recording",
-                     "version":  "0.3.5"
+                     "version":  "0.3.6"
                  },
                  {
                      "name":  "Unfaded",
@@ -37,7 +37,7 @@
                      "output":  "bin/Release/Unfaded.dll",
                      "package_config":  "thunderstore.toml",
                      "profile":  "isolated-unfaded",
-                     "version":  "1.0.11"
+                     "version":  "1.0.12"
                  },
                  {
                      "name":  "TotemSentinel",
@@ -48,7 +48,7 @@
                      "output":  "bin/Release/TotemSentinel.dll",
                      "package_config":  "thunderstore.toml",
                      "profile":  "isolated-totemsentinel",
-                     "version":  "1.5.5"
+                     "version":  "1.5.6"
                  },
                  {
                      "name":  "Unswayed",
@@ -59,7 +59,7 @@
                      "output":  "bin/Release/Unswayed.dll",
                      "package_config":  "thunderstore.toml",
                      "profile":  "isolated-unswayed",
-                     "version":  "1.0.5"
+                     "version":  "1.0.6"
                  }
              ]
 }

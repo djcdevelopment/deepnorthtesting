@@ -3,7 +3,7 @@
 # switch-profile.sh — DeepNorthTesting Linux Zero-Copy Valheim Profile Engine
 # ==============================================================================
 # Sub-millisecond POSIX symlink profile switching (ln -sfn), ephemeral isolated
-# mod profile creation, and live .cfg / .dll hotswapping for Valheim 1.0.20.
+# mod profile creation, and live .cfg / .dll hotswapping for Valheim 1.0.21.
 #
 # Usage:
 #   bash tools/switch-profile.sh --status
@@ -41,7 +41,7 @@ resolve_profile_target() {
 
 show_status() {
   echo "======================================================================"
-  echo "  DeepNorthTesting :: Linux Zero-Copy Profile Engine (Valheim 1.0.20)"
+  echo "  DeepNorthTesting :: Linux Zero-Copy Profile Engine (Valheim 1.0.21)"
   echo "======================================================================"
   echo "  Valheim Root   : $VALHEIM_DIR"
   echo "  Plugins Path   : $PLUGINS_LINK"

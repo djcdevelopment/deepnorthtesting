@@ -512,6 +512,7 @@ internal static class Program
 
     private static void AuditSinglePlugin(string pluginPath, List<ModuleDefinition> gameModules)
     {
+        string gameVersion = ReadGameVersion(gameModules.Single(m => m.Name == "assembly_valheim.dll"));
         Console.WriteLine($"\n[+] Auditing plugin assembly: {pluginPath}");
         try
         {
@@ -550,7 +551,7 @@ internal static class Program
                 TypeDefinition? targetType = FindGameType(gameModules, memberRef.DeclaringType.Name);
                 if (targetType is null)
                 {
-                    Fail($"{Path.GetFileName(pluginPath)}: referenced game type '{memberRef.DeclaringType.FullName}' does not exist in Valheim 1.0.20");
+                    Fail($"{Path.GetFileName(pluginPath)}: referenced game type '{memberRef.DeclaringType.FullName}' does not exist in Valheim {gameVersion}");
                     continue;
                 }
 
@@ -562,7 +563,7 @@ internal static class Program
                         m.Parameters.Zip(mRef.Parameters, (a, b) => a.ParameterType.Name == b.ParameterType.Name).All(x => x));
                     if (!found)
                     {
-                        Fail($"{Path.GetFileName(pluginPath)}: referenced method '{targetType.Name}.{mRef.Name}({string.Join(", ", mRef.Parameters.Select(p => p.ParameterType.Name))})' missing or signature changed in Valheim 1.0.20");
+                        Fail($"{Path.GetFileName(pluginPath)}: referenced method '{targetType.Name}.{mRef.Name}({string.Join(", ", mRef.Parameters.Select(p => p.ParameterType.Name))})' missing or signature changed in Valheim {gameVersion}");
                     }
                     else
                     {
@@ -574,7 +575,7 @@ internal static class Program
                     bool found = targetType.Fields.Any(f => f.Name == fRef.Name);
                     if (!found)
                     {
-                        Fail($"{Path.GetFileName(pluginPath)}: referenced field '{targetType.Name}.{fRef.Name}' missing in Valheim 1.0.20");
+                        Fail($"{Path.GetFileName(pluginPath)}: referenced field '{targetType.Name}.{fRef.Name}' missing in Valheim {gameVersion}");
                     }
                     else
                     {
@@ -583,7 +584,7 @@ internal static class Program
                 }
             }
 
-            Pass($"{Path.GetFileName(pluginPath)}: verified {harmonyPatchesChecked} [HarmonyPatch] target(s) and {memberRefsChecked} game member reference(s) against Valheim 1.0.20");
+            Pass($"{Path.GetFileName(pluginPath)}: verified {harmonyPatchesChecked} [HarmonyPatch] target(s) and {memberRefsChecked} game member reference(s) against Valheim {gameVersion}");
         }
         catch (BadImageFormatException)
         {

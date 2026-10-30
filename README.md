@@ -1,14 +1,14 @@
 # Deep North Testing (Valheim 1.0)
 > **Autonomous GPU-Enabled Test Harness, Preflight Reflection Audits, Sub-8-Second Boot Loops, & Live Telemetry for Valheim Modding.**
 
-[![Valheim 1.0](https://img.shields.io/badge/Valheim-1.0.20%20(Deep%20North)-blue.svg)](#)
+[![Valheim 1.0](https://img.shields.io/badge/Valheim-1.0.21%20(Deep%20North)-blue.svg)](#)
 [![BepInEx 5](https://img.shields.io/badge/BepInEx-5.4.2202-green.svg)](#)
 [![Hardware Verified](https://img.shields.io/badge/OMEN%20Silicon-Dual%20Arc%20Pro%20B70-purple.svg)](#)
 [![Zero Errors](https://img.shields.io/badge/Status-100%25%20Clean%20Boot%20(0%20Errors)-success.svg)](#)
 [![Archify Verified](https://img.shields.io/badge/System%20Maps-Archify%20Rendered-7C3AED.svg)](#-interactive-archify-system-maps)
 [![Modding 101 Workbench](https://img.shields.io/badge/Valheim%201.0%20Modding%20101-Live%20Workbench-F59E0B.svg)](https://delightful-sand-0451e171e.1.azurestaticapps.net/)
 
-> 🎓 **New to Valheim 1.0 Modding?** Launch the interactive [**Valheim 1.0 Modding 101 Workbench**](https://delightful-sand-0451e171e.1.azurestaticapps.net/) ([GitHub Repo](https://github.com/djcdevelopment/valheim-modding-101)) for step-by-step HarmonyX patterns, `1.0.20` API migration tables, and sub-second `Mono.Cecil` verification workflows.
+> 🎓 **New to Valheim 1.0 Modding?** Launch the interactive [**Valheim 1.0 Modding 101 Workbench**](https://delightful-sand-0451e171e.1.azurestaticapps.net/) ([GitHub Repo](https://github.com/djcdevelopment/valheim-modding-101)) for step-by-step HarmonyX patterns, `1.0.21` API migration tables, and sub-second `Mono.Cecil` verification workflows.
 
 ---
 
@@ -304,15 +304,15 @@ This repository develops and tests sovereign Valheim 1.0 plugins built for perfo
 
 ## ⚡ Valheim Patch Release Pipeline
 
-Whenever Iron Gate deploys a game update, [`tools/Invoke-PatchPipeline.ps1`](./tools/Invoke-PatchPipeline.ps1) runs the compatibility and release-candidate lifecycle across all five published mods (`IsModded`, `SelfieStick`, `Unfaded`, `TotemSentinel`, `Unswayed`). The current gate is Valheim 1.0.20.
+Whenever Iron Gate deploys a game update, [`tools/Invoke-PatchPipeline.ps1`](./tools/Invoke-PatchPipeline.ps1) runs the compatibility and release-candidate lifecycle across all five published mods (`IsModded`, `SelfieStick`, `Unfaded`, `TotemSentinel`, `Unswayed`). The current gate is Valheim 1.0.21 (Steam build `26249040`).
 
-1. **Exact-version and hook audit**: Requires Valheim 1.0.20, hashes the game assembly, and checks every fleet Harmony/reflection surface with Mono.Cecil.
+1. **Exact-version and hook audit**: Requires Valheim 1.0.21, hashes the game assembly, and checks every fleet Harmony/reflection surface with Mono.Cecil.
 2. **Synchronized release builds**: Rejects version drift across DLL metadata, projects, manifests, TOML, and READMEs before compiling.
 3. **Profile Manager runtime matrix**: Boots each mod in an ephemeral synthetic profile and always restores the exact original junction target.
 4. **Evidence and packaging**: Saves raw logs and hashes, then validates the contents of every `tcli` ZIP.
 5. **Protected deployment**: GitHub Actions publishes the exact tested ZIPs only after approval of the `thunderstore-production` environment.
 
-> 📖 **Evidence and operations**: Read the [Valheim 1.0.20 compatibility evidence](./docs/compatibility/valheim-1.0.20.md) and the [pipeline guide](./docs/PATCH_PIPELINE.md).
+> 📖 **Evidence and operations**: Read the [Valheim 1.0.21 compatibility evidence](./docs/compatibility/valheim-1.0.21.md) and the [pipeline guide](./docs/PATCH_PIPELINE.md).
 
 ### 1. Preflight IL Audit
 ```powershell
@@ -321,7 +321,7 @@ powershell -ExecutionPolicy Bypass -File tools\Invoke-PatchPipeline.ps1 -Audit
 
 ### 2. Full compatibility run and package staging
 ```powershell
-powershell -ExecutionPolicy Bypass -File tools\Invoke-PatchPipeline.ps1 -All -TargetGameVersion 1.0.20
+powershell -ExecutionPolicy Bypass -File tools\Invoke-PatchPipeline.ps1 -All -TargetGameVersion 1.0.21
 ```
 
 ### 3. Protected release
