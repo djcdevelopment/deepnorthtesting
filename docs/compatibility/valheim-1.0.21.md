@@ -44,6 +44,16 @@ Raw evidence: `artifacts/compatibility/valheim-1.0.21/20261030T115435Z/`.
 
 ## Thunderstore release
 
-Candidate ZIPs are built, runtime-verified on `omen-linux`, and validated against the live Thunderstore API. They are **not published**. The exact ZIPs, matching `.thunderstore.toml` sidecars and validation receipt remain local under `artifacts/compatibility/valheim-1.0.21/20261030T115435Z/packages/`; raw artifacts are ignored by Git and are not included in this commit.
+The fleet update was officially released to Thunderstore via GitHub Actions release workflow run [`41055050417`](https://github.com/djcdevelopment/deepnorthtesting/actions/runs/41055050417) with environment approval on `thunderstore-production`. The workflow reused Linux runtime evidence `20261030T115435Z` and published the exact runtime-verified ZIPs.
 
-Publishing these exact ZIPs requires `THUNDERSTORE_TOKEN` with `tools/Publish-ThunderstoreArtifacts.ps1 -ArtifactsDirectory artifacts/compatibility/valheim-1.0.21/20261030T115435Z/packages -Token $env:THUNDERSTORE_TOKEN -Confirm PUBLISH` on a PowerShell-capable host. Alternatively, the existing `thunderstore-release.yml` workflow requires the `OMEN-valheim` Windows runner for preparation and the `thunderstore-production` approval for publishing. That workflow is unchanged and has no `evidence_run_id` input or Linux-evidence reuse path; adding one requires a `workflow`-scoped credential. No release workflow was launched during this verification.
+| Mod | Released version | Previous version | Status | Live package URL |
+|---|---:|---:|---|---|
+| **IsModded** | `1.0.8` | `1.0.7` | Published | https://thunderstore.io/c/valheim/p/djcdevelopment/IsModded/ |
+| **SelfieStick** | `0.3.6` | `0.3.5` | Published | https://thunderstore.io/c/valheim/p/djcdevelopment/SelfieStick/ |
+| **TotemSentinel** | `1.5.6` | `1.5.5` | Published | https://thunderstore.io/c/valheim/p/djcdevelopment/TotemSentinel/ |
+| **Unfaded** | `1.0.12` | `1.0.11` | Published | https://thunderstore.io/c/valheim/p/djcdevelopment/Unfaded/ |
+| **Unswayed** | `1.0.6` | `1.0.5` | Published | https://thunderstore.io/c/valheim/p/djcdevelopment/Unswayed/ |
+
+All five live package versions and their `1.0.21` descriptions were independently verified through the Thunderstore API. The downloaded publish receipt marks all five as `published`; each receipt SHA-256 matches the package hash in the runtime matrix above. An initial cached API response was stale; cache-bypassed API reads confirmed the new live versions.
+
+Raw evidence and candidate ZIPs remain local under `artifacts/compatibility/valheim-1.0.21/20261030T115435Z/`; their temporary tracked copies were removed after publishing. The downloaded publication receipt and live API verification are local under `artifacts/receipt-41055050417/`. GitHub Actions retains the uploaded candidates and publication receipt as 30-day artifacts.

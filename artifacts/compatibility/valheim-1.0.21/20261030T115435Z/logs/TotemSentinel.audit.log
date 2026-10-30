@@ -1,7 +1,0 @@
-
-[+] Auditing plugin assembly: /home/derek/work/totemalert/bin/Release/TotemSentinel.dll
-  [PASS] [HarmonyPatch] TotemSentinel.Patches.PlayerDamagePatch -> Character.ApplyDamage
-  [PASS] [HarmonyPatch] TotemSentinel.Patches.TotemPickupPatch -> Humanoid.Pickup
-  [PASS] TotemSentinel.dll: verified 2 [HarmonyPatch] target(s) and 69 game member reference(s) against Valheim 1.0.21
-
-[Summary] 0 compatibility failure(s).

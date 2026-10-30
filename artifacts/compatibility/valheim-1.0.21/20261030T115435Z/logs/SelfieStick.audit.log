@@ -1,5 +1,0 @@
-
-[+] Auditing plugin assembly: /home/derek/work/SelfieStick/bin/Release/net472/CameraProof.dll
-  [PASS] CameraProof.dll: verified 0 [HarmonyPatch] target(s) and 102 game member reference(s) against Valheim 1.0.21
-
-[Summary] 0 compatibility failure(s).
